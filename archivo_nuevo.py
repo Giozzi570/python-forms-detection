@@ -1,11 +1,20 @@
 import cv2
 import numpy as np
 import os
+# import folder_for_arduino_uno.Arduino as Arduino
+import serial
+import time
+
+# # Configuración del puerto serial para Arduino
+def setup_arduino():
+    arduino = serial.Serial('COM5', 9600)  # Adjust COM port as needed
+    time.sleep(2)  # Esperar a que el Arduino se reinicie
+    arduino.write(b'1')  # Enviar un byte al Arduino
+    arduino.close()  # Cerrar el puerto serial
 
 # Configuración global
 output_folder = "capturas"
 captura_path = os.path.join(output_folder, 'captura_cuadrado.png')
-captura_hecha = False
 
 def created_folder():
     """Crea la carpeta de capturas si no existe"""
@@ -29,8 +38,9 @@ def show_screen():
     cv2.destroyAllWindows()
 
 def main():
+    captura_hecha = False
     created_folder()
-    cap = cv2.VideoCapture(1)  # Usar cámara
+    cap = cv2.VideoCapture(0)  # Usar cámara
     capturas_hechas = 0  # Contador de capturas
     cuadrados = []
 
@@ -100,15 +110,16 @@ def main():
                         # Guardar la imagen recortada
                         cv2.imwrite(captura_path, cropped_image)
                         print(f"✔️ Captura guardada en: {captura_path}")
-                        capturas_hechas += 1
                         # Detener la captura de video después de la primera detección
                         captura_hecha = True
-                        print(f"Se eliminó el cuadrado {id} de la lista y la lista ahora tiene {len(cuadrados)} elementos y quedo con estos elementos {cuadrados}.")
                         break  # Solo procesamos un cuadrado por círculo
 
-            if captura_hecha and capturas_hechas == 3:
+            if captura_hecha:
+                setup_arduino()
+                print("Arduino configurado y listo para recibir datos.")
                 cv2.waitKey(1000)
                 show_screen()
+                captura_hecha = True
                 break  # Salimos del bucle principal si ya se ha capturado
 
         cv2.imshow('Detección en vivo', resized_image)
@@ -119,5 +130,5 @@ def main():
     cap.release()
     cv2.destroyAllWindows()
 
-if __name__ == "__main__":
-    main()
+
+main()
