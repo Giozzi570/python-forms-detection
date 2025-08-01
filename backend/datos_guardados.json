@@ -1,0 +1,37 @@
+[
+  {
+    "name": "pEPE",
+    "id": "3",
+    "cuadrados_detectados": 8,
+    "circulos_detectados": 1,
+    "captura_realizada": true
+  },
+  {
+    "name": "Pepe",
+    "id": "5",
+    "cuadrados_detectados": 0,
+    "circulos_detectados": 0,
+    "captura_realizada": false
+  },
+  {
+    "name": "Juego",
+    "id": "6",
+    "cuadrados_detectados": 0,
+    "circulos_detectados": 0,
+    "captura_realizada": false
+  },
+  {
+    "name": "Jorge Federico Giozzi",
+    "id": "7",
+    "cuadrados_detectados": 116,
+    "circulos_detectados": 0,
+    "captura_realizada": false
+  },
+  {
+    "name": "Pepe",
+    "id": "8",
+    "cuadrados_detectados": 46,
+    "circulos_detectados": 0,
+    "captura_realizada": false
+  }
+]

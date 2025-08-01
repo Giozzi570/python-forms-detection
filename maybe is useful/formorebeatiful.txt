@@ -1,0 +1,35 @@
+//   const detectarButton = async () => {
+//     try {
+//       const response = await fetch("http://localhost:5000/guardar", {
+//         method: "GET",
+//       });
+//       const data = await response.json();
+//       localStorage.setItem("Resultado",data);
+//       console.log("✅ Resultado:", data);
+//        if (hiddenLoad){setHiddenLoadSure(!hiddenLoad)}
+//     } catch (error) {
+//       localStorage.setItem("error",error)
+//       if (hiddenError){setHiddenError(!hiddenError)}
+//     } 
+// }
+
+export async function guardarDatosEnBackend() {
+    const datos = {
+        name : localStorage.getItem('name'),
+        id : localStorage.getItem('playerIdCounter')
+    };
+    try{
+        const response = await fetch("http://localhost:5000/guardar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),  // Envía el objeto completo
+    })
+    if (!response.ok) throw new Error("❌ Falló el guardado");
+
+    } catch (error){
+        console.log(error)
+    }
+
+}

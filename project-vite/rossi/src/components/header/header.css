@@ -1,0 +1,136 @@
+/* Header.css */
+
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #34495e;
+    color: white;
+    position: relative;
+    z-index: 100;
+}
+
+.header .logo h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: 2rem;
+}
+
+.navigation .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.navigation .nav-links li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.navigation .nav-links li a:hover {
+    color: #f39c12;
+}
+
+.navigation .search-bar input {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 30px;
+    margin-left: 2rem;
+    font-size: 1rem;
+    outline: none;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.cta-buttons button {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cta-buttons .login-button {
+    background-color: #2980b9;
+    color: white;
+}
+
+.cta-buttons .signup-button {
+    background-color: #f39c12;
+    color: white;
+}
+
+.cta-buttons button:hover {
+    opacity: 0.8;
+}
+
+/* Hamburger Menu (Mobile) */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 30px;
+    width: 30px;
+}
+
+.hamburger .bar {
+    height: 4px;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.navigation.open {
+    display: block;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: #34495e;
+    text-align: center;
+    padding: 1rem 0;
+    margin: 0;
+}
+
+.navigation.open .nav-links {
+    display: block;
+    gap: 1rem;
+}
+
+.navigation.open .search-bar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .navigation {
+        display: none;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .cta-buttons {
+        display: none;
+    }
+}
