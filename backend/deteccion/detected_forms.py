@@ -30,40 +30,91 @@ def created_folder():
 # -----------------------------------------------------------
 # Función: show_screen()
 # Muestra en pantalla completa un mensaje de "GANASTE" al usuario.
-def show_graph(id,tamaño,puntos):
+def show_graph(id,tamañoX,tamañoY):
+    puntaje = 0
+    Verde_fuerte = [18]
+    orange = [1,2,4,5]
+    red = [3,11,12,13,14,15,17,19,21,22,23,24,25,28,32,33,34]
+    yellow = [7,8,9,26,30,31,35]
+    green = [6,10,16,20,27,29]
+    if id in Verde_fuerte:
+        puntaje = 30
+    elif id in orange:
+        puntaje = 5
+    elif id in red:
+        puntaje = -10
+    elif id in yellow:
+        puntaje = 10
+    elif id in green:
+        puntaje = 15
+    else:
+        raise TypeError("ID fuera de rango")
+    print(f"El puntaje para el ID {id} es: {puntaje}")
     plt.style.use('_mpl-gallery')
     # make the data
-    if id > 4:
-        ID_2 = round(id/2)
-        x = [ID_2 -0.5]
-        y = [1.5]
-    fig, ax = plt.subplots(figsize=(4, 4), facecolor='white',
+    if id >= 1 and id <= 5:
+        positionx = [id - 0.5]
+        positiony = [0.5]
+    elif id >= 6 and id <= 10:
+        positionx = [id - 5.5]
+        positiony = [1.5]
+    elif id >= 11 and id <= 15:
+        positionx = [id - 10.5]
+        positiony = [2.5]
+    elif id >= 16 and id <= 20:
+        positionx = [id - 15.5]
+        positiony = [3.5]
+        print(positionx, positiony)
+    elif id >= 21 and id <= 25:
+        positionx = [id - 20.5]
+        positiony = [4.5]
+        print(positionx, positiony)
+    elif id >= 26 and id <= 30:
+        positionx = [id - 25.5]
+        positiony = [5.5]
+        print(positionx, positiony)
+    elif id >= 31 and id <= 35:
+        positionx = [id - 30.5]
+        positiony = [6.5]
+        print(positionx, positiony)
+    else:
+        positionx = []
+        positiony = []
+        raise TypeError("ID fuera de rango")
+    fig, ax = plt.subplots(figsize=(3, 5), facecolor='white',
                        layout='constrained')
 
-    ax.scatter(x, y, s=1000, c="black", vmin=0, vmax=100)
+    ax.scatter(positionx, positiony, s=1000, c="black", vmin=0, vmax=100)
 
-    ax.set(xlim=(0, tamaño), xticks=np.arange(1, tamaño),
-        ylim=(0, tamaño), yticks=np.arange(1, tamaño))
+    ax.set(xlim=(0, tamañoX), xticks=np.arange(1, tamañoX),
+        ylim=(0, tamañoY), yticks=np.arange(1, tamañoY))
 
     
     plt.show()
     plt.style.use('_mpl-gallery')
+    return puntaje
     # make data
-    np.random.seed(1)
-    array = []
-    for i in range(puntos):
-        array.append(i)
-        
-
-    # plot:
-    fig, ax = plt.subplots()
-    ax.ecdf(array)
-    plt.show()
-        
-
-show_graph(5,4,3)
 # -----------------------------------------------------------
 # Función principal: main()
+x0, y0 = 10, 10           # Esquina superior izquierda del tablero
+ancho_total = 600           # Ancho total del tablero
+alto_total = 400            # Alto total del tablero
+columnas = 7
+filas = 5
+
+ancho_celda = ancho_total // columnas
+alto_celda = alto_total // filas
+
+# Crear lista de cuadrados con sus coordenadas y IDs
+cuadrados = []
+id_actual = 1
+for fila in range(filas):
+    for columna in range(columnas):
+        x = x0 + columna * ancho_celda
+        y = y0 + fila * alto_celda
+        cuadrados.append((id_actual, x, y, ancho_celda, alto_celda))
+        id_actual += 1
+        print(f"Cuadrado ID: {id_actual - 1}, Posición: ({x}, {y}), Tamaño: ({ancho_celda}, {alto_celda})")
 def detectar_formas():
     
     captura_hecha = False  # Bandera para saber si ya se hizo una captura y detener el programa.
@@ -72,96 +123,87 @@ def detectar_formas():
     # capturas_hechas = 0  # Contador de capturas hechas (no usado actualmente).
     cuadrados = []  # Lista para almacenar información de los cuadrados detectados.
 
-    while True:  # Bucle infinito para procesar cuadros continuamente.
-        ret, frame = cap.read()  # Captura un cuadro de la cámara.
-        if not ret:  # Si la cámara no devuelve un cuadro válido, sale del bucle.
+    while True:
+        ret, frame = cap.read()
+        if not ret:
             break
 
-        # -----------------------------------
-        # Redimensiona la imagen para mejorar el rendimiento.
-        scale = 0.5  # Factor de escala: reduce la imagen a la mitad.
-        width = int(frame.shape[1] * scale)  # Calcula el nuevo ancho.
-        height = int(frame.shape[0] * scale)  # Calcula el nuevo alto.
-        dim = (width, height)  # Agrupa las dimensiones.
-        resized_image = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)  # Redimensiona la imagen.
+        # Si querés redimensionar la imagen, hacelo acá
+        resized_image = frame.copy()
 
-        # -----------------------------------
-        # Preprocesamiento de la imagen.
-        gray = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)  # Convierte la imagen a escala de grises.
-        blur = cv2.GaussianBlur(gray, (5, 5), 0)  # Aplica un desenfoque gaussiano para reducir ruido.
-        canny = cv2.Canny(blur, 50, 150)  # Aplica el detector de bordes de Canny.
+        # Dibujar líneas horizontales y verticales
+        for f in range(filas + 1):
+            y = y0 + f * alto_celda
+            cv2.line(resized_image, (x0, y), (x0 + ancho_total, y), (0, 0, 255), 2)
 
-        # -----------------------------------
-        # Detección de contornos en la imagen binaria.
-        cnts, hierarchy = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        for c in range(columnas + 1):
+            x = x0 + c * ancho_celda
+            cv2.line(resized_image, (x, y0), (x, y0 + alto_total), (0, 0, 255), 2)
 
-        cuadrado_id = 1  # Contador para identificar cada cuadrado detectado.
+        # Dibujar bordes e IDs de cada cuadrado
+        for cuadrado in cuadrados:
+            id, x, y, w, h = cuadrado
+            cv2.rectangle(resized_image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.putText(resized_image, f"{id}", (x + 5, y + 20),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
-        # -----------------------------------
-        # Filtrado y verificación de contornos.
-        for i, c in enumerate(cnts):
-            if hierarchy[0][i][3] != -1:  # Ignora contornos internos (hijos).
-                continue
+        # Preparar imagen en escala de grises y aplicar suavizado
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        blur = cv2.medianBlur(gray, 5)
 
-            area = cv2.contourArea(c)  # Calcula el área del contorno.
-            if area > 500:  # Filtra contornos demasiado pequeños.
-                epsilon = 0.02 * cv2.arcLength(c, True)  # Calcula la tolerancia para aproximar el contorno.
-                approx = cv2.approxPolyDP(c, epsilon, True)  # Aproxima el contorno a un polígono.
-
-                if len(approx) == 4:  # Si tiene 4 vértices, podría ser un cuadrado.
-                    x, y, w, h = cv2.boundingRect(approx)  # Calcula el rectángulo envolvente del cuadrado.
-                    aspect_ratio = float(w) / h  # Calcula la relación ancho/alto.
-                    if 0.3 < aspect_ratio < 100:  # Filtra por relación de aspecto (muy laxa).
-                        cuadrados.append((cuadrado_id, x, y, w, h))  # Guarda el cuadrado.
-                        cv2.drawContours(resized_image, [approx], -1, (0, 255, 0), 2)  # Dibuja el contorno verde.
-                        cv2.putText(resized_image, f'cuadrado {cuadrado_id}', (x, y - 10), 1, 1, (0, 255, 0), 1)  # Escribe el ID.
-                        cuadrado_id += 1  # Incrementa el ID para el próximo cuadrado.
-
-        # -----------------------------------
-        # Detección de círculos con la Transformada de Hough.
+        # Detección de círculos
         circles = cv2.HoughCircles(blur, cv2.HOUGH_GRADIENT, dp=1.2, minDist=100,
-                                param1=150, param2=70, minRadius=10, maxRadius=100)
-        
-        if circles is not None:  # Si se detectaron círculos:
-            circles = np.uint16(np.around(circles))  # Redondea las coordenadas.
-            for circle in circles[0, :]:  # Itera sobre cada círculo detectado.
-                cx, cy, r = circle  # Extrae las coordenadas y el radio.
-                cv2.circle(resized_image, (cx, cy), r, (0, 0, 255), 2)  # Dibuja el círculo en rojo.
-                cv2.putText(resized_image, 'circulo', (cx - 10, cy - r - 10), 1, 1, (0, 0, 255), 1)  # Etiqueta el círculo.
+                                    param1=200, param2=70, minRadius=10, maxRadius=100)
 
-                # -----------------------------------
-                # Verifica si el círculo está dentro de algún cuadrado detectado.
-                for id, x, y, w, h in cuadrados:
-                    if x <= cx <= x + w and y <= cy <= y + h:
-                        print(f"🔵 Círculo en cuadrado {id}")  # Imprime que encontró un círculo dentro del cuadrado.
-                        cuadrados.pop(id-1)  # Elimina el cuadrado de la lista para evitar duplicados.
+        if circles is not None:
+            circles = np.uint16(np.around(circles))
+            for circle in circles[0, :]:
+                cx, cy, r = circle
+                cv2.circle(resized_image, (cx, cy), r, (0, 0, 255), 2)
+                cv2.putText(resized_image, 'circulo', (cx - 10, cy - r - 10),
+                            1, 1, (0, 0, 255), 1)
+
+                # Verificar en qué cuadrado cayó el círculo
+            if circles is not None:
+                   circles = np.uint16(np.around(circles))
+                   for i in circles[0, :]:
+                       x, y, r = i
+                       cv2.circle(frame, (x, y), r, (0, 255, 0), 2)
+                       cv2.circle(frame, (x, y), 2, (0, 0, 255), 3)
+
+                    # Ver si el círculo está dentro del tablero
+            if x0 <= x <= x0 + ancho_total and y0 <= y <= y0 + alto_total:
+                        col = (x - x0) // ancho_celda
+                        fila = (y - y0) // alto_celda
+                        id_celda = f"Fila{fila}_Columna{col}"
+                        id_cuadrado = (col   * filas) + fila + 1  # Calcula el ID del cuadrado basado en fila y columna.
+                        cv2.putText(frame, f"{id_celda}", (x + 10, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+                        print(f"Ficha detectada en celda: {id_celda}")
                         output_folder = "capturas"  # Vuelve a usar la carpeta de capturas.
-                        captura_path = os.path.join(output_folder, f'captura_cuadrado{id}.png')  # Ruta de guardado.
+                        captura_path = os.path.join(output_folder, f'captura_cuadrado{id_celda}.png')  # Ruta de guardado.
                         cropped_image = resized_image  # Guarda la imagen (nota: aquí se guarda la imagen completa, no recortada).
-                        cv2.imshow(f'Captura del cuadrado {id}', cropped_image)  # Muestra la captura.
+                        cv2.imshow(f'Captura del cuadrado {id_celda}', cropped_image)  # Muestra la captura.
                         cv2.imwrite(captura_path, cropped_image)  # Guarda la imagen en disco.
                         print(f"✔️ Captura guardada en: {captura_path}")
-                        captura_hecha = True  # Marca que ya se realizó la captura.
-                        break  # Sale del bucle de cuadrados.
-
-            # -----------------------------------
-            # Si se realizó la captura, activa Arduino y muestra la pantalla de victoria.
+                        captura_hecha = True  # Marca que se ha hecho una captura.
+                        
             if captura_hecha:
                 # setup_arduino()  # Envía señal al Arduino.
                 print("Arduino configurado y listo para recibir datos.")  # Mensaje de confirmación.
                 cv2.waitKey(1000)  # Pausa de 1 segundo.
                 captura_hecha = True
+                puntaje = show_graph(id_cuadrado, 5, 7)  # Muestra el gráfico con el ID del cuadrado capturado.
                 break  # Sale del bucle principal.
 
         # -----------------------------------
         # Muestra la imagen procesada en una ventana.
-        cv2.imshow('Detección en vivo', resized_image)
+        cv2.imshow('Deteccion en vivo', resized_image)
 
         # -----------------------------------
         # Permite salir del programa presionando la tecla 'q'.
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
+    
     # -----------------------------------
     # Libera la cámara y destruye las ventanas al salir del bucle.
     cap.release()
@@ -169,7 +211,6 @@ def detectar_formas():
     return{
         "cuadrados_detectados": len(cuadrados),
         "circulos_detectados": len(circles[0]) if circles is not None else 0,
-        "captura_realizada": captura_hecha
+        "captura_realizada": captura_hecha,
+        "puntaje" : puntaje
     }
-
-

@@ -37,11 +37,13 @@ def guardar():
     cuadrados_detectados = resultado["cuadrados_detectados"]
     circulos_detectados = resultado["circulos_detectados"]
     captura_realizada = resultado["captura_realizada"]
+    puntaje = resultado["puntaje"] 
 
     datos_deteccion = {
         "cuadrados_detectados": cuadrados_detectados,
         "circulos_detectados": circulos_detectados,
-        "captura_realizada": captura_realizada
+        "captura_realizada": captura_realizada,
+        "puntaje": puntaje
     }
 
     try:

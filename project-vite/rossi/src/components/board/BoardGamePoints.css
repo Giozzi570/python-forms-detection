@@ -12,6 +12,7 @@
     grid-template-columns: repeat(5, 70px);
     grid-template-rows: repeat(7, 70px);
     justify-items: center;
+    transform: rotate3d(1, 0, 0, 20deg);
 }
 #containerDistribution{
     transition: all 3s ease-in-out;

@@ -3,6 +3,9 @@ import { useState } from 'react';
 import './BoardGamePoints.css';
 const BoardGamePoints = () => {
     const [points, setPoints] = useState(false)
+    // Generar un array de 35 números incrementales comenzando desde 1
+    const pointsArray = Array.from({ length: 35 }, (_, i) => 35 - i);
+
     return(
         <main>
             <div className="w-full flex flex-col h-screen justify-center text-black">
@@ -16,7 +19,7 @@ const BoardGamePoints = () => {
                         <li><p>1. Cada jugador tiene un puntaje inicial de 0.</p></li>
                         <li><p>2. Los puntos se pueden ganar en mayor o menor medida dependiendo de donde cae la ficha.</p></li>
                         <li><p>3. El jugador con más puntos al final del juego es el ganador.</p></li>
-                        <li><p>4. Los puntos se pueden visualizar en la pagina <a target="_blank" href="/players">Jugadores</a>.</p></li>
+                        <li><p>4. Los puntos se pueden visualizar en la pagina <a href="/players">Jugadores</a>.</p></li>
                     </ul>
                 </div>
                 
@@ -41,41 +44,9 @@ const BoardGamePoints = () => {
                     <h3 className="font-black text-center">Distribución de puntaje</h3>
                     <button className="bg-emerald-600" onClick={() => setPoints(!points)}>Ver Distribución de puntaje</button>
                     <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl ${points ? 'grid' : 'hidden'} animate__animated animate__fadeInRightBig`} id='containerPoints'>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
-                        <div className="points"></div>
+                        {pointsArray.map((num) => (
+                            <div className="points" key={num}></div>
+                        ))}
                     </div>
                      <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl gap-4 ${points ? 'flex' : 'hidden'} animate__animated animate__fadeInRightBig`}>
                         <div className='h-auto bg-[#ff0000] rounded-full p-2' id='red'>-10 puntos</div>

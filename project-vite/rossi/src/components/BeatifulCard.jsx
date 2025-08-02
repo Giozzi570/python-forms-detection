@@ -17,11 +17,13 @@ const BeautifulForm = () => {
 
   const [hiddenError, setHiddenError] = useState(true)
 
+  const [hiddenfinish, setHiddenFinish] = useState(true)
 
   const HideErrorActive = `w-full h-screen flex justify-center items-center absolute ${hiddenError ? "hidden" : ""}`
   const hideLoadActiveSure = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenLoadSure ? "hidden" : ""}`
   const hideLoadActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenLoad ? "hidden" : ""}`
-  
+  const hiddenfinishActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenfinish ? "hidden" : ""}`
+
   const nameLocal = localStorage.getItem("name")
   async function guardarDatosEnBackend() {
     const datos = {
@@ -52,9 +54,17 @@ const BeautifulForm = () => {
       localStorage.removeItem("error")
   }
   const buttonHiddenLoad = () => {
+    setHiddenFinish(!hiddenfinish)
     setHiddenLoadSure(!hiddenLoadSure)
-    guardarDatosEnBackend()
+ 
     
+  }
+  const buttonHiddenFinish = () => {
+    setHiddenFinish(!hiddenfinish)
+    guardarDatosEnBackend()
+  }
+  const buttonHiddenCancelFinish = () => {
+    setHiddenFinish(true)
   }
   const buttonHiddenLoadCancel = () => {
     setHiddenLoadSure(true)
@@ -122,6 +132,15 @@ const BeautifulForm = () => {
                     </div>
                 </div>
       </div>
+        <div className={hiddenfinishActive}>
+                      <div className="flex flex-col w-96 h-96 bg-white text-black rounded-xl p-10 gap-5">
+                          <p className="text-center text-3xl font-black">Empieze a jugar</p>
+                          <p className="text-center font-bold">El numero de intento hasta ahora es {localStorage.getItem('playerIdCounter')}</p>
+                          <p className="text-center font-bold">Al dar por terminado su intento haga click en Terminar intento</p>
+                          <button id="cancelButton" onClick={buttonHiddenFinish} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
+                          <button id="cancelButton" onClick={buttonHiddenCancelFinish} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
+                      </div>
+          </div>
           <Load hideLoadActiveSureParam={hideLoadActiveSure}
               buttonHiddenLoadParam={buttonHiddenLoad}
               buttonHiddenLoadCancelParam={buttonHiddenLoadCancel}
