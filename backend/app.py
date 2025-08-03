@@ -8,8 +8,8 @@ import numpy as np
 import requests
 from flask import send_file
 app = Flask(__name__)
-import base64
-import cv2
+
+
 CORS(app)  # Permite CORS para evitar bloqueos del navegador
 
 # Función de ejemplo (sin usar `input()`)
