@@ -8,7 +8,7 @@ export default function ScreenError({hiddenError, refreshJugadores,error}) {
      <div className="flex flex-col items-center justify-center gap-6 text-center animate-fade-in px-6">
        
        <h1 className="text-5xl sm:text-6xl font-extrabold tracking-wide drop-shadow-xl">
-         Opps, Hemos tenido un Error al cargar jugadores
+         Upps, Hemos tenido un Error al cargar jugadores
        </h1>
    
        <p className="text-lg sm:text-xl text-gray-700 max-w-md">

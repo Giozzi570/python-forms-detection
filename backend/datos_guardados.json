@@ -1,11 +1,11 @@
 [
   {
-    "name": "pEPE",
-    "id": "4",
+    "name": "Pepe",
+    "id": "20",
     "circulos_detectados": 1,
     "captura_realizada": true,
-    "puntaje": 15,
-    "posicion_del_circulo": "20",
-    "img": "static\\captura_cuadrado1754185532.png"
+    "puntaje": -10,
+    "posicion_del_circulo": "33",
+    "img": "static\\captura_cuadrado1754259318.webp"
   }
 ]

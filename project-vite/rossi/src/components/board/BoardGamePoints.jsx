@@ -49,11 +49,11 @@ const BoardGamePoints = () => {
                         ))}
                     </div>
                      <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl gap-4 ${points ? 'flex' : 'hidden'} animate__animated animate__fadeInRightBig`}>
-                        <div className='h-auto bg-[#ff0000] rounded-full p-2' id='red'>-10 puntos</div>
-                        <div className='h-auto bg-[#FF9900] rounded-full p-2' id='orange'>+5 puntos</div>
-                        <div className='h-auto bg-[#FFFF00] rounded-full p-2' id='yellow'>+10 puntos</div>
-                        <div className='h-auto bg-[#008000] rounded-full p-2' id='dark-green'>+15 puntos</div>
-                        <div className='h-auto bg-[#00fa0c] rounded-full p-2' id='light-green'>+30 puntos</div>
+                        <div className='h-auto text-center bg-[#ff0000] rounded-full p-2' id='red'>-10 puntos</div>
+                        <div className='h-auto text-center bg-[#FF9900] rounded-full p-2' id='orange'>+5 puntos</div>
+                        <div className='h-auto text-center bg-[#FFFF00] rounded-full p-2' id='yellow'>+10 puntos</div>
+                        <div className='h-auto text-center bg-[#008000] rounded-full p-2' id='dark-green'>+15 puntos</div>
+                        <div className='h-auto text-center bg-[#00fa0c] rounded-full p-2' id='light-green'>+30 puntos</div>
                     </div>
                 </div>
                 </div>

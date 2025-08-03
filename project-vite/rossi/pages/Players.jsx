@@ -55,12 +55,12 @@ function getJugadoresTerminados() {
   return (
     <>
       <Header />
-      <div className={`w-full mx-auto mt-10 p-4 ${hiddenAll ? "hidden" : ""}`} id="pepe">
+      <div className={`w-full mx-auto p-4 bg-white ${hiddenAll ? "hidden" : ""}`} id="pepe">
         <h2 className="text-2xl font-bold text-center mb-6">Jugadores</h2>
 
-        <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-col gap-4 justify-center items-center">
           {[...jugadoresTop, ...jugadoresOtros].map((jugador) => (
-            <div key={jugador.id} id={`puesto-${jugador.id}`} className="p-4 border border-gray-200 gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center flex-col">
+            <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="w-1/2 p-4 border bg-blue-500 border-gray-200 gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center flex-col">
               <p className="text-gray-900 text-3xl font-black">{jugador.name}</p>
               <p className="text-xl text-center font-black text-gray-700">{jugador.puesto ? `${jugador.puesto}° Puesto` : ""}</p>
               <div className="flex flex-col items-center justify-center h-12 w-12 rounded-full bg-black">
@@ -82,9 +82,7 @@ function getJugadoresTerminados() {
           <div className="w-full max-w-lg bg-white text-black rounded-2xl shadow-xl border-4 border-black p-6 relative flex flex-col items-center animate-fade-in">
             
             <img
-              width={320}
-              height={320}
-              className="border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105 w-full"
+              className="border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105"
               src={`http://localhost:5000/${jugadaVisible.img}`}
               alt="jugada"
             />

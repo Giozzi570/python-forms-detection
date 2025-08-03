@@ -21,10 +21,14 @@ const BeautifulForm = () => {
 
   const [hiddenfinish, setHiddenFinish] = useState(true)
 
+  const [detec,setDetecFinish] = useState(true)
+
   const HideErrorActive = `w-full h-screen flex justify-center items-center absolute ${hiddenError ? "hidden" : ""}`
   const hideLoadActiveSure = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenLoadSure ? "hidden" : ""}`
   const hideLoadActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenLoad ? "hidden" : ""}`
   const hiddenfinishActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenfinish ? "hidden" : ""}`
+  const hiddenDetecActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${detec ? "hidden" : ""}`
+
 
   const nameLocal = localStorage.getItem("name")
   async function guardarDatosEnBackend() {
@@ -42,7 +46,9 @@ const BeautifulForm = () => {
         body: JSON.stringify(datos),  // Envía el objeto completo
     })
     if (!response.ok) throw new Error("❌ Falló el guardado");
-
+    else {}
+      setHiddenLoad(true)
+      setDetecFinish(!hiddenDetecActive)
     } catch (error){
         localStorage.setItem("error",error)
         setHiddenLoad(true)
@@ -150,7 +156,9 @@ const BeautifulForm = () => {
               hideLoadActiveParam={hideLoadActive}
               nameLocalParam={nameLocal}
               HideErrorActiveParam={HideErrorActive}
-              setHiddenErrorParam={buttonHiddenError}></Load>
+              setHiddenErrorParam={buttonHiddenError}
+              setHiddenDetecParam={setDetecFinish}
+              hiddenDetecActiveParam={hiddenDetecActive}></Load>
 </div>
 
 

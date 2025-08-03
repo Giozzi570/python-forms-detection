@@ -181,7 +181,7 @@ def detectar_formas():
                         cv2.putText(frame, f"{id_celda}", (x + 10, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
                         print(f"Ficha detectada en celda: {id_celda}")
                         output_folder = "static"  # Vuelve a usar la carpeta de capturas.
-                        captura_path = os.path.join(output_folder, f'captura_cuadrado{round(time.time())}.png')  # Ruta de guardado.
+                        captura_path = os.path.join(output_folder, f'captura_cuadrado{round(time.time())}.webp')  # Ruta de guardado.
                         cropped_image = resized_image  # Guarda la imagen (nota: aquí se guarda la imagen completa, no recortada).
                         cv2.imshow(f'Captura del cuadrado {id_celda}', cropped_image)  # Muestra la captura.
                         cv2.imwrite(captura_path, cropped_image)  # Guarda la imagen en disco.
