@@ -5,6 +5,8 @@ import { Load } from './modals/modals';
 import { useEffect } from 'react';
 import CircleCursorFollow from './decoration/CircleCursorFollow';
 import BoardGamePoints from './board/BoardGamePoints';
+import { PlayerIdCounter } from '../logic/createElement';
+import { refreshJugadores } from '../../pages/Players';
 const BeautifulForm = () => {
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -56,6 +58,7 @@ const BeautifulForm = () => {
   const buttonHiddenLoad = () => {
     setHiddenFinish(!hiddenfinish)
     setHiddenLoadSure(!hiddenLoadSure)
+    PlayerIdCounter()
  
     
   }

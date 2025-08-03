@@ -17,8 +17,8 @@ import matplotlib.pyplot as plt
 
 # -----------------------------------------------------------
 # Configuración global
-output_folder = "capturas"  # Define el nombre de la carpeta donde se guardarán las capturas.
-captura_path = os.path.join(output_folder, 'captura_cuadrado.png')  # Crea la ruta completa para la captura base.
+output_folder = "static"  # Define el nombre de la carpeta donde se guardarán las capturas.
+captura_path = os.path.join(output_folder, 'captura_cuadrado.jpg')  # Crea la ruta completa para la captura base.
 
 # -----------------------------------------------------------
 # Función: created_folder()
@@ -92,7 +92,7 @@ def show_graph(id,tamañoX,tamañoY):
     
     plt.show()
     plt.style.use('_mpl-gallery')
-    return puntaje
+    return puntaje,id
     # make data
 # -----------------------------------------------------------
 # Función principal: main()
@@ -116,8 +116,10 @@ for fila in range(filas):
         id_actual += 1
         print(f"Cuadrado ID: {id_actual - 1}, Posición: ({x}, {y}), Tamaño: ({ancho_celda}, {alto_celda})")
 def detectar_formas():
-    
     captura_hecha = False  # Bandera para saber si ya se hizo una captura y detener el programa.
+    id_cuadrado = None     # Inicializa id_cuadrado para evitar errores si no se detecta ningún círculo.
+    id = None              # Inicializa id para evitar errores si no se detecta ningún círculo.
+    puntaje = None         # Inicializa puntaje para evitar errores si no se detecta ningún círculo.
     created_folder()  # Llama a la función para crear la carpeta de capturas si no existe.
     cap = cv2.VideoCapture(0)  # Inicializa la cámara (0 indica la cámara predeterminada).
     # capturas_hechas = 0  # Contador de capturas hechas (no usado actualmente).
@@ -154,7 +156,6 @@ def detectar_formas():
         # Detección de círculos
         circles = cv2.HoughCircles(blur, cv2.HOUGH_GRADIENT, dp=1.2, minDist=100,
                                     param1=200, param2=70, minRadius=10, maxRadius=100)
-
         if circles is not None:
             circles = np.uint16(np.around(circles))
             for circle in circles[0, :]:
@@ -175,12 +176,12 @@ def detectar_formas():
             if x0 <= x <= x0 + ancho_total and y0 <= y <= y0 + alto_total:
                         col = (x - x0) // ancho_celda
                         fila = (y - y0) // alto_celda
-                        id_celda = f"Fila{fila}_Columna{col}"
-                        id_cuadrado = (col   * filas) + fila + 1  # Calcula el ID del cuadrado basado en fila y columna.
+                        id_cuadrado = (col   * filas) + fila + 1
+                        id_celda = f"Fila{fila}_Columna{col}"  # Calcula el ID del cuadrado basado en fila y columna.
                         cv2.putText(frame, f"{id_celda}", (x + 10, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
                         print(f"Ficha detectada en celda: {id_celda}")
-                        output_folder = "capturas"  # Vuelve a usar la carpeta de capturas.
-                        captura_path = os.path.join(output_folder, f'captura_cuadrado{id_celda}.png')  # Ruta de guardado.
+                        output_folder = "static"  # Vuelve a usar la carpeta de capturas.
+                        captura_path = os.path.join(output_folder, f'captura_cuadrado{round(time.time())}.png')  # Ruta de guardado.
                         cropped_image = resized_image  # Guarda la imagen (nota: aquí se guarda la imagen completa, no recortada).
                         cv2.imshow(f'Captura del cuadrado {id_celda}', cropped_image)  # Muestra la captura.
                         cv2.imwrite(captura_path, cropped_image)  # Guarda la imagen en disco.
@@ -192,7 +193,8 @@ def detectar_formas():
                 print("Arduino configurado y listo para recibir datos.")  # Mensaje de confirmación.
                 cv2.waitKey(1000)  # Pausa de 1 segundo.
                 captura_hecha = True
-                puntaje = show_graph(id_cuadrado, 5, 7)  # Muestra el gráfico con el ID del cuadrado capturado.
+                puntaje, id = show_graph(id_cuadrado, 5, 7)  # Muestra el gráfico con el ID del cuadrado capturado.
+                print(id, id_cuadrado)
                 break  # Sale del bucle principal.
 
         # -----------------------------------
@@ -208,9 +210,15 @@ def detectar_formas():
     # Libera la cámara y destruye las ventanas al salir del bucle.
     cap.release()
     cv2.destroyAllWindows()
-    return{
-        "cuadrados_detectados": len(cuadrados),
+    # Retorna un diccionario con los resultados de la detección
+    # Guarda la última imagen capturada si se realizó una captura
+    if captura_hecha:
+        cv2.imwrite(captura_path, cropped_image)
+
+    return {
         "circulos_detectados": len(circles[0]) if circles is not None else 0,
         "captura_realizada": captura_hecha,
-        "puntaje" : puntaje
+        "puntaje": puntaje,
+        "posicion_del_circulo": f"{id}",
+        "img": captura_path
     }

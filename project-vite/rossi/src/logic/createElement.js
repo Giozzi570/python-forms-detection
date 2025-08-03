@@ -1,7 +1,4 @@
 export const createElement = (name) => {
-    let playerIdCounter = localStorage.getItem('playerIdCounter') || 0;
-    playerIdCounter++;
-    localStorage.setItem('playerIdCounter', playerIdCounter);
     // Crear el contenido HTML del nuevo jugador
 
     // Crear un objeto con la información que quieres guardar
@@ -10,6 +7,12 @@ export const createElement = (name) => {
     // Guardar la información del jugador en el localStorage
     localStorage.setItem('name', playerData);  // Guardar el array actualizado de jugadores
 };
+export const PlayerIdCounter = () => {
+    let playerIdCounter = 1
+    playerIdCounter = localStorage.getItem('playerIdCounter') || 0;
+    playerIdCounter++;
+    localStorage.setItem('playerIdCounter', playerIdCounter);
+}
 window.onload = () => {
     let players = JSON.parse(localStorage.getItem('players')) || [];
 

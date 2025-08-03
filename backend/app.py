@@ -4,9 +4,12 @@ import json
 from deteccion.detected_forms import detectar_formas
 from pathlib import Path
 import os
+import numpy as np
 import requests
 from flask import send_file
 app = Flask(__name__)
+import base64
+import cv2
 CORS(app)  # Permite CORS para evitar bloqueos del navegador
 
 # Función de ejemplo (sin usar `input()`)
@@ -29,21 +32,33 @@ def detectar():
     else:
         return jsonify({"mensaje": "Envía un POST para procesar datos"})
     # Ruta para guardar los datos
+@app.route("/guardar-imagen")
+def guardar_imagen():
+    # Supongamos que ya tenés una imagen como array NumPy
+    imagen = np.random.randint(0, 255, (100, 100, 3), dtype=np.uint8)  # ejemplo de imagen aleatoria
+
+    # Guardar en la carpeta static
+    ruta = "static/imagen.jpg"
+    cv2.imwrite(ruta, imagen)
+
+    return "Imagen guardada"
 @app.route('/guardar', methods=['POST'])
 
 def guardar():
     # Obtener datos de detección
     resultado = detectar_formas()
-    cuadrados_detectados = resultado["cuadrados_detectados"]
+    posicion_del_circulo = resultado["posicion_del_circulo"]
     circulos_detectados = resultado["circulos_detectados"]
     captura_realizada = resultado["captura_realizada"]
     puntaje = resultado["puntaje"] 
+    img = resultado["img"]
 
     datos_deteccion = {
-        "cuadrados_detectados": cuadrados_detectados,
         "circulos_detectados": circulos_detectados,
         "captura_realizada": captura_realizada,
-        "puntaje": puntaje
+        "puntaje": puntaje,
+        "posicion_del_circulo": posicion_del_circulo,
+        "img": img
     }
 
     try:
@@ -88,7 +103,8 @@ def guardar():
     
     except Exception as e:
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
-    
+
+
 @app.route('/api/datos')
 def get_datos():
     ruta_json = os.path.join(os.path.dirname(__file__), 'datos_guardados.json')

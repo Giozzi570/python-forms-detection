@@ -1,26 +1,11 @@
 [
   {
-    "name": "Pepe",
-    "id": "24",
-    "cuadrados_detectados": 0,
-    "circulos_detectados": 1,
-    "captura_realizada": true,
-    "puntaje": -10
-  },
-  {
-    "name": "Pepe",
-    "id": "29",
-    "cuadrados_detectados": 0,
-    "circulos_detectados": 1,
-    "captura_realizada": true,
-    "puntaje": -10
-  },
-  {
-    "name": "Pepe",
+    "name": "pEPE",
     "id": "4",
-    "cuadrados_detectados": 0,
     "circulos_detectados": 1,
     "captura_realizada": true,
-    "puntaje": -10
+    "puntaje": 15,
+    "posicion_del_circulo": "20",
+    "img": "static\\captura_cuadrado1754185532.png"
   }
 ]

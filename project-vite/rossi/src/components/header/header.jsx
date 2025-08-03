@@ -7,7 +7,9 @@ const Header = () => {
     const toggleMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };
-
+    const CleanLocalStorage = () => {
+        localStorage.clear();  
+    }
     return (
         <header className="header">
 
@@ -19,6 +21,7 @@ const Header = () => {
                 <ul className="nav-links">
                     <li><a href="/">Ingreso</a></li>
                     <li><a href="/players">Jugadores</a></li>
+                    <li><button onClick={CleanLocalStorage}>Limpiar LocalStorage</button></li>
                 </ul>
             </nav>
             <div className="hamburger" onClick={toggleMenu}>

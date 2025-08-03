@@ -45,7 +45,7 @@ const BoardGamePoints = () => {
                     <button className="bg-emerald-600" onClick={() => setPoints(!points)}>Ver Distribución de puntaje</button>
                     <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl ${points ? 'grid' : 'hidden'} animate__animated animate__fadeInRightBig`} id='containerPoints'>
                         {pointsArray.map((num) => (
-                            <div className="points" key={num}></div>
+                            <div className="points" key={num} id={`${num}`}></div>
                         ))}
                     </div>
                      <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl gap-4 ${points ? 'flex' : 'hidden'} animate__animated animate__fadeInRightBig`}>
