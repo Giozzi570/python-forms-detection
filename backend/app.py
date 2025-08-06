@@ -39,7 +39,6 @@ def guardar_imagen():
 
     # Guardar en la carpeta static
     ruta = "static/imagen.jpg"
-    cv2.imwrite(ruta, imagen)
 
     return "Imagen guardada"
 @app.route('/guardar', methods=['POST'])
