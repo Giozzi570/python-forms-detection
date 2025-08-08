@@ -2,7 +2,7 @@ import './App.css'
 import BeautifulForm from './components/BeatifulCard'
 import Header from './components/header/header'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Players from "/Players";
+import Players from "./pages/Players";
 import React from 'react';
 import BoardGamePoints from './components/board/BoardGamePoints';
 import ModalFinish from '../pages/Test';
