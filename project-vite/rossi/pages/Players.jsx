@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./players.css";
 import Header from "../src/components/header/header";
-import ScreenError from "../src/components/modals/screenError/ScreenError.JSX";
+import ScreenError from "../src/components/modals/screenError/ScreenError.jsx";
 export function refreshJugadores() {
   location.reload();
 }
