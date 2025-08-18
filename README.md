@@ -1,9 +1,9 @@
-Esta es una versión alpha sobre un juego que trata sobre tirar una ficha y dependiendo de donde cae la ficha, depende la puntuación que tendras.
+¡Hola! Esta es una versión alpha de un juego que estoy desarrollando.
 
+La idea es simple: lanzas una ficha, y dependiendo de dónde caiga, obtienes una determinada puntuación.
 
+Cualquier error que encuentres o sugerencia de mejora será más que bienvenida. Si además puedes dejar una estrella, ¡me ayudaría muchísimo!
 
+Detalles importantes:
 
-Cualquier Error o cosa a mejorar que vean me sirviria y si le dejan una estrella también.
-
-
-Cosas a recalcar es que la camara se conecta al primer puerto, se puede cambiar.
+La cámara se conecta al primer puerto disponible por defecto. Esto se puede cambiar si es necesario.
