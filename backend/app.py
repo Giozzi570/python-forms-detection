@@ -10,7 +10,7 @@ from flask import send_file
 app = Flask(__name__)
 
 
-CORS(app)  # Permite CORS para evitar bloqueos del navegador
+CORS(app)  # Permitir CORS para evitar bloqueos del navegador
 
 # Función de ejemplo (sin usar `input()`)
 def inputName(name):
@@ -22,7 +22,7 @@ def inputName(name):
     }
 
 # Ruta principal que acepta POST (y opcionalmente GET)
-@app.route("/", methods=["GET", "POST"])  # ¡Acepta ambos métodos!
+@app.route("/", methods=["GET", "POST"])  # Acepta ambos métodos
 def detectar():
     if request.method == "POST":
         datos = request.get_json()  # Obtiene datos JSON del frontend
@@ -32,15 +32,7 @@ def detectar():
     else:
         return jsonify({"mensaje": "Envía un POST para procesar datos"})
     # Ruta para guardar los datos
-@app.route("/guardar-imagen")
-def guardar_imagen():
-    # Supongamos que ya tenés una imagen como array NumPy
-    imagen = np.random.randint(0, 255, (100, 100, 3), dtype=np.uint8)  # ejemplo de imagen aleatoria
 
-    # Guardar en la carpeta static
-    ruta = "static/imagen.jpg"
-
-    return "Imagen guardada"
 @app.route('/guardar', methods=['POST'])
 
 def guardar():
