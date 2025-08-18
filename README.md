@@ -7,3 +7,6 @@ Cualquier error que encuentres o sugerencia de mejora será más que bienvenida.
 Detalles importantes:
 
 La cámara se conecta al primer puerto disponible por defecto. Esto se puede cambiar si es necesario.
+
+
+NO FUNCIONA LA URL 
