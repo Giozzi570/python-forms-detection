@@ -10,3 +10,16 @@ La cámara se conecta al primer puerto disponible por defecto. Esto se puede cam
 
 
 NO FUNCIONA LA URL 
+
+
+Hi! This is an alpha version of a game I’m developing.
+
+The idea is simple: you toss a token, and depending on where it lands, you get a certain score.
+
+Any bugs you find or suggestions for improvement are more than welcome. If you could also leave a star, that would help me a lot!
+
+Important details:
+
+The camera connects to the first available port by default. This can be changed if needed.
+
+THE URL DOES NOT WORK
