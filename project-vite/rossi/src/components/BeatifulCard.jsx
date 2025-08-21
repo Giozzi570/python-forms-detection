@@ -7,10 +7,17 @@ import CircleCursorFollow from './decoration/CircleCursorFollow';
 import BoardGamePoints from './board/BoardGamePoints';
 import { PlayerIdCounter } from '../logic/createElement';
 import { refreshJugadores } from '../../pages/Players';
+import SelectGame from './selectgame/selectGame';
+import BeautifulCard from './selectgame/cardSelectGame/cardSelectOption';
+import { SelectGameFunction } from '../logic/createElement';
+
 const BeautifulForm = () => {
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);
   
+  const [selectedOption, setSelectedOption] = useState("Puntuacion");
+  const [modificationGame, setModificationGame] = useState(false);
+
   const [Target, setTarget] = useState(false);
 
   const [hiddenLoad, setHiddenLoad] = useState(true)
@@ -34,7 +41,8 @@ const BeautifulForm = () => {
   async function guardarDatosEnBackend() {
     const datos = {
         name : localStorage.getItem('name'),
-        id : localStorage.getItem('playerIdCounter')
+        id : localStorage.getItem('playerIdCounter'),
+        TypeGame : localStorage.getItem('TypeGame')
     };
     try{
         setHiddenLoad(!hiddenLoad)
@@ -65,6 +73,7 @@ const BeautifulForm = () => {
     setHiddenFinish(!hiddenfinish)
     setHiddenLoadSure(!hiddenLoadSure)
     PlayerIdCounter()
+  
  
     
   }
@@ -83,6 +92,7 @@ const BeautifulForm = () => {
     createElement(name)
     setSubmitted(bool);
     setTarget(!target)
+    SelectGameFunction(selectedOption)
     setHiddenLoadSure(!hiddenLoadSure)
     setTimeout(() => {
       setSubmitted(false);
@@ -118,6 +128,9 @@ const BeautifulForm = () => {
             placeholder="Escribe tu nombre aquí..."
           />
           <FaUser className="absolute right-4 top-1/2 -translate-y-1/2 text-xl transition-all duration-300 text-black" />
+        </div>
+        <div>
+          <SelectGame modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
         </div>
         <button
           onClick={handleSubmit}
@@ -159,6 +172,7 @@ const BeautifulForm = () => {
               setHiddenErrorParam={buttonHiddenError}
               setHiddenDetecParam={setDetecFinish}
               hiddenDetecActiveParam={hiddenDetecActive}></Load>
+          <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} selectedOptionParam={selectedOption} setSelectedOptionParam={setSelectedOption} />
 </div>
 
 

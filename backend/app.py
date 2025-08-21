@@ -63,8 +63,8 @@ def guardar():
     try:
         # Validar datos del frontend
         datos = request.get_json()
-        if not datos or not all(key in datos for key in ['name', 'id']):
-            return jsonify({"error": "Los campos 'name' e 'id' son requeridos"}), 400
+        if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame']):
+            return jsonify({"error": "Los campos 'name' , 'id' y 'TypeGame' son requeridos"}), 400
 
         # Combinar datos
         resultado_final = {**datos, **datos_deteccion}

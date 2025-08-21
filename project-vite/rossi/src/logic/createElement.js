@@ -13,6 +13,15 @@ export const PlayerIdCounter = () => {
     playerIdCounter++;
     localStorage.setItem('playerIdCounter', playerIdCounter);
 }
+export const SelectGameFunction = (TypeGame) => {
+    // Crear el contenido HTML del nuevo jugador
+
+    // Crear un objeto con la información que quieres guardar
+    const TypeGameSelected = TypeGame
+    console.log(TypeGameSelected)
+    // Guardar la información del jugador en el localStorage
+    localStorage.setItem('TypeGame', TypeGameSelected);  // Guardar el array actualizado de jugadores
+};
 window.onload = () => {
     let players = JSON.parse(localStorage.getItem('players')) || [];
 
