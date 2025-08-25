@@ -1,17 +1,6 @@
 import React from "react";
 import './ProgressBarLoadingScreen.css'
-const SpinnerLoadingScreen = () => {
-  return (
-    <div className="spinner-container">
-      <div className="spinner"></div>
-      <div className="spinner1"></div>
-      <div className="spinner2"></div>
-      <div className="spinner3"></div>
-      <div className="spinner4"></div>
-    </div>
-  );
-};
-
+import SpinnerLoadingScreen from "./modalLoad";
 
 export const Load = ({hideLoadActiveSureParam , nameLocalParam, buttonHiddenLoadParam, buttonHiddenLoadCancelParam , hideLoadActiveParam , HideErrorActiveParam ,setHiddenErrorParam, hiddenDetecActiveParam, setHiddenDetecParam}) => {
   return(

@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import CircleCursorFollow from './decoration/CircleCursorFollow';
 import BoardGamePoints from './board/BoardGamePoints';
 import { PlayerIdCounter } from '../logic/createElement';
-import { refreshJugadores } from '../../pages/Players';
 import SelectGame from './selectgame/selectGame';
 import BeautifulCard from './selectgame/cardSelectGame/cardSelectOption';
 import { SelectGameFunction } from '../logic/createElement';
@@ -15,7 +14,6 @@ const BeautifulForm = () => {
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);
   
-  const [selectedOption, setSelectedOption] = useState("Puntuacion");
   const [modificationGame, setModificationGame] = useState(false);
 
   const [Target, setTarget] = useState(false);
@@ -44,6 +42,7 @@ const BeautifulForm = () => {
         id : localStorage.getItem('playerIdCounter'),
         TypeGame : localStorage.getItem('TypeGame')
     };
+    console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
         const response = await fetch("http://localhost:5000/guardar", {
@@ -92,7 +91,6 @@ const BeautifulForm = () => {
     createElement(name)
     setSubmitted(bool);
     setTarget(!target)
-    SelectGameFunction(selectedOption)
     setHiddenLoadSure(!hiddenLoadSure)
     setTimeout(() => {
       setSubmitted(false);
@@ -129,8 +127,9 @@ const BeautifulForm = () => {
           />
           <FaUser className="absolute right-4 top-1/2 -translate-y-1/2 text-xl transition-all duration-300 text-black" />
         </div>
-        <div>
+        <div className='flex flex-col justify-center '>
           <SelectGame modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
+          <p className='text-center text-black font-bold py-6'>Estas jugando el modo {localStorage.getItem('TypeGame')}</p>
         </div>
         <button
           onClick={handleSubmit}
@@ -172,7 +171,7 @@ const BeautifulForm = () => {
               setHiddenErrorParam={buttonHiddenError}
               setHiddenDetecParam={setDetecFinish}
               hiddenDetecActiveParam={hiddenDetecActive}></Load>
-          <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} selectedOptionParam={selectedOption} setSelectedOptionParam={setSelectedOption} />
+          <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
 </div>
 
 
