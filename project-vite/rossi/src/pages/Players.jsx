@@ -8,8 +8,7 @@ import app from "../firebase.js";
 import { collection, getDocs } from "firebase/firestore";
 
 
-const jugadores = await getDocs(collection(db, "datos_guardados"))
-const jugadoresIterados = jugadores.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
 
 async function jugadoresTerminados(setHideLoadActive, setHiddenError, setHiddenAll) {
   try {
@@ -73,11 +72,9 @@ const Players = () => {
   fetchJugadores();
   }, []);
 
-  if (jugadoresIterados.length > 0) {
-    setSinJugadores(false);
-  }else if (jugadoresIterados.length) {
-    setSinJugadores(true);
-  }
+  useEffect(() => {
+  setSinJugadores(jugadoresIterados.length === 0);
+}, [jugadoresIterados]);
 
   const jugadoresTop = [...jugadoresIterados]
   .sort((a, b) => b.puntaje - a.puntaje)
