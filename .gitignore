@@ -30,3 +30,9 @@ Thumbs.db
 
 # --- Others ---
 .env.local
+project-vite/rossi/src/firebase.js
+project-vite/rossi/package-lock.json
+project-vite/rossi/package.json
+backend/passwords/Passwords_firebase.json
+backend/deteccion/__pycache__/detected_forms.cpython-313.pyc
+backend/deteccion/__pycache__/__init__.cpython-313.pyc

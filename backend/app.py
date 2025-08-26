@@ -8,7 +8,13 @@ import numpy as np
 import requests
 from flask import send_file
 app = Flask(__name__)
+import firebase_admin
+from firebase_admin import credentials, firestore
 
+cred = credentials.Certificate("./passwords/Passwords_firebase.json")
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
 
 CORS(app)  # Permitir CORS para evitar bloqueos del navegador
 
@@ -52,57 +58,26 @@ def guardar():
         "img": img
     }
 
-    try:
         # Validar datos del frontend
-        datos = request.get_json()
-        if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame']):
+    datos = request.get_json()
+    if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame']):
             return jsonify({"error": "Los campos 'name' , 'id' y 'TypeGame' son requeridos"}), 400
 
         # Combinar datos
-        resultado_final = {**datos, **datos_deteccion}
-        # Guardar en archivo manteniendo formato de lista JSON
-        archivo_json = Path('datos_guardados.json')
-        if not archivo_json.exists():
-            # Si el archivo no existe, crear nuevo con lista
-            with open(archivo_json, 'w') as f:
-                json.dump([resultado_final], f, indent=2)
-        else:
-            # Si el archivo existe, leer, actualizar y guardar
-            try:
-                with open(archivo_json, 'r+') as f:
-                    try:
-                        datos_existentes = json.load(f)
-                        if not isinstance(datos_existentes, list):
-                            datos_existentes = [datos_existentes]  # Convertir a lista si no lo era
-                    except json.JSONDecodeError:
-                        datos_existentes = []
-                    
-                    datos_existentes.append(resultado_final)
-                    
-                    f.seek(0)
-                    json.dump(datos_existentes, f, indent=2)
-                    f.truncate()
-            except Exception as e:
-                return jsonify({"error": f"Error al guardar: {str(e)}"}), 500
+    resultado_final = {**datos, **datos_deteccion}
 
-        return jsonify({
-            "mensaje": "✅ Datos guardados correctamente",
-            "id": datos['id'],
-            "data": resultado_final
-        })
-    
-    
-    except Exception as e:
-        return jsonify({"error": f"Error interno: {str(e)}"}), 500
+    # Guardar en Firestore
+    db.collection('datos_guardados').add(resultado_final)
+
+    return jsonify({"mensaje": "Datos guardados exitosamente"}), 200
 
 
 @app.route('/api/datos')
 def get_datos():
-    ruta_json = os.path.join(os.path.dirname(__file__), 'datos_guardados.json')
-    with open(ruta_json, 'r', encoding='utf-8') as f:
-        datos = json.load(f)
-    return jsonify(datos)
+    datos = db.collection('datos_guardados').stream()
+    return jsonify([doc.to_dict() for doc in datos])
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
