@@ -3,14 +3,23 @@
 
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #34495e;
-    color: white;
-    position: relative;
-    z-index: 100;
+    position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px 30px;
+    
+  background: rgba(0, 0, 0, 0.5); /* Negro semitransparente */
+  backdrop-filter: blur(10px);     /* Difumina lo que hay detrás */
+  -webkit-backdrop-filter: blur(10px); /* Safari */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: white;
+  z-index: 1000;
+    
 }
 
 .header .logo h1 {

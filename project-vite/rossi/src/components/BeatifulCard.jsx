@@ -9,7 +9,7 @@ import { PlayerIdCounter } from '../logic/createElement';
 import SelectGame from './selectgame/selectGame';
 import BeautifulCard from './selectgame/cardSelectGame/cardSelectOption';
 import { SelectGameFunction } from '../logic/createElement';
-
+import './BeatifulCard.css'
 const BeautifulForm = () => {
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -110,9 +110,9 @@ const BeautifulForm = () => {
     : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-purple-600 hover:to-indigo-600';
 
   return (
-    <div className="min-h-screen w-full flex flex-row-reverse items-center justify-around bg-gradient-to-br from-gray-50 to-gray-200 p-4">
+    <div className="min-h-screen w-full flex flex-row-reverse items-center justify-around from-gray-50 to-gray-200 p-4 " id='BeatifulCard'>
       <BoardGamePoints/>
-      <div className="w-full max-w-md bg-white/50 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 grow">
+      <div className="w-full max-w-md bg-white backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 grow">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-indigo-600 mb-8">
           Ingresa tu Nombre
         </h2>
