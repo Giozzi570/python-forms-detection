@@ -3,12 +3,13 @@ import { useState } from "react";
 import Arrow from "../../../assets/arrow.svg";
 export default function BeautifulCard({modificationGameParam, setModificationGameParam, selectedOptionParam, setSelectedOptionParam}) {
   const [selectedOption, setSelectedOption] = useState("Puntuacion");
-  
+  localStorage.setItem('TypeGame', selectedOption);
   const toggleOption = () => {
     setSelectedOption((prev) =>
       prev === "Puntuacion" ? "Metrologia" : "Puntuacion"
     );
     localStorage.setItem('TypeGame', selectedOption === "Puntuacion" ? "Metrologia" : "Puntuacion");
+    
   };
   return(
     <>

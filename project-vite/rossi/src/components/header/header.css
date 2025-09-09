@@ -8,51 +8,53 @@
   left: 0;
   width: 100%;
   padding: 15px 30px;
-    
-  background: rgba(0, 0, 0, 0.5); /* Negro semitransparente */
-  backdrop-filter: blur(10px);     /* Difumina lo que hay detrás */
-  -webkit-backdrop-filter: blur(10px); /* Safari */
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  color: white;
+  background-color: #fff;
+  color: black;
   z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     
 }
 
-.header .logo h1 {
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin: 0;
-    letter-spacing: 2px;
+.header .logo {
+    background: #ff7c39;
+    border-radius: 9999px;
+    padding: 10px;
 }
-
+.header .logo:hover {
+    background: #fc4b08;
+    border-radius: 9999px;
+    padding: 10px;
+    cursor: pointer;
+}
 .navigation {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
-    margin-left: 2rem;
 }
 
 .navigation .nav-links {
     display: flex;
     gap: 2rem;
+    align-items: center;
     list-style: none;
 }
 
 .navigation .nav-links li a {
     text-decoration: none;
-    color: white;
+    color: black;
     font-size: 1.1rem;
     font-weight: 500;
     transition: color 0.3s;
+    padding: 5px
 }
 
 .navigation .nav-links li a:hover {
-    color: #f39c12;
+    background: #f0f0f0;
+    border-radius: 8px;
 }
 
 .navigation .search-bar input {
@@ -129,7 +131,6 @@
 .navigation.open .search-bar {
     display: none;
 }
-
 @media (max-width: 768px) {
     .navigation {
         display: none;

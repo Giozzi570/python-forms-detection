@@ -10,6 +10,7 @@ import SelectGame from './selectgame/selectGame';
 import BeautifulCard from './selectgame/cardSelectGame/cardSelectOption';
 import { SelectGameFunction } from '../logic/createElement';
 import './BeatifulCard.css'
+
 const BeautifulForm = () => {
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);

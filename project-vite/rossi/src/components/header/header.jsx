@@ -1,27 +1,34 @@
 // App.jsx
 import React, { useState } from 'react';
-import './Header.css';
-
+import './header.css';
+import Home from '../../../public/home.svg';
+import GitHub from '../../../public/github.png';
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-  const CleanLocalStorage = () => localStorage.clear();
 
   return (
     <div className="App">
       <header className="header">
         <div className="logo">
-          <h1>Points_python</h1>
+          <a href="/"> <img src={Home} alt="Logo" width={25} /></a>
         </div>
 
         <nav className={`navigation ${isMobileMenuOpen ? 'open' : ''}`}>
           <ul className="nav-links">
             <li><a href="/">Ingreso</a></li>
             <li><a href="/players">Jugadores</a></li>
-            <li><button onClick={CleanLocalStorage}>Limpiar LocalStorage</button></li>
+            <li><a href="/players">Jugadores</a></li>
+            <li><a href="/players">Jugadores</a></li>
+            <li><a href="/players">Jugadores</a></li>
           </ul>
         </nav>
+        <div>
+          <a href="https://github.com/Giozzi570/python-forms-detection">
+            <img src={GitHub} alt="GitHub" width={50} />
+          </a>
+        </div>
 
         <div className="hamburger" onClick={toggleMenu}>
           <div className="bar"></div>
