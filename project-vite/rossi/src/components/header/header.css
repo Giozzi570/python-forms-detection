@@ -139,7 +139,7 @@
 
 .hamburger .bar {
     height: 4px;
-    width: 100%;
+    width: 30px;
     background-color: #222;
     border-radius: 10px;
     transition: all 0.3s ease;
@@ -202,7 +202,12 @@
     color: #333;
     transition: all 0.3s ease;
 }
-
+.hamburger:hover {
+    background: rgba(0, 0, 0, 0.823);
+    & > .bar {
+        background: white;
+    }
+}
 /* Hover con fondo */
 .navigation.open .nav-links li a:hover {
     background: linear-gradient(135deg, #ff7c39, #fc4b08);
@@ -218,8 +223,32 @@
     }
     .hamburger {
         display: flex;
+        border: 3px solid #111;
+        border-radius: 10px;
+        background: transparent;
+        width: 50px;
+        height: 50px;
     }
     .cta-buttons {
         display: none;
+    }
+    #github {
+        display: none;
+    }
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        backdrop-filter: blur(10px);
+        background: transparent;
+        color: #111;
+        z-index: 1000;
+        box-shadow: none;
+        transition: all 0.3s ease;
     }
 }

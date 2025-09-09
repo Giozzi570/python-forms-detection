@@ -24,7 +24,7 @@ function App() {
             <li><a href="/players">Jugadores</a></li>
           </ul>
         </nav>
-        <div>
+        <div id='github' className="github">
           <a href="https://github.com/Giozzi570/python-forms-detection">
             <img src={GitHub} alt="GitHub" width={50} />
           </a>
