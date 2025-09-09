@@ -31,16 +31,11 @@ function App() {
         </div>
 
         <div className="hamburger" onClick={toggleMenu}>
-          <div className="bar"></div>
-          <div className="bar"></div>
-          <div className="bar"></div>
+          <div id='bar1' className={isMobileMenuOpen ? 'bar1-active bar' : 'bar'}></div>
+          <div id='bar2' className={isMobileMenuOpen ? 'bar2-active bar' : 'bar'}></div>
+          <div id='bar3' className={isMobileMenuOpen ? 'bar3-active bar' : 'bar'}></div>
         </div>
       </header>
-
-      <main className="content">
-        <h2>Contenido detrás del header</h2>
-        <p>Desplázate hacia abajo para ver el efecto blur.</p>
-      </main>
     </div>
   );
 }
