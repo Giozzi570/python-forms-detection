@@ -16,14 +16,12 @@ import base64
 #     arduino.close()  # Cierra el puerto serial para liberar el recurso.
 
 # -----------------------------------------------------------
-# Configuración global
-output_folder = "static"  # Define el nombre de la carpeta donde se guardarán las capturas.
-captura_path = os.path.join(output_folder, 'captura_cuadrado.jpg')  # Crea la ruta completa para la captura base.
+
 
 # -----------------------------------------------------------
 # Función: created_folder()
 # Crea la carpeta de capturas si no existe.
-def created_folder():
+def created_folder(output_folder):
     if not os.path.exists(output_folder):  # Verifica si la carpeta 'capturas' no existe.
         os.makedirs(output_folder)  # Si no existe, la crea.
 
@@ -91,7 +89,10 @@ def show_graph(name,id,tamañoX,tamañoY):
 
     
     # plt.show()
-    plt.savefig(f"grafico{name}")
+    folder = "graph"
+    created_folder(folder)
+    captura_graph = os.path.join(folder,f"grafico{name}.png" )
+    plt.savefig(captura_graph)
     plt.style.use('_mpl-gallery')
     return puntaje,id
     # make data
@@ -120,8 +121,9 @@ def detectar_formas():
     captura_hecha = False  # Bandera para saber si ya se hizo una captura y detener el programa.
     id_cuadrado = None     # Inicializa id_cuadrado para evitar errores si no se detecta ningún círculo.
     id = None              # Inicializa id para evitar errores si no se detecta ningún círculo.
-    puntaje = None         # Inicializa puntaje para evitar errores si no se detecta ningún círculo.
-    created_folder()  # Llama a la función para crear la carpeta de capturas si no existe.
+    puntaje = None   
+    output_folder = "static"      # Inicializa puntaje para evitar errores si no se detecta ningún círculo.
+    created_folder(output_folder)  # Llama a la función para crear la carpeta de capturas si no existe.
     cap = cv2.VideoCapture(0)  # Inicializa la cámara (0 indica la cámara predeterminada).
     # capturas_hechas = 0  # Contador de capturas hechas (no usado actualmente).
     cuadrados = []  # Lista para almacenar información de los cuadrados detectados.
@@ -199,10 +201,11 @@ def detectar_formas():
 
             if captura_hecha:
                 # setup_arduino()  # Envía señal al Arduino.
+                
                 print("Arduino configurado y listo para recibir datos.")  # Mensaje de confirmación.
                 cv2.waitKey(1000)  # Pausa de 1 segundo.
                 captura_hecha = False
-                puntaje, id = show_graph(UNIC_TIME,id_cuadrado, 5, 7)  # Muestra el gráfico con el ID del cuadrado capturado.
+                puntaje, id  = show_graph(UNIC_TIME,id_cuadrado, 5, 7) 
                 print(id, id_cuadrado)
                 cap.release()
                 cv2.destroyAllWindows()
@@ -232,3 +235,5 @@ def detectar_formas():
         "posicion_del_circulo": f"{id}",
         "img": imagen_base64
     }
+
+detectar_formas()
