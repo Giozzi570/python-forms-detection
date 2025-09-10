@@ -5,7 +5,7 @@ import os  # Importa la biblioteca os para manejo de archivos y carpetas.
 import serial  # Importa la biblioteca pySerial para comunicación con Arduino a través del puerto serial.
 import time  # Importa time para manejar pausas y esperas en la ejecución.
 import matplotlib.pyplot as plt
-
+import base64
 # -----------------------------------------------------------
 # Función: setup_arduino()
 # Configura el puerto serial para la comunicación con Arduino.
@@ -182,12 +182,19 @@ def detectar_formas():
                         print(f"Ficha detectada en celda: {id_celda}")
                         output_folder = "static"  # Vuelve a usar la carpeta de capturas.
                         captura_path = os.path.join(output_folder, f'captura_cuadrado{round(time.time())}.webp')  # Ruta de guardado.
-                        cropped_image = resized_image  # Guarda la imagen (nota: aquí se guarda la imagen completa, no recortada).
+                        cropped_image = resized_image
+                          # Guarda la imagen (nota: aquí se guarda la imagen completa, no recortada).
                         cv2.imshow(f'Captura del cuadrado {id_celda}', cropped_image)  # Muestra la captura.
                         cv2.imwrite(captura_path, cropped_image)  # Guarda la imagen en disco.
                         print(f"✔️ Captura guardada en: {captura_path}")
                         captura_hecha = True  # Marca que se ha hecho una captura.
-                        
+                        with open(resized_image, "rb") as f:
+                            imagen_bytes = f.read()
+
+                        # Convertir a base64
+                        imagen_base64 = base64.b64encode(imagen_bytes).decode("utf-8")
+
+                        print(imagen_base64)
             if captura_hecha:
                 # setup_arduino()  # Envía señal al Arduino.
                 print("Arduino configurado y listo para recibir datos.")  # Mensaje de confirmación.
