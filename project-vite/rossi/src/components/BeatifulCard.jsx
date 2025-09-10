@@ -46,7 +46,7 @@ const BeautifulForm = () => {
     console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("http://192.168.100.118:5000//guardar", {
+        const response = await fetch("http://192.168.100.118:443//guardar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
