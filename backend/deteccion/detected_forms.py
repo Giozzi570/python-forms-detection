@@ -30,7 +30,7 @@ def created_folder():
 # -----------------------------------------------------------
 # Función: show_screen()
 # Muestra en pantalla completa un mensaje de "GANASTE" al usuario.
-def show_graph(id,tamañoX,tamañoY):
+def show_graph(name,id,tamañoX,tamañoY):
     puntaje = 0
     Verde_fuerte = [18]
     orange = [1,2,4,5]
@@ -90,7 +90,8 @@ def show_graph(id,tamañoX,tamañoY):
         ylim=(0, tamañoY), yticks=np.arange(1, tamañoY))
 
     
-    plt.show()
+    # plt.show()
+    plt.savefig(f"grafico{name}")
     plt.style.use('_mpl-gallery')
     return puntaje,id
     # make data
@@ -181,7 +182,8 @@ def detectar_formas():
                         cv2.putText(frame, f"{id_celda}", (x + 10, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
                         print(f"Ficha detectada en celda: {id_celda}")
                         output_folder = "static"  # Vuelve a usar la carpeta de capturas.
-                        captura_path = os.path.join(output_folder, f'captura_cuadrado{round(time.time())}.webp')  # Ruta de guardado.
+                        UNIC_TIME = round(time.time())
+                        captura_path = os.path.join(output_folder, f'captura_cuadrado{UNIC_TIME}.webp')  # Ruta de guardado.
                         cropped_image = resized_image
                           # Guarda la imagen (nota: aquí se guarda la imagen completa, no recortada).
                         cv2.imshow(f'Captura del cuadrado {id_celda}', cropped_image)  # Muestra la captura.
@@ -199,11 +201,13 @@ def detectar_formas():
                 # setup_arduino()  # Envía señal al Arduino.
                 print("Arduino configurado y listo para recibir datos.")  # Mensaje de confirmación.
                 cv2.waitKey(1000)  # Pausa de 1 segundo.
-                captura_hecha = True
-                puntaje, id = show_graph(id_cuadrado, 5, 7)  # Muestra el gráfico con el ID del cuadrado capturado.
+                captura_hecha = False
+                puntaje, id = show_graph(UNIC_TIME,id_cuadrado, 5, 7)  # Muestra el gráfico con el ID del cuadrado capturado.
                 print(id, id_cuadrado)
+                cap.release()
+                cv2.destroyAllWindows()
                 break  # Sale del bucle principal.
-
+            
         # -----------------------------------
         # Muestra la imagen procesada en una ventana.
         cv2.imshow('Deteccion en vivo', resized_image)
@@ -221,7 +225,6 @@ def detectar_formas():
     # Guarda la última imagen capturada si se realizó una captura
     if captura_hecha:
         cv2.imwrite(captura_path, cropped_image)
-    print(imagen_base64)
     return {
         "circulos_detectados": len(circles[0]) if circles is not None else 0,
         "captura_realizada": captura_hecha,
