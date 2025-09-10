@@ -188,13 +188,13 @@ def detectar_formas():
                         cv2.imwrite(captura_path, cropped_image)  # Guarda la imagen en disco.
                         print(f"✔️ Captura guardada en: {captura_path}")
                         captura_hecha = True  # Marca que se ha hecho una captura.
-                        with open(resized_image, "rb") as f:
+                        with open(captura_path, "rb") as f:
                             imagen_bytes = f.read()
 
                         # Convertir a base64
                         imagen_base64 = base64.b64encode(imagen_bytes).decode("utf-8")
 
-                        print(imagen_base64)
+
             if captura_hecha:
                 # setup_arduino()  # Envía señal al Arduino.
                 print("Arduino configurado y listo para recibir datos.")  # Mensaje de confirmación.
@@ -221,11 +221,11 @@ def detectar_formas():
     # Guarda la última imagen capturada si se realizó una captura
     if captura_hecha:
         cv2.imwrite(captura_path, cropped_image)
-
+    print(imagen_base64)
     return {
         "circulos_detectados": len(circles[0]) if circles is not None else 0,
         "captura_realizada": captura_hecha,
         "puntaje": puntaje,
         "posicion_del_circulo": f"{id}",
-        "img": captura_path
+        "img": imagen_base64
     }

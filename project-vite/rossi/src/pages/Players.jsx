@@ -142,7 +142,7 @@ const Players = () => {
             
             <img
               className="border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105"
-              src={`http://localhost:5000/${jugadaVisible.img}`}
+              src={`data:image/webp;base64,${jugadaVisible.img}`}
               alt="jugada"
             />
 
