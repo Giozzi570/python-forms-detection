@@ -152,9 +152,10 @@ const BeautifulForm = () => {
                         <h3>Nombre</h3>
                         <span>{name}</span>
                     </div>
+                    <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
                 </div>
+                
       </div>
-                <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
         </div>
       
        <BoardGamePoints/>

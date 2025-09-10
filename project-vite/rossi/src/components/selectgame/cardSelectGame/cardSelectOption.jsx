@@ -14,7 +14,7 @@ export default function BeautifulCard({modificationGameParam, setModificationGam
   return(
     <>
     {modificationGameParam && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-transparent z-50">
                 <div className="bg-white p-12 rounded-xl shadow-lg flex flex-col justify-center items-center">
                     <h2 className="font-bold text-black">Modificar modo de juego</h2>
                     <div className="flex items-center gap-4 mt-4 justify-between">

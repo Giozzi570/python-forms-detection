@@ -7,8 +7,8 @@ const BoardGamePoints = () => {
     const pointsArray = Array.from({ length: 35 }, (_, i) => 35 - i);
 
     return(
-        <main>
-            <div className="w-full flex flex-col h-screen justify-center text-white">
+        <main className='w-auto flex flex-col h-screen justify-start lg:justify-center text-white' id='BoardGamePoints'>
+            <div className="w-auto h-auto flex flex-col justify-around items-center p-4">
                 <aside className={` ${points ? 'hidden' : 'block'}`}>
                       <div id='content-1' className=" m-4 rounded-3xl text-black shadow-lg animate__animated animate__fadeIn">
                     <h3 className="font-black text-center p-2">Sistema de puntaje</h3>

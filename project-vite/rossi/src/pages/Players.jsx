@@ -102,7 +102,7 @@ const Players = () => {
   return (
     <>
       <Header />
-      <div className={`w-full mx-auto p-4 bg-white ${hiddenAll ? "hidden" : ""}`} id="pepe">
+      <div className={`w-full mx-auto p-4 bg-white mt-4 ${hiddenAll ? "hidden" : ""}`} id="pepe">
         <h2 className="text-2xl font-bold text-center mb-6">Jugadores</h2>
       {sinJugadores && (
   <div className="flex flex-col items-center justify-center gap-4 p-6 rounded-xl bg-purple-100 border-2 border-purple-300 shadow-lg text-center animate-fade-in">
