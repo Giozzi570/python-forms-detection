@@ -210,7 +210,7 @@ def detectar_formas():
 
         # -----------------------------------
         # Permite salir del programa presionando la tecla 'q'.
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if (cv2.waitKey(1) & 0xFF == ord('q')) or captura_hecha:
             break
     
     # -----------------------------------
