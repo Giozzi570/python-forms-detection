@@ -111,10 +111,10 @@ const BeautifulForm = () => {
     : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-purple-600 hover:to-indigo-600';
 
   return (
-    <div className="min-h-screen w-full flex flex-row-reverse items-center justify-around from-gray-50 to-gray-200 p-4 " id='BeatifulCard'>
-      <BoardGamePoints/>
-      <div className="w-full max-w-md bg-white backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 grow">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-indigo-600 mb-8">
+    <div className="lg:min-h-screen h-auto w-full flex lg:flex-row flex-col items-center justify-around from-gray-50 to-gray-200 p-4 " id='BeatifulCard'>
+      <div className="w-full flex flex-col max-w-md h-screen justify-center grow">
+        <div className='bg-white backdrop-blur-lg bg-opacity-30 rounded-2xl p-8 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1'>
+            <h2 className="text-2xl md:text-3xl font-bold text-center text-indigo-600 mb-8">
           Ingresa tu Nombre
         </h2>
 
@@ -154,6 +154,10 @@ const BeautifulForm = () => {
                     </div>
                 </div>
       </div>
+                <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
+        </div>
+      
+       <BoardGamePoints/>
         <div className={hiddenfinishActive}>
                       <div className="flex flex-col w-96 h-96 bg-white text-black rounded-xl p-10 gap-5">
                           <p className="text-center text-3xl font-black">Empieze a jugar</p>
@@ -172,7 +176,6 @@ const BeautifulForm = () => {
               setHiddenErrorParam={buttonHiddenError}
               setHiddenDetecParam={setDetecFinish}
               hiddenDetecActiveParam={hiddenDetecActive}></Load>
-          <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
 </div>
 
 

@@ -156,7 +156,6 @@
 
 /* Navigation Mobile */
 .navigation.open {
-    display: block;
     position: absolute;
     top: 80px;
     right: 0;
@@ -215,11 +214,25 @@
     transform: translateX(5px);
     box-shadow: 0 4px 12px rgba(252, 75, 8, 0.3);
 }
-
+.github-text {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    color: #111;
+    font-weight: 600;
+}
+#githubMobile {
+        display: none;
+    }
 /* Responsive */
 @media (max-width: 768px) {
     .navigation {
         display: none;
+    }
+    .navigation.open {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        
     }
     .hamburger {
         display: flex;
@@ -234,6 +247,13 @@
     }
     #github {
         display: none;
+    }
+    #githubMobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 6px;
     }
     .header {
         position: fixed;

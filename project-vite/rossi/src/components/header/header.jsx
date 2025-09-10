@@ -20,9 +20,13 @@ function App() {
             <li><a href="/">Ingreso</a></li>
             <li><a href="/players">Jugadores</a></li>
             <li><a href="/players">Jugadores</a></li>
-            <li><a href="/players">Jugadores</a></li>
-            <li><a href="/players">Jugadores</a></li>
           </ul>
+          <div id='githubMobile' className="github">
+          <p className='github-text'>Link del proyecto</p>
+          <a href="https://github.com/Giozzi570/python-forms-detection">
+            <img src={GitHub} alt="GitHub" width={50} />
+          </a>
+        </div>
         </nav>
         <div id='github' className="github">
           <a href="https://github.com/Giozzi570/python-forms-detection">
