@@ -222,6 +222,12 @@
 }
 #githubMobile {
         display: none;
+        margin-bottom: 15px;
+    }
+#githubMobile > a > img:hover {
+          background: linear-gradient(135deg, #fc4b08, #ffb347);
+    transform: scale(1.1) rotate(-3deg);
+    cursor: pointer;
     }
 /* Responsive */
 @media (max-width: 768px) {
@@ -232,7 +238,9 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: none;
     }
     .hamburger {
         display: flex;

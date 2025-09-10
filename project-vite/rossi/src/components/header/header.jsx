@@ -14,7 +14,7 @@ function App() {
         <div className="logo">
           <a href="/"> <img src={Home} alt="Logo" width={25} /></a>
         </div>
-
+        
         <nav className={`navigation ${isMobileMenuOpen ? 'open' : ''}`}>
           <ul className="nav-links">
             <li><a href="/">Ingreso</a></li>
