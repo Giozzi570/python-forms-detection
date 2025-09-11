@@ -46,7 +46,7 @@ const BeautifulForm = () => {
     console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("https://bd1c6577a351.ngrok-free.app/guardar", {
+        const response = await fetch("https://c9bdc1d70880.ngrok-free.app/guardar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

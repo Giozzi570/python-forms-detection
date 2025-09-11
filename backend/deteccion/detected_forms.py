@@ -235,5 +235,3 @@ def detectar_formas():
         "posicion_del_circulo": f"{id}",
         "img": imagen_base64
     }
-
-detectar_formas()
