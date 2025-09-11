@@ -10,38 +10,7 @@ import { collection, getDocs } from "firebase/firestore";
 
 
 
-async function jugadoresTerminados(setHideLoadActive, setHiddenError, setHiddenAll) {
-  try {
-    setHideLoadActive(true);
-    const jugadores = await getDocs(collection(db, "datos_guardados"))
-    const jugadoresYaTerminados = jugadores.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setHideLoadActive(false);
-    return jugadoresYaTerminados;
-  } catch (error) {
-    setHideLoadActive(false);
-    setHiddenError(false);
-    setHiddenAll(false);
-    console.error("Error:", error);
-    localStorage.setItem("Error", error.message);
-    return [];
-  }
-}
 
-function TopJugadores() {
-  const jugadoresTopsOrdenados = [...jugadoresIterados].sort((a, b) => b.puntaje - a.puntaje);
-  console.log(jugadoresTopsOrdenados)
-  return jugadoresTopsOrdenados.slice(0, 3).map((jugador, index) => ({
-    puesto: index + 1,
-    ...jugador
-  }));
-}
-
-
-function getJugadoresTerminados() {
-  const jugadoresActivosOrdenados =  [...jugadoresIterados].sort((a, b) => b.puntaje - a.puntaje);
-  jugadoresActivosOrdenados.splice(0, 3); // remover top 3
-  return jugadoresActivosOrdenados;
-}
 
 const Players = () => {
   const [jugadaVisible, setJugadaVisible] = useState(null); 
@@ -64,9 +33,10 @@ const Players = () => {
       setHideLoadActive(false);
     } catch (error) {
       setHideLoadActive(false);
+      setSinJugadores(false)
       setHiddenError(false);
       setHiddenAll(false);
-      console.error("Error:", error);
+      console.error("El Error:", error);
     }
   };
   fetchJugadores();
@@ -96,6 +66,7 @@ const Players = () => {
       setHideLoadActive(false);
       setHiddenError(false);
       setHiddenAll(false);
+      setSinJugadores(false)
       console.error("Error:", error);
     }
 };
@@ -108,7 +79,7 @@ const Players = () => {
   <div className="flex flex-col items-center justify-center gap-4 p-6 rounded-xl bg-purple-100 border-2 border-purple-300 shadow-lg text-center animate-fade-in">
     
     {/* Gatito estilo SVG */}
-    <img src="../public/power.png" alt="Gatito" />
+    <img src="./power.png" alt="Gatito" />
 
     <p className="text-2xl font-bold text-purple-900">¡Ups! No hay jugadores</p>
     <p className="text-purple-800">Parece que todos se fueron a jugar a otra parte o aún no empezo el juego 🐾</p>
@@ -174,7 +145,7 @@ const Players = () => {
       {/* Perrito corriendo */}
       <div className="relative w-24 h-24">
         <img 
-          src="../public/runningDog.png" 
+          src="./runningDog.png" 
           alt="DogRunning" 
           className="w-full h-full animate-running-dog"
         />
@@ -188,7 +159,7 @@ const Players = () => {
       {/* Mensaje de búsqueda con lupa */}
       <div className="flex gap-2 items-center mt-2 ">
         <p className="text-gray-800 font-semibold animate-pulse">Buscando jugadores...</p>
-        <img src="../public/lupa.png" width={20} alt="Lupa" className="animate-ping" />
+        <img src="./lupa.png" width={20} alt="Lupa" className="animate-ping" />
       </div>
     </div>
   </div>

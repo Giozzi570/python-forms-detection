@@ -1,8 +1,14 @@
-
 import matplotlib.pyplot as plt
 import numpy as np
+import os,time
 
-def show_graph(id,tamañoX,tamañoY):
+def created_folder(name):
+    if not os.path.exists(name):  # Verifica si la carpeta 'capturas' no existe.
+        os.makedirs(name)  # Si no existe, la crea.
+        print(f"Carpeta creada: {name}")
+
+        
+def show_graph_puntuacion_function(id,tamañoX,tamañoY):
     puntaje = 0
     Verde_fuerte = [18]
     orange = [1,2,4,5]
@@ -53,7 +59,6 @@ def show_graph(id,tamañoX,tamañoY):
         positionx = []
         positiony = []
         raise TypeError("ID fuera de rango")
-
     fig, ax = plt.subplots(figsize=(3, 5), facecolor='white',
                        layout='constrained')
 
@@ -62,12 +67,12 @@ def show_graph(id,tamañoX,tamañoY):
     ax.set(xlim=(0, tamañoX), xticks=np.arange(1, tamañoX),
         ylim=(0, tamañoY), yticks=np.arange(1, tamañoY))
 
+    folder = "graph"
+    created_folder(folder)
+    captura_graph = os.path.join(folder,f"grafico{round(time.time())}.png" )
+    plt.savefig(captura_graph)
+    ax.set(xlim=(0, tamañoX), xticks=np.arange(1, tamañoX),
+        ylim=(0, tamañoY), yticks=np.arange(1, tamañoY))
     
-    plt.show()
     plt.style.use('_mpl-gallery')
-    # make data
-
-    
-        
-
-show_graph(30,5,7)
+    return puntaje,id

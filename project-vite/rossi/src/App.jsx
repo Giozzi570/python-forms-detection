@@ -4,7 +4,6 @@ import Header from './components/header/header'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Players from "./pages/Players";
 import React from 'react';
-import BoardGamePoints from './components/board/BoardGamePoints';
 
 function App() {
   

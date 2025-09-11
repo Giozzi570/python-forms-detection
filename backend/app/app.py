@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
-from deteccion.detected_forms import detectar_formas
+from deteccion import mode_points
 from pathlib import Path
 import os
 import numpy as np
@@ -10,8 +10,8 @@ from flask import send_file
 app = Flask(__name__)
 import firebase_admin
 from firebase_admin import credentials, firestore
-
-cred = credentials.Certificate("./passwords/Passwords_firebase.json")
+import random
+cred = credentials.Certificate("../passwords/Passwords_firebase.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -42,26 +42,25 @@ def detectar():
 @app.route('/guardar', methods=['POST'])
 
 def guardar():
-    # Obtener datos de detección
-    resultado = detectar_formas()
-    posicion_del_circulo = resultado["posicion_del_circulo"]
-    circulos_detectados = resultado["circulos_detectados"]
-    captura_realizada = resultado["captura_realizada"]
-    puntaje = resultado["puntaje"] 
-    img = resultado["img"]
-
-    datos_deteccion = {
-        "circulos_detectados": circulos_detectados,
-        "captura_realizada": captura_realizada,
-        "puntaje": puntaje,
-        "posicion_del_circulo": posicion_del_circulo,
-        "img": img
-    }
 
         # Validar datos del frontend
     datos = request.get_json()
     if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame']):
             return jsonify({"error": "Los campos 'name' , 'id' y 'TypeGame' son requeridos"}), 400
+    
+    lista_instruments = ["Micrometro", "Calibre", "Goniometro"]
+    instrument = random.choice(lista_instruments)
+    # Obtener datos de detección
+    resultado = mode_points.select_game(datos["TypeGame"])
+    circulos_detectados = resultado["circulos_detectados"]
+    captura_realizada = resultado["captura_realizada"]
+    img = resultado["img"]
+
+    datos_deteccion = {
+        "circulos_detectados": circulos_detectados,
+        "captura_realizada": captura_realizada,
+        "img": img
+    }
 
         # Combinar datos
     resultado_final = {**datos, **datos_deteccion}
@@ -79,5 +78,5 @@ def get_datos():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True)
 

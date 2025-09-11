@@ -4,10 +4,12 @@ import { createElement } from '../logic/createElement';
 import { Load } from './modals/modals';
 import { useEffect } from 'react';
 import CircleCursorFollow from './decoration/CircleCursorFollow';
-import BoardGamePoints from './board/BoardGamePoints';
+import BoardGamePoints from './boards/BoardGamePoints/BoardGamePoints';
+import BoardGameLen from './boards/BoardGameLen/BoardGameLen';
 import { PlayerIdCounter } from '../logic/createElement';
 import SelectGame from './selectgame/selectGame';
 import BeautifulCard from './selectgame/cardSelectGame/cardSelectOption';
+import BoardGameNull from './boards/BoardNull/BoardGameNull';
 import { SelectGameFunction } from '../logic/createElement';
 import './BeatifulCard.css'
 
@@ -35,7 +37,6 @@ const BeautifulForm = () => {
   const hiddenfinishActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenfinish ? "hidden" : ""}`
   const hiddenDetecActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${detec ? "hidden" : ""}`
 
-
   const nameLocal = localStorage.getItem("name")
   async function guardarDatosEnBackend() {
     const datos = {
@@ -46,7 +47,7 @@ const BeautifulForm = () => {
     console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("https://c9bdc1d70880.ngrok-free.app/guardar", {
+        const response = await fetch("http://localhost:5000/guardar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -157,8 +158,9 @@ const BeautifulForm = () => {
                 
       </div>
         </div>
-      
-       <BoardGamePoints/>
+       {localStorage.getItem("TypeGame") == "Puntuacion" && <BoardGamePoints/> }
+       {localStorage.getItem("TypeGame") == "Metrologia" && <BoardGameLen/> }
+       {localStorage.getItem("TypeGame") == "" && <BoardGameNull /> }
         <div className={hiddenfinishActive}>
                       <div className="flex flex-col w-96 h-96 bg-white text-black rounded-xl p-10 gap-5">
                           <p className="text-center text-3xl font-black">Empieze a jugar</p>

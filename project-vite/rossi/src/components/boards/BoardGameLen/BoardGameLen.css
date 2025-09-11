@@ -1,0 +1,26 @@
+#content-1, #content-2{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+.tools{
+    width: 50px;
+    height: 50px;
+    background-color: #b3b3b3;
+    border: 2px solid #000;
+    filter:brightness(0.7);
+}
+
+#containerPointsLen{
+    background-color: #C19A6B;
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(6, 50px);
+    justify-items: center;
+    transform: rotate3d(1, 0, 0, 20deg);
+}
+#containerDistribution{
+    transition: all 3s ease-in-out;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+.points:hover{
+    cursor: pointer;
+    filter:brightness(1);
+}
