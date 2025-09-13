@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import "./players.css";
-import Header from "../components/header/header.jsx";
-import ScreenError from "../components/modals/screenError/ScreenError.jsx";
-import SpinnerLoadingScreen from "../components/modals/modalLoad.jsx";
-import { db } from "../firebase.js";
-import app from "../firebase.js";
+import "./playersMet.css";
+import Header from "../../components/header/header.jsx";
+import ScreenError from "../../components/modals/screenError/ScreenError.jsx";
+import SpinnerLoadingScreen from "../../components/modals/modalLoad.jsx";
+import { dbMet } from "../../firebaseMet.js";
+import appMet from "../../firebaseMet.js";
 import { collection, getDocs } from "firebase/firestore";
 
 
@@ -27,7 +27,7 @@ const Players = () => {
   const fetchJugadores = async () => {
     try {
       setHideLoadActive(true);
-      const snapshot = await getDocs(collection(db, "datos_guardados"));
+      const snapshot = await getDocs(collection(dbMet, "datos_guardados"));
       const jugadores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setJugadoresIterados(jugadores);
       setHideLoadActive(false);
@@ -45,20 +45,11 @@ const Players = () => {
   useEffect(() => {
   setSinJugadores(jugadoresIterados.length === 0);
 }, [jugadoresIterados]);
-
-  const jugadoresTop = [...jugadoresIterados]
-  .sort((a, b) => b.puntaje - a.puntaje)
-  .slice(0, 3)
-  .map((jugador, index) => ({ puesto: index + 1, ...jugador }));
-
-  const jugadoresOtros = [...jugadoresIterados]
-  .sort((a, b) => b.puntaje - a.puntaje)
-  .slice(3);
   
   const refreshJugadores = async () => {
     try {
       setHideLoadActive(true);
-      const snapshot = await getDocs(collection(db, "datos_guardados"));
+      const snapshot = await getDocs(collection(dbMet, "datos_guardados"));
       const jugadores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setJugadoresIterados(jugadores);
       setHideLoadActive(false);
@@ -93,12 +84,12 @@ const Players = () => {
   </div>
 )}
         <div className="flex flex-col gap-4 justify-center items-center">
-          {[...jugadoresTop, ...jugadoresOtros].map((jugador) => (
+          {jugadoresIterados.map((jugador) => (
             <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="w-1/2 p-4 border bg-blue-500 border-gray-200 gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center flex-col">
               <p className="text-gray-900 text-3xl font-black">{jugador.name}</p>
               <p className="text-xl text-center font-black text-gray-700">{jugador.puesto ? `${jugador.puesto}° Puesto` : ""}</p>
-              <div className="flex flex-col items-center justify-center h-12 w-12 rounded-full bg-black">
-                <p className="text-xl font-black text-white">{jugador.puntaje}</p>
+              <div className="flex flex-col items-center justify-center h-12 w-auto p-4 rounded-full bg-black text-center">
+                <p className="text-xl font-black text-white">{jugador.gano ? "¡Ganó con " + jugador.instrument + "!" : "Perdió con " + jugador.instrument}</p>
               </div>
               <button onClick={() => setJugadaVisible(jugador)}>Ver jugada</button>
             </div>

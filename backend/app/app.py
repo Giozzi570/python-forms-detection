@@ -12,6 +12,40 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import random
 
+from firebase_admin import credentials, firestore, initialize_app, get_app
+
+def get_firestore_by_game(type_game: str):
+    """
+    Devuelve la conexión (db) a Firestore según el modo de juego.
+    type_game puede ser 'Puntuacion' o 'Metrologia'.
+    """
+
+    try:
+        if type_game == 'Puntuacion':
+            cred = credentials.Certificate("../passwords/Passwords_firebase_puntos.json")
+            app = initialize_app(cred, name='PuntuacionApp')
+
+        elif type_game == 'Metrologia':
+            cred = credentials.Certificate("../passwords/Passwords_firebase_metro.json")
+            app = initialize_app(cred, name='MetrologiaApp')
+
+        else:
+            raise ValueError(f"Tipo de juego desconocido: {type_game}")
+
+    except ValueError:
+        # La app ya estaba inicializada → recuperamos la instancia
+        if type_game == 'Puntuacion':
+            cred = credentials.Certificate("../passwords/Passwords_firebase_puntos.json")
+            app = get_app('PuntuacionApp')
+
+        elif type_game == 'Metrologia':
+            cred = credentials.Certificate("../passwords/Passwords_firebase_metro.json")
+            app = get_app('MetrologiaApp')
+
+    # Siempre llegamos acá con 'app' definido
+    print(f"[INFO] Credenciales utilizadas ({type_game}): {cred}")
+    db = firestore.client(app=app)
+    return db
 
 CORS(app)  # Permitir CORS para evitar bloqueos del navegador
 
@@ -47,28 +81,24 @@ def guardar():
     
     lista_instruments = ["Micrometro", "Calibre", "Goniometro"]
     instrument = random.choice(lista_instruments)
-    try:
-        if datos['TypeGame'] == 'Puntuacion':
-            cred = credentials.Certificate("../passwords/Passwords_firebase_puntos.json")
-            firebase_admin.initialize_app(cred)
-        elif datos['TypeGame'] == 'Metrologia':
-            cred = credentials.Certificate("../passwords/Passwords_firebase_metro.json")
-            firebase_admin.initialize_app(cred)
-    except ValueError:
-        pass  # La app ya ha sido inicializada
-    finally:
-        db = firestore.client()
-        # Obtener datos de detección
+    print(f"Tipo de juego: {datos['TypeGame']}")
+
+    db = get_firestore_by_game(datos['TypeGame'])
 
     resultado = mode_points.select_game(datos["TypeGame"])
-    circulos_detectados = resultado["circulos_detectados"]
-    captura_realizada = resultado["captura_realizada"]
-    img = resultado["img"]
+    Circulos_detectados = resultado["circulos_detectados"]
+    Captura_realizada = resultado["captura_realizada"]
+    Puntaje = resultado["puntaje"]
+    Gano = resultado["Gano"]
+    Img = resultado["img"]
 
     datos_deteccion = {
-        "circulos_detectados": circulos_detectados,
-        "captura_realizada": captura_realizada,
-        "img": img
+        "circulos_detectados": Circulos_detectados,
+        "captura_realizada": Captura_realizada,
+        "puntaje": Puntaje,
+        "Gano": Gano,
+        "img": Img,
+        "instrument": instrument
     }
 
         # Combinar datos
@@ -80,10 +110,10 @@ def guardar():
     return jsonify({"mensaje": "Datos guardados exitosamente"}), 200
 
 
-@app.route('/api/datos')
-def get_datos():
-    datos = db.collection('datos_guardados').stream()
-    return jsonify([doc.to_dict() for doc in datos])
+# @app.route('/api/datos')
+# def get_datos():
+#     datos = db.collection('datos_guardados').stream()
+#     return jsonify([doc.to_dict() for doc in datos])
 
 
 if __name__ == '__main__':

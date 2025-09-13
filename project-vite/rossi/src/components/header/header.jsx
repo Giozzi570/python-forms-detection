@@ -18,8 +18,8 @@ function App() {
         <nav className={`navigation ${isMobileMenuOpen ? 'open' : ''}`}>
           <ul className="nav-links">
             <li><a href="/">Ingreso</a></li>
-            <li><a href="/players">Jugadores</a></li>
-            <li><a href="/players">Jugadores</a></li>
+            <li><a href="/playersPun">Jugadores Puntuación</a></li>
+            <li><a href="/playersMet">Jugadores Metrología</a></li>
           </ul>
           <div id='githubMobile' className="github">
           <p className='github-text'>Link del proyecto</p>

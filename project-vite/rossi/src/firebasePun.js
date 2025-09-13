@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-const firebaseConfig = {
+const firebaseConfigPun = {
   apiKey: "AIzaSyCgW4SBQv8DETQEPZBaQUQ3ohiB8q6MWoI",
   authDomain: "juegopuntos-455c0.firebaseapp.com",
   projectId: "juegopuntos-455c0",
@@ -11,10 +11,10 @@ const firebaseConfig = {
   measurementId: "G-B6QHWSNS8T"
 };
 
-const app = initializeApp(firebaseConfig);
+const appPun = initializeApp(firebaseConfigPun,"Puntos");
 
-const db = getFirestore(app);
+const dbPun = getFirestore(appPun);
 
-export { db };
+export { dbPun };
 
-export default app;
+export default appPun;

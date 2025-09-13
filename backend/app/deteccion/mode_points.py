@@ -158,7 +158,8 @@ def detectar_formas_puntuacion(x0=20, y0=40, ancho_total=600, alto_total=400, co
         "captura_realizada": captura_hecha,
         "puntaje": puntaje,
         "posicion_del_circulo": f"{id}",
-        "img": imagen_base64
+        "img": imagen_base64,
+        "Gano": None
     }
 
 # Función para detectar formas en el modo de metrología, donde se pasa un event para saber donde tiene que caer la ficha
@@ -285,7 +286,8 @@ def detectar_formas_metrologia(event,x0=20, y0=40, ancho_total=600, alto_total=4
         "captura_realizada": captura_hecha,
         "Gano": jugador_gano,
         "posicion_del_circulo": f"{id}",
-        "img": imagen_base64
+        "img": imagen_base64,
+        "puntaje": None
     }
 
 # lista_instruments = ["Micrometro", "Calibre", "Goniometro"]
