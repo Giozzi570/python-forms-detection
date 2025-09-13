@@ -11,10 +11,7 @@ app = Flask(__name__)
 import firebase_admin
 from firebase_admin import credentials, firestore
 import random
-cred = credentials.Certificate("../passwords/Passwords_firebase.json")
-firebase_admin.initialize_app(cred)
 
-db = firestore.client()
 
 CORS(app)  # Permitir CORS para evitar bloqueos del navegador
 
@@ -50,7 +47,19 @@ def guardar():
     
     lista_instruments = ["Micrometro", "Calibre", "Goniometro"]
     instrument = random.choice(lista_instruments)
-    # Obtener datos de detección
+    try:
+        if datos['TypeGame'] == 'Puntuacion':
+            cred = credentials.Certificate("../passwords/Passwords_firebase_puntos.json")
+            firebase_admin.initialize_app(cred)
+        elif datos['TypeGame'] == 'Metrologia':
+            cred = credentials.Certificate("../passwords/Passwords_firebase_metro.json")
+            firebase_admin.initialize_app(cred)
+    except ValueError:
+        pass  # La app ya ha sido inicializada
+    finally:
+        db = firestore.client()
+        # Obtener datos de detección
+
     resultado = mode_points.select_game(datos["TypeGame"])
     circulos_detectados = resultado["circulos_detectados"]
     captura_realizada = resultado["captura_realizada"]

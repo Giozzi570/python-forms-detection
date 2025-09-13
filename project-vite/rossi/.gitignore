@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.env.local
+backend/passwords/Passwords_firebase_metro.json
+backend/passwords/Passwords_firebase_puntos.json
+backend/deteccion/__pycache__/detected_forms.cpython-313.pyc
+backend/deteccion/__pycache__/__init__.cpython-313.pyc
