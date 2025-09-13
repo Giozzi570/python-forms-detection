@@ -31,11 +31,11 @@ const BeautifulForm = () => {
 
   const [detec,setDetecFinish] = useState(true)
 
-  const HideErrorActive = `w-full h-screen flex justify-center items-center absolute ${hiddenError ? "hidden" : ""}`
-  const hideLoadActiveSure = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenLoadSure ? "hidden" : ""}`
-  const hideLoadActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenLoad ? "hidden" : ""}`
-  const hiddenfinishActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenfinish ? "hidden" : ""}`
-  const hiddenDetecActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${detec ? "hidden" : ""}`
+  const HideErrorActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenError ? "hidden" : ""}`
+  const hideLoadActiveSure = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenLoadSure ? "hidden" : ""}`
+  const hideLoadActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenLoad ? "hidden" : ""}`
+  const hiddenfinishActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenfinish ? "hidden" : ""}`
+  const hiddenDetecActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${detec ? "hidden" : ""}`
 
   const nameLocal = localStorage.getItem("name")
   async function guardarDatosEnBackend() {
@@ -47,7 +47,7 @@ const BeautifulForm = () => {
     console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("https://9a6509f762d1.ngrok-free.app/guardar", {
+        const response = await fetch("http://localhost:5000/guardar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -113,7 +113,7 @@ const BeautifulForm = () => {
 
   return (
     <div className="lg:min-h-screen h-auto w-full flex lg:flex-row flex-col items-center justify-around from-gray-50 to-gray-200 p-4 " id='BeatifulCard'>
-      <div className="w-full flex flex-col max-w-md h-screen justify-center grow">
+      <div className="relative w-full flex flex-col max-w-md h-screen justify-center grow">
         <div className='bg-white backdrop-blur-lg bg-opacity-30 rounded-2xl p-8 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1'>
             <h2 className="text-2xl md:text-3xl font-bold text-center text-indigo-600 mb-8">
           Ingresa tu Nombre
@@ -155,13 +155,7 @@ const BeautifulForm = () => {
                     </div>
                     <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
                 </div>
-                
-      </div>
-        </div>
-       {localStorage.getItem("TypeGame") == "Puntuacion" && <BoardGamePoints/> }
-       {localStorage.getItem("TypeGame") == "Metrologia" && <BoardGameLen/> }
-       {localStorage.getItem("TypeGame") == "" && <BoardGameNull /> }
-        <div className={hiddenfinishActive}>
+                <div className={hiddenfinishActive}>
                       <div className="flex flex-col w-96 h-96 bg-white text-black rounded-xl p-10 gap-5">
                           <p className="text-center text-3xl font-black">Empieze a jugar</p>
                           <p className="text-center font-bold">El numero de intento hasta ahora es {localStorage.getItem('playerIdCounter')}</p>
@@ -179,6 +173,11 @@ const BeautifulForm = () => {
               setHiddenErrorParam={buttonHiddenError}
               setHiddenDetecParam={setDetecFinish}
               hiddenDetecActiveParam={hiddenDetecActive}></Load>
+      </div>
+        </div>
+       {localStorage.getItem("TypeGame") == "Puntuacion" && <BoardGamePoints/> }
+       {localStorage.getItem("TypeGame") == "Metrologia" && <BoardGameLen/> }
+       {localStorage.getItem("TypeGame") == "" && <BoardGameNull /> }
 </div>
 
 
