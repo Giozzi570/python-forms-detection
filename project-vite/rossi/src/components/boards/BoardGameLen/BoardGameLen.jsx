@@ -7,7 +7,7 @@ const BoardGameLen = () => {
     const pointsArray = Array.from({ length: 18 }, (_, i) => 18 - i);
 
     return (
-    <main className='w-auto flex flex-col h-screen justify-start lg:justify-center text-white' id='BoardGamePoints'>
+    <main className='w-auto flex flex-col justify-start lg:justify-center text-white' id='BoardGamePoints'>
         <div className="w-auto h-auto flex flex-col justify-around items-center p-4">
 
             <aside className={`${points ? 'hidden' : 'block'}`}>
@@ -51,14 +51,6 @@ const BoardGameLen = () => {
                     {pointsArray.map((num) => (
                         <div className="tools" key={num} id={`${num}`}></div>
                     ))}
-                </div>
-
-                <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl gap-4 ${points ? 'flex' : 'hidden'} animate__animated animate__fadeInRightBig`}>
-                    <div className='h-auto text-center bg-[#ff0000] rounded-full p-2' id='red'>Error Máximo</div>
-                    <div className='h-auto text-center bg-[#FF9900] rounded-full p-2' id='orange'>Tolerancia Baja</div>
-                    <div className='h-auto text-center bg-[#FFFF00] rounded-full p-2' id='yellow'>Tolerancia Media</div>
-                    <div className='h-auto text-center bg-[#008000] rounded-full p-2' id='dark-green'>Tolerancia Alta</div>
-                    <div className='h-auto text-center bg-[#00fa0c] rounded-full p-2' id='light-green'>Precisión Óptima</div>
                 </div>
             </div>
 
