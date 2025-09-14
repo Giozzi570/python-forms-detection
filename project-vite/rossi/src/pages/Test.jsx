@@ -1,21 +1,28 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Search } from "lucide-react";
 
-function ModalFinish() {
-    const [hiddenfinish, setHiddenFinish] = useState(false)
-    const hiddenfinishActive = `w-full h-screen flex justify-center items-center absolute bg-transparent ${hiddenfinish ? "hidden" : ""}`
+const SearchBar = ({ onSearch }) => {
+  const [query, setQuery] = useState("");
 
-    return (
-        <div className={hiddenfinishActive}>
-            <div className="flex flex-col justify-center h-auto w-80 bg-white text-black rounded-xl p-10 gap-8 items-center">
-            <img width={100} height={100} src="../si.png" alt="" />
-            <span className="text-center font-bold text-xl">Se han termindo de detectar sus fichas {name}</span>
-            <span className="text-center font-bold text-xl">Espero que le haya gustado el juego</span>
-            <button id="cancelButton" onClick={setHiddenFinish} class="overflow-hidden group px-6 py-3 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40">Finalizar intento</button>
-        </div>
-        </div>
-    )
-}
-// { setHiddenFinish , hiddenfinish }
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+    onSearch(value); // 🔥 llama automáticamente al escribir
+  };
 
-export default ModalFinish;
+  return (
+    <div className="flex items-center bg-white rounded-full shadow-lg px-4 py-2 w-full max-w-md 
+                    focus-within:ring-2 focus-within:ring-blue-400 transition">
+      <Search className="text-gray-400 w-5 h-5 mr-2" />
+      <input
+        type="text"
+        value={query}
+        onChange={handleChange}
+        placeholder="Buscar..."
+        className="flex-grow bg-transparent outline-none text-gray-700 placeholder-gray-400"
+      />
+    </div>
+  );
+};
+
+export default SearchBar;
