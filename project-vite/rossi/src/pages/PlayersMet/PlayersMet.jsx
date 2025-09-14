@@ -6,8 +6,7 @@ import SpinnerLoadingScreen from "../../components/modals/modalLoad.jsx";
 import { dbMet } from "../../firebaseMet.js";
 import appMet from "../../firebaseMet.js";
 import { collection, getDocs } from "firebase/firestore";
-
-
+import { FaEye } from "react-icons/fa";
 
 
 
@@ -83,17 +82,19 @@ const Players = () => {
     </button>
   </div>
 )}
-        <div className="flex flex-col gap-4 justify-center items-center">
-          {jugadoresIterados.map((jugador) => (
-            <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="w-1/2 p-4 border bg-blue-500 border-gray-200 gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center flex-col">
-              <p className="text-gray-900 text-3xl font-black">{jugador.name}</p>
-              <p className="text-xl text-center font-black text-gray-700">{jugador.puesto ? `${jugador.puesto}° Puesto` : ""}</p>
-              <div className="flex flex-col items-center justify-center h-12 w-auto p-4 rounded-full bg-black text-center">
-                <p className="text-xl font-black text-white">{jugador.gano ? "¡Ganó con " + jugador.instrument + "!" : "Perdió con " + jugador.instrument}</p>
-              </div>
-              <button onClick={() => setJugadaVisible(jugador)}>Ver jugada</button>
-            </div>
-          ))}
+        <div className="flex flex-col gap-4 justify-center items-center w-full">
+                {[...jugadoresIterados].map((jugador) => (
+                    <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="lg:w-1/2 w-auto flex-wrap justify-center text-black p-4 border border-4 border-black gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center lg:justify-between">
+                       <p className="text-xl text-center font-black text-gray-700">{jugador.puesto ? `${jugador.puesto}°` : ""}</p>
+                       <p className="text-gray-900 text-3xl font-black">{jugador.name}</p>
+                      <div>
+                         <div className="bg-[#E0E7FF] text-black rounded-lg p-3">
+                                    <p className="text-3xl font-black text-center text-wrap">{jugador.gano ? <span>¡Ganó!</span> : <span>Perdió</span>} <span className="text-muted-foreground">con {jugador.instrument}</span></p>
+                          </div>
+                      </div>
+                      <button className="flex items-center gap-2" onClick={() => setJugadaVisible(jugador)}><FaEye /> <p>Ver jugada</p></button>
+                    </div>
+                  ))}
         </div>
 
 
