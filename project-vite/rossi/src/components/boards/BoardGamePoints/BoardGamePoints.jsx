@@ -19,7 +19,7 @@ const BoardGamePoints = () => {
                         <li><p>1. Cada jugador tiene un puntaje inicial de 0.</p></li>
                         <li><p>2. Los puntos se pueden ganar en mayor o menor medida dependiendo de donde cae la ficha.</p></li>
                         <li><p>3. El jugador con más puntos al final del juego es el ganador.</p></li>
-                        <li><p>4. Los puntos se pueden visualizar en la pagina <a href="/players">Jugadores</a>.</p></li>
+                        <li><p>4. Los puntos se pueden visualizar en la pagina <a href="/PlayersPun">Jugadores</a>.</p></li>
                     </ul>
                 </div>
                 
@@ -48,12 +48,12 @@ const BoardGamePoints = () => {
                             <div className="points" key={num} id={`${num}`}></div>
                         ))}
                     </div>
-                     <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl gap-4 ${points ? 'flex' : 'hidden'} animate__animated animate__fadeInRightBig`}>
-                        <div className='h-auto text-center bg-[#ff0000] rounded-full p-2' id='red'>-10 puntos</div>
-                        <div className='h-auto text-center bg-[#FF9900] rounded-full p-2' id='orange'>+5 puntos</div>
-                        <div className='h-auto text-center bg-[#FFFF00] rounded-full p-2' id='yellow'>+10 puntos</div>
-                        <div className='h-auto text-center bg-[#008000] rounded-full p-2' id='dark-green'>+15 puntos</div>
-                        <div className='h-auto text-center bg-[#00fa0c] rounded-full p-2' id='light-green'>+30 puntos</div>
+                     <div className={`w-auto flex-wrap h-auto justify-center items-center border-2 border-black p-5 rounded-3xl gap-4 ${points ? 'flex' : 'hidden'} animate__animated animate__fadeInRightBig`}>
+                        <div className='h-auto text-center bg-[#ff0000] rounded-full p-2' id='red'>-1000 puntos</div>
+                        <div className='h-auto text-center bg-[#FF9900] rounded-full p-2' id='orange'>+500 puntos</div>
+                        <div className='h-auto text-center bg-[#FFFF00] rounded-full p-2' id='yellow'>+1000 puntos</div>
+                        <div className='h-auto text-center bg-[#008000] rounded-full p-2' id='dark-green'>+1500 puntos</div>
+                        <div className='h-auto text-center bg-[#00fa0c] rounded-full p-2' id='light-green'>+3000 puntos</div>
                     </div>
                 </div>
                 </div>

@@ -20,7 +20,7 @@ const BoardGameLen = () => {
                                 <li><p>1. Cada instrumento tiene una precisión inicial de referencia.</p></li>
                                 <li><p>2. Las mediciones pueden variar dependiendo de la calibración y el instrumento usado.</p></li>
                                 <li><p>3. Los valores más precisos permiten obtener resultados más confiables.</p></li>
-                                <li><p>4. Las mediciones se pueden registrar en la sección <a href="/measurements">Mediciones</a>.</p></li>
+                                <li><p>4. Las mediciones se pueden registrar en la sección <a href="/PlayersMet">Mediciones</a>.</p></li>
                             </ul>
                         </div>
                     </div>

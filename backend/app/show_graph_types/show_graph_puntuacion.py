@@ -16,15 +16,15 @@ def show_graph_puntuacion_function(id,tamañoX,tamañoY):
     yellow = [7,8,9,26,30,31,35]
     green = [6,10,16,20,27,29]
     if id in Verde_fuerte:
-        puntaje = 30
+        puntaje = 3000
     elif id in orange:
-        puntaje = 5
+        puntaje = 500
     elif id in red:
-        puntaje = -10
+        puntaje = -1000
     elif id in yellow:
-        puntaje = 10
+        puntaje = 100
     elif id in green:
-        puntaje = 15
+        puntaje = 1500
     else:
         raise TypeError("ID fuera de rango")
     print(f"El puntaje para el ID {id} es: {puntaje}")

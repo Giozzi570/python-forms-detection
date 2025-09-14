@@ -6,7 +6,7 @@ import SpinnerLoadingScreen from "../../components/modals/modalLoad.jsx";
 import { dbPun } from "../../firebasePun.js";
 import appPun from "../../firebasePun.js";
 import { collection, getDocs } from "firebase/firestore";
-
+import { FaEye } from "react-icons/fa";
 
 
 
@@ -53,8 +53,20 @@ const Players = () => {
 
   const jugadoresOtros = [...jugadoresIterados]
   .sort((a, b) => b.puntaje - a.puntaje)
+  .map((jugador, index) => ({ puesto: index + 1, ...jugador }))
   .slice(3);
-  
+const getPodio = (puesto) => {
+    switch (puesto) {
+      case 1:
+        return "🥇";
+      case 2:
+        return "🥈";
+      case 3:
+        return "🥉";
+      default:
+        return "";
+    }
+  }
   const refreshJugadores = async () => {
     try {
       setHideLoadActive(true);
@@ -92,15 +104,32 @@ const Players = () => {
     </button>
   </div>
 )}
-        <div className="flex flex-col gap-4 justify-center items-center">
-          {[...jugadoresTop, ...jugadoresOtros].map((jugador) => (
-            <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="w-1/2 p-4 border bg-blue-500 border-gray-200 gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center flex-col">
+        <div className="flex flex-col md:flex-row gap-4 justify-center items-center mb-12">
+          {[...jugadoresTop].map((jugador) => (
+            <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="w-64 h-auto text-center justify-between p-4 border bg-blue-500 border-gray-200 gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center flex-col">
               <p className="text-gray-900 text-3xl font-black">{jugador.name}</p>
               <p className="text-xl text-center font-black text-gray-700">{jugador.puesto ? `${jugador.puesto}° Puesto` : ""}</p>
-              <div className="flex flex-col items-center justify-center h-12 w-12 rounded-full bg-black">
-                <p className="text-xl font-black text-white">{jugador.puntaje}</p>
+              <div className="bg-[#E0E7FF] text-black rounded-lg p-3">
+                            <p className="text-3xl font-black text-chart-3">{jugador.puntaje}</p>
+                            <p className="text-sm text-muted-foreground">puntos</p>
+                          </div>
+              {getPodio(jugador.puesto)}
+              <button className="flex items-center gap-2" onClick={() => setJugadaVisible(jugador)}><FaEye /> <p>Ver jugada</p></button>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col gap-4 justify-center items-center">
+        {[...jugadoresOtros].map((jugador) => (
+            <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="w-auto text-black p-4 border border-4 border-black gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center justify-between">
+               <p className="text-xl text-center font-black text-gray-700">{jugador.puesto ? `${jugador.puesto}°` : ""}</p>
+               <p className="text-gray-900 text-3xl font-black">{jugador.name}</p>
+              <div>
+                 <div className="bg-[#E0E7FF] text-black rounded-lg p-3">
+                            <p className="text-3xl font-black text-chart-3">{jugador.puntaje}</p>
+                            <p className="text-sm text-muted-foreground">puntos</p>
+                  </div>
               </div>
-              <button onClick={() => setJugadaVisible(jugador)}>Ver jugada</button>
+              <button className="flex items-center gap-2" onClick={() => setJugadaVisible(jugador)}><FaEye /> <p>Ver jugada</p></button>
             </div>
           ))}
         </div>
