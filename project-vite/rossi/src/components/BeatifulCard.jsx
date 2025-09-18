@@ -47,7 +47,7 @@ const BeautifulForm = () => {
     console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("http://localhost:5000/guardar", {
+        const response = await fetch("https://backend-saud.onrender.com/guardar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
