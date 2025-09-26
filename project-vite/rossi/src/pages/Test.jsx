@@ -8,7 +8,7 @@ function ModalTypeCamera() {
 
   async function PermiCamera() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ facingMode: "environment"});
+      const stream = await navigator.mediaDevices.getUserMedia({video : true facingMode: "environment", audio : false});
       if (videoRef.current) {
         videoRef.current.srcObject = stream; // asigna el stream
       }
