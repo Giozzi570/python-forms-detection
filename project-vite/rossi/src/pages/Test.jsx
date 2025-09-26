@@ -11,7 +11,7 @@ document.getElementById("video").srcObject = stream
 function ModalTypeCamera(){
   return(
     <>
-    <video id="video"></video>
+    <video id="video" autoplay playsinline ></video>
     <div className="text-black flex-col text-black shadow-2xl rounded-2xl flex items-center justify-center h-80 w-80 m-auto p-2">
       <div className="text-center pb-6">¿Con que tipo de camara quiere jugar?</div>
       <div className="flex gap-3">
