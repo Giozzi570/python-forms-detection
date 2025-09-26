@@ -5,7 +5,7 @@ import "./Test.css"
 
 
 function PermiCamera(){
-  navigator.mediaDevices.getUserMedia()
+  navigator.mediaDevices.getUserMedia({video : true})
 }
 function ModalTypeCamera(){
   return(
