@@ -4,8 +4,9 @@ import Web from "/typeWeb.png"
 import "./Test.css"
 
 
-function PermiCamera(){
-  navigator.mediaDevices.getUserMedia({video : true})
+async function PermiCamera(){
+  const stream = await navigator.mediaDevices.getUserMedia({video : true})
+document.getElementById("video").srcObject = stream
 }
 function ModalTypeCamera(){
   return(
