@@ -15,7 +15,7 @@ function ModalTypeCamera(){
       <div className="text-center pb-6">¿Con que tipo de camara quiere jugar?</div>
       <div className="flex gap-3">
         <div><button onClick={PermiCamera}><img className="rounded-sm" src={Cellphone} alt="Celphone" /></button></div>
-        <div><button><img className="rounded-sm" src={Web} alt="Webcam"  /></button></div>
+        <div><button><img className="rounded-sm" src={Web} alt="Webcam"/></button></div>
       </div>
     </div>
     </>
