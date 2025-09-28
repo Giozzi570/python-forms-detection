@@ -11,7 +11,7 @@ export default defineConfig({
   build: {
     outDir: 'dist'
   },
-  // 👇 esto es lo importante
+
   resolve: {
     alias: {
       '@': '/src'

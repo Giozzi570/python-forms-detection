@@ -9,7 +9,7 @@ export const createElement = (name) => {
 };
 export const PlayerIdCounter = () => {
     let playerIdCounter = 1
-    playerIdCounter = localStorage.getItem('playerIdCounter') || 0;
+    playerIdCounter = parseInt(localStorage.getItem('playerIdCounter'), 10) || 0;
     playerIdCounter++;
     localStorage.setItem('playerIdCounter', playerIdCounter);
 }

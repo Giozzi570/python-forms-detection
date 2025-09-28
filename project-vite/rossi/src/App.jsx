@@ -6,7 +6,7 @@ import Players from "./pages/PlayersPun/PlayersPun";
 import PlayersMet from "./pages/PlayersMet/PlayersMet";
 import React from 'react';
 import SearchBar from './components/searchBar/search';
-
+import ModalTypeCamera from './pages/Test';
 function App() {
   
   return (
@@ -17,7 +17,7 @@ function App() {
           <Route path='/' element={<><Header/><BeautifulForm /></>}/>
           <Route path="/playersPun" element={<Players/>} />
           <Route path="/playersMet" element={<PlayersMet/>} />
-          <Route path="/test" element={<SearchBar />} />
+          <Route path="/test" element={<ModalTypeCamera />} />
         </Routes>
       </BrowserRouter>
     </React.StrictMode>

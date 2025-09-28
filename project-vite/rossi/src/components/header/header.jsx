@@ -1,8 +1,8 @@
 // App.jsx
 import React, { useState } from 'react';
 import './header.css';
-import Home from '../../../public/home.svg';
-import GitHub from '../../../public/github.png';
+import Home from '/home.svg';
+import GitHub from '/github.png';
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

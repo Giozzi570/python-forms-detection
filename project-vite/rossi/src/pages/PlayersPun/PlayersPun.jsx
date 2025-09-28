@@ -4,7 +4,6 @@ import Header from "../../components/header/header.jsx";
 import ScreenError from "../../components/modals/screenError/ScreenError.jsx";
 import SpinnerLoadingScreen from "../../components/modals/modalLoad.jsx";
 import { dbPun } from "../../firebasePun.js";
-import appPun from "../../firebasePun.js";
 import { collection, getDocs } from "firebase/firestore";
 import { FaEye } from "react-icons/fa";
 
@@ -14,7 +13,6 @@ import { FaEye } from "react-icons/fa";
 
 const Players = () => {
   const [jugadaVisible, setJugadaVisible] = useState(null); 
-  const [imagen, setImagen] = useState(true);
   const [hiddenAll, setHiddenAll] = useState(false);
   const [hiddenError, setHiddenError] = useState(true);
   const [hideLoadActive, setHideLoadActive] = useState(true);
@@ -94,7 +92,7 @@ const getPodio = (puesto) => {
     <img src="./power.png" alt="Gatito" />
 
     <p className="text-2xl font-bold text-purple-900">¡Ups! No hay jugadores</p>
-    <p className="text-purple-800">Parece que todos se fueron a jugar a otra parte o aún no empezo el juego 🐾</p>
+    <p className="text-purple-800">Parece que todos se fueron a jugar a otra parte o aún no empezó el juego 🐾</p>
 
     <button
       className="mt-4 px-6 py-2 bg-purple-400 hover:bg-purple-500 text-purple-900 font-bold rounded-lg shadow-md transition"
