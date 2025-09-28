@@ -3,6 +3,7 @@ import { FaUser, FaPaperPlane, FaCheck } from 'react-icons/fa';
 import { createElement } from '../logic/createElement';
 import { Load } from './modals/modals';
 import { useEffect } from 'react';
+import { useRef } from 'react';
 import CircleCursorFollow from './decoration/CircleCursorFollow';
 import BoardGamePoints from './boards/BoardGamePoints/BoardGamePoints';
 import BoardGameLen from './boards/BoardGameLen/BoardGameLen';
@@ -27,22 +28,53 @@ const BeautifulForm = () => {
 
   const [hiddenError, setHiddenError] = useState(true)
 
-  const [hiddenfinish, setHiddenFinish] = useState(true)
+  const [hiddenfinishWeb, setHiddenFinishWeb] = useState(true)
+
+  
+  const [hiddenfinishCellphone, setHiddenFinishCellphone] = useState(true)
 
   const [detec,setDetecFinish] = useState(true)
+
+  const [camera,setHiddenCamera] = useState(true)
+  
+  const [cellphone,setHiddenCellphone] = useState(true)
 
   const HideErrorActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenError ? "hidden" : ""}`
   const hideLoadActiveSure = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenLoadSure ? "hidden" : ""}`
   const hideLoadActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenLoad ? "hidden" : ""}`
-  const hiddenfinishActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenfinish ? "hidden" : ""}`
+  const hiddenfinishActiveWeb = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenfinishWeb ? "hidden" : ""}`
   const hiddenDetecActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${detec ? "hidden" : ""}`
+  const hiddenCameraActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${camera ? "hidden" : ""}`
+  const hiddenfinishActiveCellphone = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${cellphone ? "hidden" : ""}`
 
   const nameLocal = localStorage.getItem("name")
-  async function guardarDatosEnBackend() {
+  const videoRef = useRef(null); // referencia al <video>
+
+  async function PermiCamera() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({video : {facingMode: "environment"}, audio : false});
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream; // asigna el stream
+      }
+    } catch (err) {
+      console.error("Error al abrir la cámara:", err);
+    }finally{
+      setHiddenCamera(false)
+    }
+   setHiddenCamera(true)
+   setHiddenCellphone(false)
+    console.log("no tengo camara xd")
+  }
+  function PermiCameraWeb(){
+    setHiddenCamera(true)
+  }
+  async function guardarDatosEnBackendWithCellphone() {
     const datos = {
         name : localStorage.getItem('name'),
         id : localStorage.getItem('playerIdCounter'),
-        TypeGame : localStorage.getItem('TypeGame')
+        TypeCamera : "Cellphone",
+        TypeGame : localStorage.getItem('TypeGame'),
+        
     };
     console.log(datos);
     try{
@@ -66,33 +98,71 @@ const BeautifulForm = () => {
     }
 
 }
+  async function guardarDatosEnBackendWithWeb() {
+    const datos = {
+        name : localStorage.getItem('name'),
+        id : localStorage.getItem('playerIdCounter'),
+        TypeCamera : 'WebCam',
+        TypeGame : localStorage.getItem('TypeGame')
+    };
+    console.log(datos);
+    try{
+        setHiddenLoad(!hiddenLoad)
+        const response = await fetch("http://127.0.0.1:5000/guardar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),  // Envía el objeto completo
+    })
+    if (!response.ok) throw new Error("❌ Falló el guardado");
+    else {}
+      setHiddenLoad(true)
+      setDetecFinish(!hiddenDetecActive)
+    } catch (error){
+        localStorage.setItem("error",error)
+        setHiddenLoad(true)
+        setHiddenError(!HideErrorActive)
+        console.log(error)
+    }
+
+}
   const buttonHiddenError = () => {
       setHiddenError(!hiddenError)
       localStorage.removeItem("error")
   }
   const buttonHiddenLoad = () => {
-    setHiddenFinish(!hiddenfinish)
+    setHiddenFinishWeb(!hiddenfinishWeb)
     setHiddenLoadSure(!hiddenLoadSure)
     PlayerIdCounter()
   
  
     
   }
-  const buttonHiddenFinish = () => {
-    setHiddenFinish(!hiddenfinish)
-    guardarDatosEnBackend()
+  const buttonHiddenFinishWeb = () => {
+    setHiddenFinishWeb(!hiddenfinishWeb)
+    guardarDatosEnBackendWithWeb()
   }
-  const buttonHiddenCancelFinish = () => {
-    setHiddenFinish(true)
+  const buttonHiddenCancelFinishWeb = () => {
+    setHiddenFinishWeb(true)
   }
   const buttonHiddenLoadCancel = () => {
     setHiddenLoadSure(true)
   }
+
+   const buttonHiddenFinishCellphone = () => {
+    setHiddenFinishCellphone(!hiddenfinishCellphone)
+    guardarDatosEnBackendWithCellphone()
+  }
+  const buttonHiddenCancelFinishCellphone = () => {
+    setHiddenFinishWebCellhone(true)
+  }
   
-  function functionFetch(name,bool,target,hiddenLoadSure){
+  function functionFetch(name,bool,target,hiddenLoadSure,camara){
     createElement(name)
     setSubmitted(bool);
     setTarget(!target)
+    setHiddenCamera(!camara)
     setHiddenLoadSure(!hiddenLoadSure)
     setTimeout(() => {
       setSubmitted(false);
@@ -102,7 +172,7 @@ const BeautifulForm = () => {
 
   const handleSubmit = () => {
     if (!name.trim()) return;
-    functionFetch(name,true,Target,hiddenLoadSure)
+    functionFetch(name,true,Target,hiddenLoadSure,camera)
   }
   
   const buttonBase =
@@ -155,13 +225,24 @@ const BeautifulForm = () => {
                     </div>
                     <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
                 </div>
-                <div className={hiddenfinishActive}>
+                <div className={hiddenfinishActiveWeb}>
                       <div className="flex flex-col w-96 h-96 bg-white text-black rounded-xl p-10 gap-5">
                           <p className="text-center text-3xl font-black">Empieze a jugar</p>
                           <p className="text-center font-bold">El numero de intento hasta ahora es {localStorage.getItem('playerIdCounter')}</p>
                           <p className="text-center font-bold">Al dar por terminado su intento haga click en Terminar intento</p>
-                          <button id="cancelButton" onClick={buttonHiddenFinish} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
-                          <button id="cancelButton" onClick={buttonHiddenCancelFinish} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
+                          <button id="cancelButton" onClick={buttonHiddenFinishWeb} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
+                          <button id="cancelButton" onClick={buttonHiddenCancelFinishWeb} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
+                      </div>
+        
+          </div>
+          <div className={hiddenfinishActiveCellphone}>
+                      <div className="flex flex-col w-96 h-auto bg-white text-black rounded-xl p-10 gap-5">
+                          <p className="text-center text-3xl font-black">Empieze a jugar</p>
+                          <p className="text-center text-3xl font-black">Ubique su telefono para empezar a jugar</p>
+                          <p className="text-center font-bold">El numero de intento hasta ahora es {localStorage.getItem('playerIdCounter')}</p>
+                          <p className="text-center font-bold">Al dar por terminado su intento haga click en Terminar intento</p>
+                          <button id="cancelButton" onClick={buttonHiddenFinishCellphone} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
+                          <button id="cancelButton" onClick={buttonHiddenCancelFinishCellphone} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
                       </div>
           </div>
           <Load hideLoadActiveSureParam={hideLoadActiveSure}
@@ -172,7 +253,10 @@ const BeautifulForm = () => {
               HideErrorActiveParam={HideErrorActive}
               setHiddenErrorParam={buttonHiddenError}
               setHiddenDetecParam={setDetecFinish}
-              hiddenDetecActiveParam={hiddenDetecActive}></Load>
+              hiddenDetecActiveParam={hiddenDetecActive}
+              HiddenCameraParam={hiddenCameraActive}
+              PermiCameraParam={PermiCamera}
+              PermiCameraWebParam={PermiCameraWeb}></Load>
       </div>
         </div>
        {localStorage.getItem("TypeGame") == "Puntuacion" && <BoardGamePoints/> }

@@ -1,6 +1,5 @@
-import time
-import random
+import cv2
 
+cap = cv2.VideoCapture(1)
 
-print(random.randint(1, 10)) 
-print(round(time.time()))
+print(cap.isOpened())

@@ -1,9 +1,14 @@
 import base64
 
-with open("imagen.txt", "r") as f:
-    data = f.read()
+# Leer la imagen en binario
+with open("example.jpeg", "rb") as f:
+    img_bytes = f.read()
 
-imagen_bytes = base64.b64decode(data)
+# Convertir a base64
+img_base64 = base64.b64encode(img_bytes)
 
-with open("imagen_recuperada.png", "wb") as f:
-    f.write(imagen_bytes)
+# Guardar en un archivo de texto
+with open("imagen_base64.txt", "wb") as f:
+    f.write(img_base64)
+
+print("Imagen convertida a base64 y guardada en imagen_base64.txt ✅")
