@@ -17,7 +17,7 @@ const Players = () => {
   const [hideLoadActive, setHideLoadActive] = useState(true);
   const [jugadoresIterados, setJugadoresIterados] = useState([]);
   const [sinJugadores, setSinJugadores] = useState(true);
-
+  const [hiddenAll, setHidden] = useState(false)
 
 
   useEffect(() => {
@@ -80,15 +80,17 @@ const Players = () => {
     </button>
   </div>
 )}
-        <div className="flex flex-col gap-4 justify-center items-center w-full">
+        <div className="flex flex-col gap-4 justify-around items-center w-full">
                 {[...jugadoresIterados].map((jugador) => (
-                    <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="lg:w-1/2 w-auto flex-wrap justify-center text-black p-4 border border-4 border-black gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center lg:justify-between">
-                       <p className="text-xl text-center font-black text-gray-700">{jugador.puesto ? `${jugador.puesto}°` : ""}</p>
-                       <p className="text-gray-900 text-3xl font-black">{jugador.name}</p>
+                    <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="lg:w-3/4 flex-wrap justify-center w-full text-black p-4 border border-4 border-black gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center lg:justify-between">
+                       <div className="flex flex-col">
+                        <p className="text-gray-900 text-3xl font-black">{jugador.name}</p>
+
                       <div>
                          <div className="bg-[#E0E7FF] text-black rounded-lg p-3">
                                     <p className="text-3xl font-black text-center text-wrap">{jugador.gano ? <span>¡Ganó!</span> : <span>Perdió</span>} <span className="text-muted-foreground">con {jugador.instrument}</span></p>
                           </div>
+                      </div>
                       </div>
                       <button className="flex items-center gap-2" onClick={() => setJugadaVisible(jugador)}><FaEye /> <p>Ver jugada</p></button>
                     </div>

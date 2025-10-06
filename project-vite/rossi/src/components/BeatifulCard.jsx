@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef } from 'react';
 import { FaUser, FaPaperPlane, FaCheck } from 'react-icons/fa';
 import { createElement } from '../logic/createElement';
 import { Load } from './modals/modals';
@@ -16,7 +16,8 @@ import './BeatifulCard.css'
 const BeautifulForm = () => {
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  
+  const [errorMsgCamera, setErrorMsg] = useState("");
+
   const [modificationGame, setModificationGame] = useState(false);
 
   const [Target, setTarget] = useState(false);
@@ -27,27 +28,144 @@ const BeautifulForm = () => {
 
   const [hiddenError, setHiddenError] = useState(true)
 
-  const [hiddenfinish, setHiddenFinish] = useState(true)
+  const [hiddenfinishWeb, setHiddenFinishWeb] = useState(true)
+  
+  
+  const [hiddenfinishCellphone, setHiddenFinishCellphone] = useState(true)
 
   const [detec,setDetecFinish] = useState(true)
 
+  const [camera,setHiddenCamera] = useState(true)
+  
+  const [cellphone,setHiddenCellphone] = useState(true)
+  const [cellphoneError,setHiddenCellphoneError] = useState(true)
+  
   const HideErrorActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenError ? "hidden" : ""}`
   const hideLoadActiveSure = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenLoadSure ? "hidden" : ""}`
   const hideLoadActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenLoad ? "hidden" : ""}`
-  const hiddenfinishActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenfinish ? "hidden" : ""}`
+  const hiddenfinishActiveWeb = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenfinishWeb ? "hidden" : ""}`
   const hiddenDetecActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${detec ? "hidden" : ""}`
+  const hiddenCameraActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${camera ? "hidden" : ""}`
+  const hiddenfinishActiveCellphone = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${cellphone ? "hidden" : ""}`
+  const hiddenfinishErrorCellphone = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${cellphoneError ? "hidden" : ""}`
 
   const nameLocal = localStorage.getItem("name")
-  async function guardarDatosEnBackend() {
-    const datos = {
+  const videoRef = useRef(null); // referencia al <video>
+
+  function PermiCamera() {
+    async function CameraFunction() {
+      try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+        audio: false,
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        console.log("Hola")
+        setHiddenCellphone(false)
+        setHiddenCellphoneError(true)
+      }
+    } catch (err) {
+        let message = "";
+      switch (err.name) {
+        case "NotAllowedError":
+          message = "Permiso denegado para usar la cámara.";
+          break;
+        case "NotFoundError":
+          message = "No se encontró ninguna cámara.";
+          break;
+        case "NotReadableError":
+          message = "La cámara está siendo usada por otra aplicación.";
+          break;
+        case "OverconstrainedError":
+          message = "La configuración de video no es compatible con tu dispositivo.";
+          break;
+        case "SecurityError":
+          message = "Debe ejecutarse en un sitio seguro (https o localhost).";
+          break;
+        default:
+          message = "Error desconocido al acceder a la cámara.";
+      }
+      setErrorMsg(message);
+      setHiddenCellphoneError(false)
+      setHiddenLoad(true)
+    }
+    }
+    CameraFunction()
+    PermiCameraModal()
+  }
+
+
+async function guardarDatosEnBackendWithCellphone() {
+  const datos = {
         name : localStorage.getItem('name'),
         id : localStorage.getItem('playerIdCounter'),
-        TypeGame : localStorage.getItem('TypeGame')
-    };
+        TypeCamera : "Cellphone",
+        TypeGame : localStorage.getItem('TypeGame'),
+        data_image: localStorage.getItem('data_text_image')
+        
+  };
     console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
         const response = await fetch("https://backend-saud.onrender.com/guardar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),  // Envía el objeto completo
+    })
+    if (!response.ok) throw new Error("❌ Falló el guardado");
+    else {}
+      setHiddenLoad(true)
+      setDetecFinish(!hiddenDetecActive)
+    } catch (error){
+        localStorage.setItem("error",error)
+        setHiddenLoad(true)
+        setHiddenError(!HideErrorActive)
+        console.log(error)
+    }
+
+}
+function CapturarImagen() {
+      if (!videoRef.current) return;
+  
+      const canvas = document.createElement("canvas");
+      const video = videoRef.current;
+  
+      // tamaño del canvas igual al del video
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+  
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  
+      // obtiene el string base64
+      const dataUrl = canvas.toDataURL("image/png");
+      const data_url_python = dataUrl.split(",")[1]
+      localStorage.setItem("data_text_image",data_url_python)
+      console.log("Imagen en base64:", data_url_python); // podés usarla o enviarla a un backend
+      setHiddenCellphone(!cellphone)
+    }
+  function PermiCameraModal(){
+    setHiddenCamera(!camera)
+}
+function PermiCameraModalWeb(){
+  setHiddenCamera(!camera)
+  setHiddenFinishWeb(!hiddenfinishWeb)
+}
+async function guardarDatosEnBackendWithWeb() {
+    const datos = {
+        name : localStorage.getItem('name'),
+        id : localStorage.getItem('playerIdCounter'),
+        TypeCamera : 'WebCam',
+        TypeGame : localStorage.getItem('TypeGame')
+        
+    };
+    console.log(datos);
+    try{
+        setHiddenLoad(!hiddenLoad)
+        const response = await fetch("http://127.0.0.1:5000/guardar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -71,22 +189,31 @@ const BeautifulForm = () => {
       localStorage.removeItem("error")
   }
   const buttonHiddenLoad = () => {
-    setHiddenFinish(!hiddenfinish)
     setHiddenLoadSure(!hiddenLoadSure)
+    PermiCameraModal()
     PlayerIdCounter()
   
  
     
   }
-  const buttonHiddenFinish = () => {
-    setHiddenFinish(!hiddenfinish)
-    guardarDatosEnBackend()
+  const buttonHiddenFinishWeb = () => {
+    setHiddenFinishWeb(!hiddenfinishWeb)
+    guardarDatosEnBackendWithWeb()
   }
-  const buttonHiddenCancelFinish = () => {
-    setHiddenFinish(true)
+  const buttonHiddenCancelFinishWeb = () => {
+    setHiddenFinishWeb(true)
   }
   const buttonHiddenLoadCancel = () => {
     setHiddenLoadSure(true)
+  }
+
+   const buttonHiddenFinishCellphone = () => {
+    setHiddenFinishCellphone(!hiddenfinishCellphone)
+    CapturarImagen()
+    guardarDatosEnBackendWithCellphone()
+  }
+  const buttonHiddenCancelFinishCellphone = () => {
+    setHiddenCellphone(true)
   }
   
   function functionFetch(name,bool,target,hiddenLoadSure){
@@ -113,6 +240,10 @@ const BeautifulForm = () => {
 
   return (
     <div className="lg:min-h-screen h-auto w-full flex lg:flex-row flex-col items-center justify-around from-gray-50 to-gray-200 p-4 " id='BeatifulCard'>
+      <video ref={videoRef}
+        autoPlay
+        playsInline
+        className="w-80 h-60 rounded-lg shadow-md border border-gray-300"></video>
       <div className="relative w-full flex flex-col max-w-md h-screen justify-center grow">
         <div className='bg-white backdrop-blur-lg bg-opacity-30 rounded-2xl p-8 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1'>
             <h2 className="text-2xl md:text-3xl font-bold text-center text-indigo-600 mb-8">
@@ -155,13 +286,32 @@ const BeautifulForm = () => {
                     </div>
                     <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
                 </div>
-                <div className={hiddenfinishActive}>
+                <div className={hiddenfinishActiveWeb}>
                       <div className="flex flex-col w-96 h-96 bg-white text-black rounded-xl p-10 gap-5">
                           <p className="text-center text-3xl font-black">Empieze a jugar</p>
                           <p className="text-center font-bold">El numero de intento hasta ahora es {localStorage.getItem('playerIdCounter')}</p>
                           <p className="text-center font-bold">Al dar por terminado su intento haga click en Terminar intento</p>
-                          <button id="cancelButton" onClick={buttonHiddenFinish} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
-                          <button id="cancelButton" onClick={buttonHiddenCancelFinish} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
+                          <button id="cancelButton" onClick={buttonHiddenFinishWeb} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
+                          <button id="cancelButton" onClick={buttonHiddenCancelFinishWeb} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
+                      </div>
+        
+          </div>
+          <div className={hiddenfinishActiveCellphone}>
+                      <div className="flex flex-col w-96 h-auto bg-white text-black rounded-xl p-10 gap-5">
+                          <p className="text-center text-3xl font-black">Empieze a jugar</p>
+                          <p className="text-center text-3xl font-black">Ubique su telefono para empezar a jugar</p>
+                          <p className="text-center font-bold">El numero de intento hasta ahora es {localStorage.getItem('playerIdCounter')}</p>
+                          <p className="text-center font-bold">Al dar por terminado su intento haga click en Terminar intento</p>
+                          <button id="cancelButton" onClick={buttonHiddenFinishCellphone} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
+                          <button id="cancelButton" onClick={buttonHiddenCancelFinishCellphone} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
+                      </div>
+          </div>
+          <div className={hiddenfinishErrorCellphone}>
+                      <div className="flex flex-col w-96 h-auto bg-white text-black rounded-xl p-10 gap-5">
+                          <p className="text-center text-3xl font-black">Hubo un error al conectarse con su camara</p>
+                          <p className="text-center text-3xl font-black">{errorMsgCamera}</p>
+                          <button id="cancelButton" onClick={PermiCamera} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Volver a intentar </button>
+                          <button id="cancelButton" onClick={buttonHiddenCancelFinishCellphone} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
                       </div>
           </div>
           <Load hideLoadActiveSureParam={hideLoadActiveSure}
@@ -172,7 +322,10 @@ const BeautifulForm = () => {
               HideErrorActiveParam={HideErrorActive}
               setHiddenErrorParam={buttonHiddenError}
               setHiddenDetecParam={setDetecFinish}
-              hiddenDetecActiveParam={hiddenDetecActive}></Load>
+              hiddenDetecActiveParam={hiddenDetecActive}
+              HiddenCameraParam={hiddenCameraActive}
+              PermiCameraParam={PermiCamera}
+              PermiCameraWebParam={PermiCameraModalWeb}></Load>
       </div>
         </div>
        {localStorage.getItem("TypeGame") == "Puntuacion" && <BoardGamePoints/> }

@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
-from deteccion import mode_points
+from deteccion_pc import camera_web_pc
 from pathlib import Path
 import os
 import numpy as np
@@ -76,16 +76,16 @@ def guardar():
 
         # Validar datos del frontend
     datos = request.get_json()
-    if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame']):
-            return jsonify({"error": "Los campos 'name' , 'id' y 'TypeGame' son requeridos"}), 400
-    
+    if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame', 'TypeCamera']):
+            return jsonify({"error": "Los campos 'name' , 'id' , 'TypeGame' y 'TypeCamera' son requeridos"}), 400
+
     lista_instruments = ["Micrometro", "Calibre", "Goniometro"]
     instrument = random.choice(lista_instruments)
     print(f"Tipo de juego: {datos['TypeGame']}")
 
     db = get_firestore_by_game(datos['TypeGame'])
 
-    resultado = mode_points.select_game(datos["TypeGame"])
+    resultado = camera_web_pc.select_game(datos["TypeGame"])
     Circulos_detectados = resultado["circulos_detectados"]
     Captura_realizada = resultado["captura_realizada"]
     Puntaje = resultado["puntaje"]
