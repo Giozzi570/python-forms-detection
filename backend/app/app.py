@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 from deteccion_pc import camera_web_pc
+from deteccion_web import camera_web_cellphone
 from pathlib import Path
 import os
 import numpy as np
@@ -76,8 +77,8 @@ def guardar():
 
         # Validar datos del frontend
     datos = request.get_json()
-    if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame', 'TypeCamera']):
-            return jsonify({"error": "Los campos 'name' , 'id' , 'TypeGame' y 'TypeCamera' son requeridos"}), 400
+    if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame', 'TypeCamera', 'data_image']):
+            return jsonify({"error": "Los campos 'name' , 'id' , 'TypeGame' , 'TypeCamera' y 'data_image' son requeridos"}), 400
 
     lista_instruments = ["Micrometro", "Calibre", "Goniometro"]
     instrument = random.choice(lista_instruments)
@@ -85,30 +86,54 @@ def guardar():
 
     db = get_firestore_by_game(datos['TypeGame'])
 
-    resultado = camera_web_pc.select_game(datos["TypeGame"])
-    Circulos_detectados = resultado["circulos_detectados"]
-    Captura_realizada = resultado["captura_realizada"]
-    Puntaje = resultado["puntaje"]
-    Gano = resultado["Gano"]
-    Img = resultado["img"]
+    if datos['TypeCamera'] == 'WebCam':
+        resultado = camera_web_pc.select_game(datos["TypeGame"])
+        Circulos_detectados = resultado["circulos_detectados"]
+        Captura_realizada = resultado["captura_realizada"]
+        Puntaje = resultado["puntaje"]
+        Gano = resultado["Gano"]
+        Img = resultado["img"]
 
-    datos_deteccion = {
-        "circulos_detectados": Circulos_detectados,
-        "captura_realizada": Captura_realizada,
-        "puntaje": Puntaje,
-        "Gano": Gano,
-        "img": Img,
-        "instrument": instrument
-    }
+        datos_deteccion = {
+            "circulos_detectados": Circulos_detectados,
+            "captura_realizada": Captura_realizada,
+            "puntaje": Puntaje,
+            "Gano": Gano,
+            "img": Img,
+            "instrument": instrument
+        }
+
+            # Combinar datos
+        resultado_final = {**datos, **datos_deteccion}
+
+        # Guardar en Firestore
+        db.collection('datos_guardados').add(resultado_final)
+
+        return jsonify({"mensaje": "Datos guardados exitosamente"}), 200
+    elif datos['TypeCamera'] == 'Cellphone':
+        resultado_cellphone = camera_web_cellphone.select_game(datos["TypeGame"], datos["data_image"])
+        Circulos_detectados = resultado_cellphone["circulos_detectados"]
+        Captura_realizada = resultado_cellphone["captura_realizada"]
+        Puntaje = resultado_cellphone["puntaje"]
+        Gano = resultado_cellphone["Gano"]
+        Img = resultado_cellphone["img"]
+
+        datos_deteccion = {
+            "circulos_detectados": int(Circulos_detectados),
+            "captura_realizada": Captura_realizada,
+            "puntaje": Puntaje,
+            "Gano": Gano,
+            "instrument": instrument,
+            "img": Img
+        }
 
         # Combinar datos
-    resultado_final = {**datos, **datos_deteccion}
+        resultado_final = {**datos, **datos_deteccion}
 
-    # Guardar en Firestore
-    db.collection('datos_guardados').add(resultado_final)
+        # Guardar en Firestore
+        db.collection('datos_guardados').add(resultado_final)
 
-    return jsonify({"mensaje": "Datos guardados exitosamente"}), 200
-
+        return jsonify({"mensaje": "Datos guardados exitosamente"}), 200
 
 # @app.route('/api/datos')
 # def get_datos():
@@ -117,5 +142,5 @@ def guardar():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000,host="0.0.0.0")
 
