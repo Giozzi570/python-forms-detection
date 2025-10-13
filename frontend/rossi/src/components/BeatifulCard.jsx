@@ -104,7 +104,7 @@ async function guardarDatosEnBackendWithCellphone() {
         data_image: localStorage.getItem('data_text_image')
         
   };
-    console.log(`Estos son los ${datos}`);
+    console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
         const response = await fetch("https://backend-v2-9f7y.onrender.com/guardar", 
