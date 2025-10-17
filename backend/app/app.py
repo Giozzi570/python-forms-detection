@@ -3,6 +3,7 @@ from flask_cors import CORS
 import json
 from deteccion_pc import camera_web_pc
 from deteccion_web import camera_web_cellphone
+from get_firestore_by_game import firestore_get
 from pathlib import Path
 import os
 import numpy as np
@@ -14,39 +15,6 @@ from firebase_admin import credentials, firestore
 import random
 
 from firebase_admin import credentials, firestore, initialize_app, get_app
-
-def get_firestore_by_game(type_game: str):
-    """
-    Devuelve la conexión (db) a Firestore según el modo de juego.
-    type_game puede ser 'Puntuacion' o 'Metrologia'.
-    """
-
-    try:
-        if type_game == 'Puntuacion':
-            cred = credentials.Certificate("../passwords/Passwords_firebase_puntos.json")
-            app = initialize_app(cred, name='PuntuacionApp')
-
-        elif type_game == 'Metrologia':
-            cred = credentials.Certificate("../passwords/Passwords_firebase_metro.json")
-            app = initialize_app(cred, name='MetrologiaApp')
-
-        else:
-            raise ValueError(f"Tipo de juego desconocido: {type_game}")
-
-    except ValueError:
-        # La app ya estaba inicializada → recuperamos la instancia
-        if type_game == 'Puntuacion':
-            cred = credentials.Certificate("../passwords/Passwords_firebase_puntos.json")
-            app = get_app('PuntuacionApp')
-
-        elif type_game == 'Metrologia':
-            cred = credentials.Certificate("../passwords/Passwords_firebase_metro.json")
-            app = get_app('MetrologiaApp')
-
-    # Siempre llegamos acá con 'app' definido
-    print(f"[INFO] Credenciales utilizadas ({type_game}): {cred}")
-    db = firestore.client(app=app)
-    return db
 
 CORS(app)  # Permitir CORS para evitar bloqueos del navegador
 
@@ -84,39 +52,44 @@ def guardar():
     instrument = random.choice(lista_instruments)
     print(f"Tipo de juego: {datos['TypeGame']}")
 
-    db = get_firestore_by_game(datos['TypeGame'])
+    db = firestore_get.get_firestore_by_game(datos['TypeGame'],credentials, initialize_app, get_app, firestore)
+    try:
+        if datos['TypeCamera'] == 'WebCam':
+            resultado = camera_web_pc.select_game(datos["TypeGame"])
+            Circulos_detectados = resultado["circulos_detectados"]
+            Captura_realizada = resultado["captura_realizada"]
+            Puntaje = resultado["puntaje"]
+            Gano = resultado["Gano"]
+            Img = resultado["img"]
+            Img_graph = resultado["img_graph"]
 
-    if datos['TypeCamera'] == 'WebCam':
-        resultado = camera_web_pc.select_game(datos["TypeGame"])
-        Circulos_detectados = resultado["circulos_detectados"]
-        Captura_realizada = resultado["captura_realizada"]
-        Puntaje = resultado["puntaje"]
-        Gano = resultado["Gano"]
-        Img = resultado["img"]
+            datos_deteccion = {
+                "circulos_detectados": Circulos_detectados,
+                "captura_realizada": Captura_realizada,
+                "puntaje": Puntaje,
+                "Gano": Gano,
+                "img": Img,
+                "instrument": instrument,
+                "img_graph": Img_graph
+            }
 
-        datos_deteccion = {
-            "circulos_detectados": Circulos_detectados,
-            "captura_realizada": Captura_realizada,
-            "puntaje": Puntaje,
-            "Gano": Gano,
-            "img": Img,
-            "instrument": instrument
-        }
+                # Combinar datos
+            resultado_final = {**datos, **datos_deteccion}
 
-            # Combinar datos
-        resultado_final = {**datos, **datos_deteccion}
+            # Guardar en Firestore
+            db.collection('datos_guardados').add(resultado_final)
 
-        # Guardar en Firestore
-        db.collection('datos_guardados').add(resultado_final)
-
-        return jsonify({"mensaje": "Datos guardados exitosamente"}), 200
-    elif datos['TypeCamera'] == 'Cellphone':
+            return jsonify({"mensaje": "Datos guardados exitosamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+    if datos['TypeCamera'] == 'Cellphone':
         resultado_cellphone = camera_web_cellphone.select_game(datos["TypeGame"], datos["data_image"])
         Circulos_detectados = resultado_cellphone["circulos_detectados"]
         Captura_realizada = resultado_cellphone["captura_realizada"]
         Puntaje = resultado_cellphone["puntaje"]
         Gano = resultado_cellphone["Gano"]
-        Img = resultado_cellphone["img"]
+        Img_tablero = resultado_cellphone["img_tablero"]
 
         datos_deteccion = {
             "circulos_detectados": int(Circulos_detectados),
@@ -124,7 +97,7 @@ def guardar():
             "puntaje": Puntaje,
             "Gano": Gano,
             "instrument": instrument,
-            "img": Img
+            "img": Img_tablero,
         }
 
         # Combinar datos

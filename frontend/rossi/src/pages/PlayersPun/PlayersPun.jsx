@@ -4,7 +4,7 @@ import Header from "../../components/header/header.jsx";
 import ScreenError from "../../components/modals/screenError/ScreenError.jsx";
 import SpinnerLoadingScreen from "../../components/modals/modalLoad.jsx";
 import { dbPun } from "../../firebasePun.js";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { FaEye } from "react-icons/fa";
 
 
@@ -13,6 +13,7 @@ import { FaEye } from "react-icons/fa";
 
 const Players = () => {
   const [jugadaVisible, setJugadaVisible] = useState(null); 
+  const [jugadaGraph, setGraph] = useState(null); 
   const [hiddenAll, setHiddenAll] = useState(false);
   const [hiddenError, setHiddenError] = useState(true);
   const [hideLoadActive, setHideLoadActive] = useState(true);
@@ -25,7 +26,8 @@ const Players = () => {
   const fetchJugadores = async () => {
     try {
       setHideLoadActive(true);
-      const snapshot = await getDocs(collection(dbPun, "datos_guardados"));
+      const lotejugadores = query(collection(dbPun, "datos_guardados"),orderBy("puntaje","desc"));
+      const snapshot = await getDocs(lotejugadores)
       const jugadores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setJugadoresIterados(jugadores);
       setHideLoadActive(false);
@@ -113,6 +115,7 @@ const getPodio = (puesto) => {
                           </div>
               {getPodio(jugador.puesto)}
               <button className="flex items-center gap-2" onClick={() => setJugadaVisible(jugador)}><FaEye /> <p>Ver jugada</p></button>
+              <button className="flex items-center gap-2" onClick={() => setGraph(jugador)}><FaEye /> <p>Ver jugada</p></button>
             </div>
           ))}
         </div>
@@ -128,6 +131,7 @@ const getPodio = (puesto) => {
                   </div>
               </div>
               <button className="flex items-center gap-2" onClick={() => setJugadaVisible(jugador)}><FaEye /> <p>Ver jugada</p></button>
+              <button className="flex items-center gap-2" onClick={() => setGraph(jugador)}><FaEye /> <p>Ver grafico</p></button>
             </div>
           ))}
         </div>
@@ -148,6 +152,28 @@ const getPodio = (puesto) => {
 
             <button
               onClick={() => setJugadaVisible(null)}
+              className="mt-6 px-6 py-2 text-white bg-red-600 hover:bg-red-700 transition-colors duration-200 rounded-lg font-semibold shadow-md"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+        
+      )}
+      {jugadaGraph && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 w-full">
+          <div className="w-full max-w-lg bg-white text-black rounded-2xl shadow-xl border-4 border-black p-6 relative flex flex-col items-center animate-fade-in">
+            
+            <img
+              className="border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105"
+              src={`data:image/webp;base64,${jugadaGraph.img_graph}`}
+              alt="jugada"
+            />
+
+            <p className="text-2xl font-bold text-center mt-4 tracking-wide">{jugadaGraph.name}</p>
+
+            <button
+              onClick={() => setGraph(null)}
               className="mt-6 px-6 py-2 text-white bg-red-600 hover:bg-red-700 transition-colors duration-200 rounded-lg font-semibold shadow-md"
             >
               Cerrar

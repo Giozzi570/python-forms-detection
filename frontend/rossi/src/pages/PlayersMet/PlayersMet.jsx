@@ -12,6 +12,7 @@ import { FaEye } from "react-icons/fa";
 
 const Players = () => {
   const [jugadaVisible, setJugadaVisible] = useState(null); 
+  const [jugadaGraph, setGraph] = useState(null); 
   const [imagen, setImagen] = useState(true);
   const [hiddenError, setHiddenError] = useState(true);
   const [hideLoadActive, setHideLoadActive] = useState(true);
@@ -88,11 +89,12 @@ const Players = () => {
 
                       <div>
                          <div className="bg-[#E0E7FF] text-black rounded-lg p-3">
-                                    <p className="text-3xl font-black text-center text-wrap">{jugador.gano ? <span>¡Ganó!</span> : <span>Perdió</span>} <span className="text-muted-foreground">con {jugador.instrument}</span></p>
+                                    <p className="text-3xl font-black text-center text-wrap">{jugador.Gano ? <span>¡Ganó!</span> : <span>Perdió</span>} <span className="text-muted-foreground">con {jugador.instrument}</span></p>
                           </div>
                       </div>
                       </div>
                       <button className="flex items-center gap-2" onClick={() => setJugadaVisible(jugador)}><FaEye /> <p>Ver jugada</p></button>
+                      <button className="flex items-center gap-2" onClick={() => setGraph(jugador)}><FaEye /> <p>Ver Grafico</p></button>
                     </div>
                   ))}
         </div>
@@ -113,6 +115,28 @@ const Players = () => {
 
             <button
               onClick={() => setJugadaVisible(null)}
+              className="mt-6 px-6 py-2 text-white bg-red-600 hover:bg-red-700 transition-colors duration-200 rounded-lg font-semibold shadow-md"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+        
+      )}
+      {jugadaGraph && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 w-full">
+          <div className="w-full max-w-lg bg-white text-black rounded-2xl shadow-xl border-4 border-black p-6 relative flex flex-col items-center animate-fade-in">
+            
+            <img
+              className="border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105"
+              src={`data:image/webp;base64,${jugadaGraph.img_graph}`}
+              alt="jugada"
+            />
+
+            <p className="text-2xl font-bold text-center mt-4 tracking-wide">{jugadaGraph.name}</p>
+
+            <button
+              onClick={() => setGraph(null)}
               className="mt-6 px-6 py-2 text-white bg-red-600 hover:bg-red-700 transition-colors duration-200 rounded-lg font-semibold shadow-md"
             >
               Cerrar

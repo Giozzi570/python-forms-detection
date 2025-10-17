@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import './BoardGamePoints.css';
+import './BoardGame.css';
 const BoardGamePoints = () => {
     const [points, setPoints] = useState(false)
     // Generar un array de 35 números incrementales comenzando desde 1
@@ -45,7 +45,7 @@ const BoardGamePoints = () => {
                     <button className="bg-emerald-600" onClick={() => setPoints(!points)}>{points ? "Ocultar Distribución de puntaje" : "Ver Distribución de puntaje"}</button>
                     <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl ${points ? 'grid' : 'hidden'} animate__animated animate__fadeInRightBig`} id='containerPoints'>
                         {pointsArray.map((num) => (
-                            <div className="points" key={num} id={`${num}`}></div>
+                            <div className="points-new" key={num} id={`${num}`}></div>
                         ))}
                     </div>
                      <div className={`w-auto flex-wrap h-auto justify-center items-center border-2 border-black p-5 rounded-3xl gap-4 ${points ? 'flex' : 'hidden'} animate__animated animate__fadeIn`}>
