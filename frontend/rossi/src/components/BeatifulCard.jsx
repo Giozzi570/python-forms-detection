@@ -122,7 +122,7 @@ async function guardarDatosEnBackendWithCellphone() {
     console.log(`Estos son los ${datos}`);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("http://localhost:5000/guardar", 
+        const response = await fetch("https://deana-inspirable-weirdly.ngrok-free.dev", 
           {
         method: "POST",
         headers: {
@@ -182,7 +182,7 @@ async function guardarDatosEnBackendWithWeb() {
     console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("http://127.0.0.1:5000/guardar", {
+        const response = await fetch("https://deana-inspirable-weirdly.ngrok-free.dev", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
