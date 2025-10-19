@@ -52,6 +52,7 @@ def detectar_camara():
     intentos = 0
     num_cam = 0
     camara_found = cv2.VideoCapture(0)
+    puerto = 0
     print("Empezando busqueda")
     while not camara_found.isOpened():
         num_cam += 1
@@ -62,11 +63,17 @@ def detectar_camara():
         print(num_cam)
         if len(puntos) > 3:
             puntos = ""
-        sys.stdout.write(f"\rCámara no encontrada{puntos} en el puerto {num_cam}  ")  # sobrescribe línea
+        puerto += 1
+        if puerto > 3:
+            puerto = 0
+        if intentos > 20:
+            print("\nNo se pudo encontrar una cámara conectada. Por favor, asegúrese de que la cámara esté conectada correctamente e intente nuevamente.")
+            sys.exit()
+        sys.stdout.write(f"\rCámara no encontrada{puntos} en el puerto {puerto}  ")  # sobrescribe línea
         sys.stdout.flush()
         time.sleep(0.5)
-        camara_found = cv2.VideoCapture(0)
-    print(f"\nSe encontro una camara despues de {intentos} intentos en el puerto {num_cam}.")
+        camara_found = cv2.VideoCapture(puerto)
+    print(f"\nSe encontro una camara despues de {intentos} intentos en el puerto {puerto}.")
 
 
 def detectar_formas_puntuacion(x0=20, y0=40, ancho_total=600, alto_total=400, columnas=7, filas=5):
@@ -149,6 +156,7 @@ def detectar_formas_puntuacion(x0=20, y0=40, ancho_total=600, alto_total=400, co
                                         captura_path = os.path.join("static/Puntuacion", f'captura_cuadrado_puntuacion{round(time.time())}.webp')  # Ruta de guardado.
                                         print(f"Ruta de guardado: {captura_path}")
                                         cropped_image = resized_image  # Guarda la imagen (nota: aquí se guarda la imagen completa, no recortada).
+                                        cv2.imshow(cropped_image)
                                         cv2.imwrite(captura_path, cropped_image)  # Guarda la imagen en disco.
                                         print(f"✔️ Captura guardada en: {captura_path}")
                                         captura_hecha = True  # Marca que se ha hecho una captura.
@@ -311,8 +319,9 @@ def detectar_formas_metrologia(event,x0=20, y0=40, ancho_total=600, alto_total=4
                             "posicion_del_circulo": f"{id}",
                             "img": imagen_base64,
                             "img_graph": imagen_base64_graph,
-                            "puntaje": None
-                        } 
+                            "puntaje": None,
+                            "instrument": None
+                        }
                             if circles is None:
                                 print("No se detectaron círculos.")
                                         # -----------------------------------

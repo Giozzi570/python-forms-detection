@@ -3,7 +3,7 @@ import './ProgressBarLoadingScreen.css'
 import SpinnerLoadingScreen from "./modalLoad";
 import Cellphone from "/typeCellphone.png";
 import Web from "/typeWeb.png";
-export const Load = ({hideLoadActiveSureParam , nameLocalParam, buttonHiddenLoadParam, buttonHiddenLoadCancelParam , hideLoadActiveParam , HideErrorActiveParam ,setHiddenErrorParam, hiddenDetecActiveParam, setHiddenDetecParam, HiddenCameraParam, PermiCameraParam, PermiCameraWebParam }) => {
+export const Load = ({videoRefParam,videoStyleParam,hideLoadActiveSureParam , nameLocalParam, buttonHiddenLoadParam, buttonHiddenLoadCancelParam , hideLoadActiveParam , HideErrorActiveParam ,setHiddenErrorParam, hiddenDetecActiveParam, setHiddenDetecParam, HiddenCameraParam, PermiCameraParam, PermiCameraWebParam }) => {
   return(
     <>
     <div className={HiddenCameraParam}>
@@ -63,13 +63,31 @@ export const Load = ({hideLoadActiveSureParam , nameLocalParam, buttonHiddenLoad
         </div>
         </div>
             <div className={hiddenDetecActiveParam}>
-                <div className="flex flex-col justify-center h-auto w-80 bg-white text-black rounded-xl p-10 gap-8 items-center">
-                <img width={100} height={100} src="../si.png" alt="" />
-                <span className="text-center font-bold text-xl">Se han termindo de detectar sus fichas {nameLocalParam}</span>
-                <span className="text-center font-bold text-xl">Espero que le haya gustado el juego</span>
-                <button id="cancelButton" onClick={setHiddenDetecParam} class="overflow-hidden group px-6 py-3 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40">Finalizar intento</button>
-            </div>
-            </div>
+                <div className="flex flex-col items-center justify-center w-80 bg-white text-gray-900 rounded-2xl p-8 shadow-lg space-y-6">
+                  <img width={100} height={100} src="../si.png" alt="Éxito" className="drop-shadow-md" />
+
+                  <h2 className="text-center text-2xl font-semibold">
+                    Fichas detectadas correctamente, <span className="font-bold text-blue-600">{nameLocalParam}</span>.
+                  </h2>
+
+                  <p className="text-center text-lg">
+                    Espero que haya disfrutado el juego.
+                  </p>
+
+                  <p className="text-center text-lg font-bold text-blue-600">
+                    Puntaje: {localStorage.getItem("puntaje")}
+                  </p>
+
+                  <button
+                    id="cancelButton"
+                    onClick={setHiddenDetecParam}
+                    className="px-6 py-3 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-transform transform hover:scale-105 active:scale-95 shadow-md"
+                  >
+                    Finalizar intento
+                  </button>
+                </div>
+              </div>
+
     </>
     )
 }

@@ -64,7 +64,7 @@ def detectar_formas_puntuacion(data_image,x0=20, y0=40, ancho_total=600, alto_to
     jugador_gano = None       # Inicializa jugador_gano para evitar errores si no se detecta ningún círculo.
     # capturas_hechas = 0  # Contador de capturas hechas (no usado actualmente).
     cuadrados = []  # Lista para almacenar información de los cuadrados detectados.
-
+    ids_cuadrados = []
     # Crear lista de cuadrados con sus coordenadas y IDs
     ancho_celda = ancho_total // columnas # Ancho de cada celda mediante un cálculo que es, el ancho total dividido por la cantidad de columnas
     alto_celda = alto_total // filas  
@@ -125,7 +125,8 @@ def detectar_formas_puntuacion(data_image,x0=20, y0=40, ancho_total=600, alto_to
                             param1=200, param2=50, minRadius=10, maxRadius=100)
 
         if circles is not None:
-                print(f"Círculos detectados: {len(circles[0])}")
+                time.sleep(0.1)
+                cantidad_circulos = circles
                 circles = np.uint16(np.around(circles))
                 for circle in circles[0, :]:
                     cx, cy, r = circle
@@ -133,42 +134,46 @@ def detectar_formas_puntuacion(data_image,x0=20, y0=40, ancho_total=600, alto_to
                     cv2.putText(resized_image, 'Circulo', (cx - 10, cy - r - 10),
                                 1, 1, (0, 0, 0), 1)
 
-                    # Verificar en qué cuadrado cayó el círculo
-                if circles is not None:
-                    circles = np.uint16(np.around(circles))
-                    for i in circles[0, :]:
-                        x, y, r = i
-                        cv2.circle(resized_image, (x, y), r, (0, 255, 0), 2)
-                        cv2.circle(resized_image, (x, y), 2, (0, 0, 255), 3)
-
                         # Ver si el círculo está dentro del tablero
-                if x0 <= cx <= x0 + ancho_total and y0 <= cy <= y0 + alto_total:
-                            created_folder(output_folder)  # Llama a la función para crear la carpeta de capturas si no existe.
-                            col = (cx - margen_izq) // ancho_celda
-                            fila = (cy - margen_sup) // alto_celda
-                            id_cuadrado = (col   * filas) + fila + 1
-                            id_celda = f"Fila{fila}_Columna{col}"  # Calcula el ID del cuadrado basado en fila y columna.
-                            cv2.putText(resized_image, f"{id_celda}", (x + 10, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
-                            print(f"Ficha detectada en celda: {id_celda}")
-                            captura_path = os.path.join(f"{output_folder}", f'captura_cuadrado{round(time.time())}.webp')
-                            cropped_image = resized_image  # Guarda la imagen (nota: aquí se guarda la imagen completa, no recortada).
-                            cv2.imshow(f'Captura del cuadrado {id_celda}', cropped_image)  # Muestra la captura.
-                            cv2.imwrite(captura_path, cropped_image)  # Guarda la imagen en disco.
-                            print(f"✔️ Captura guardada en: {captura_path}")
-                            captura_hecha = True  # Marca que se ha hecho una captura.
-                            with open(captura_path, "rb") as f:
-                                imagen_bytes = f.read()
-                            print(f"Imagen guardada en bytes: {len(imagen_bytes)} bytes")
-                            # Convertir a base64
-                            imagen_base64 = base64.b64encode(imagen_bytes).decode("utf-8")
+                for c in circles[0, :]:
+                                x, y, r = c
+                                if x0 <= x <= x0 + ancho_total and y0 <= y <= y0 + alto_total:
+                                        col = (x - x0) // ancho_celda
+                                        fila = (y - y0) // alto_celda
+                                        id_cuadrado = fila * columnas + col
+                                        id_celda = f"Fila{fila}_Columna{col}"  # Calcula el ID del cuadrado basado en fila y columna.
+                                        print(f"Ficha detectada en celda: {id_celda}")
+                                        created_folder("Puntuacion")  # Vuelve a usar la carpeta de capturas.
+                                        captura_path = os.path.join("static/Puntuacion", f'captura_cuadrado_puntuacion{round(time.time())}.webp')  # Ruta de guardado.
+                                        print(f"Ruta de guardado: {captura_path}")
+                                        cropped_image = resized_image  # Guarda la imagen (nota: aquí se guarda la imagen completa, no recortada).
+                                        cv2.imwrite(captura_path, cropped_image)  # Guarda la imagen en disco.
+                                        print(f"✔️ Captura guardada en: {captura_path}")
+                                        captura_hecha = True  # Marca que se ha hecho una captura.
+                                        with open(captura_path, "rb") as f:
+                                            imagen_bytes = f.read()
+
+                                        # Convertir a base64
+                                        imagen_base64 = base64.b64encode(imagen_bytes).decode("utf-8")
+                                        ids_cuadrados.append(id_cuadrado)
+
                 if captura_hecha:
                     # setup_arduino()  # Envía señal al Arduino.
                     # print("Arduino configurado y listo para recibir datos.")  Mensaje de confirmación.
                     cv2.waitKey(1000)  # Pausa de 1 segundo.
+                    print(ids_cuadrados)
                     captura_hecha = True
-                    puntaje,id = puntuacion(id_cuadrado, 7, 5)  # Muestra el gráfico con el ID del cuadrado capturado.
-                    print(id, id_cuadrado)
-                    break  # Sale del bucle principal.
+                    puntaje,id,img_graph = puntuacion(id_cuadrado,ids_cuadrados, 5, 7)  # Muestra el gráfico con el ID del cuadrado capturado.
+                    print(id, id_cuadrado, len(circles))
+                    return({
+            "circulos_detectados": len(circles) if circles is not None else 0,
+            "captura_realizada": captura_hecha,
+            "img": imagen_base64,
+            "Gano": jugador_gano,
+            "posicion_del_circulo": f"{id}",
+            "puntaje": puntaje,
+            "img_tablero" : img_graph
+        })
 
 
 
@@ -183,15 +188,8 @@ def detectar_formas_puntuacion(data_image,x0=20, y0=40, ancho_total=600, alto_to
         # Retorna un diccionario con los resultados de la detección
         # Guarda la última imagen capturada si se realizó una captura
         
-
-    return({
-            "circulos_detectados": len(circles[0]) if circles is not None else 0,
-            "captura_realizada": captura_hecha,
-            "img": imagen_base64,
-            "Gano": jugador_gano,
-            "posicion_del_circulo": f"{id}",
-            "puntaje": puntaje
-        })
+   
+    
 def detectar_formas_metrologia(event,data_image,x0=20, y0=40, ancho_total=600, alto_total=400, columnas=6, filas=3):
     captura_hecha = False  # Bandera para saber si ya se hizo una captura y detener el programa.
     id_cuadrado = None     # Inicializa id_cuadrado para evitar errores si no se detecta ningún círculo.

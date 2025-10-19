@@ -79,7 +79,7 @@ def guardar():
             # Guardar en Firestore
             db.collection('datos_guardados').add(resultado_final)
 
-            return jsonify({"mensaje": "Datos guardados exitosamente"}), 200
+            return jsonify({"Datos" : resultado_final}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
@@ -90,6 +90,7 @@ def guardar():
         Puntaje = resultado_cellphone["puntaje"]
         Gano = resultado_cellphone["Gano"]
         Img_tablero = resultado_cellphone["img_tablero"]
+        Img = resultado_cellphone["img"]
 
         datos_deteccion = {
             "circulos_detectados": int(Circulos_detectados),
@@ -98,6 +99,7 @@ def guardar():
             "Gano": Gano,
             "instrument": instrument,
             "img": Img_tablero,
+            "img_graph": Img
         }
 
         # Combinar datos
@@ -106,7 +108,7 @@ def guardar():
         # Guardar en Firestore
         db.collection('datos_guardados').add(resultado_final)
 
-        return jsonify({"mensaje": "Datos guardados exitosamente"}), 200
+        return jsonify({"Datos" : resultado_final}), 200
 
 # @app.route('/api/datos')
 # def get_datos():

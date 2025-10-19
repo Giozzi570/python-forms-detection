@@ -40,6 +40,10 @@ const BeautifulForm = () => {
   const [cellphone,setHiddenCellphone] = useState(true)
   const [cellphoneError,setHiddenCellphoneError] = useState(true)
   
+  const [process, setProcess] = useState('');
+  const [functions, setFunctions] = useState('');
+  const [video, setHiddenVideo] = useState(true)
+
   const HideErrorActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenError ? "hidden" : ""}`
   const hideLoadActiveSure = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenLoadSure ? "hidden" : ""}`
   const hideLoadActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenLoad ? "hidden" : ""}`
@@ -48,11 +52,16 @@ const BeautifulForm = () => {
   const hiddenCameraActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${camera ? "hidden" : ""}`
   const hiddenfinishActiveCellphone = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${cellphone ? "hidden" : ""}`
   const hiddenfinishErrorCellphone = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${cellphoneError ? "hidden" : ""}`
+  const videoStyle = `bg-transparent h-auto w-76 rounded-2xl  border-2 ${video ? "hidden" : ""}`;
+
+
 
   const nameLocal = localStorage.getItem("name")
   const videoRef = useRef(null); // referencia al <video>
 
   function PermiCamera() {
+    selectCellphoneCamera()
+    PermiCameraModal()
     async function CameraFunction() {
       try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -61,8 +70,15 @@ const BeautifulForm = () => {
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        
+        setHiddenVideo(false)
         setHiddenCellphone(false)
         setHiddenCellphoneError(true)
+        let Track = stream.getVideoTracks()[0]
+        Track.addEventListener("ended",() => {
+          CameraFunction()
+          setHiddenCellphone(true)
+      })
       }
     } catch (err) {
         let message = "";
@@ -91,7 +107,6 @@ const BeautifulForm = () => {
     }
     }
     CameraFunction()
-    PermiCameraModal()
   }
 
 
@@ -107,7 +122,7 @@ async function guardarDatosEnBackendWithCellphone() {
     console.log(`Estos son los ${datos}`);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("https://backend-v2-9f7y.onrender.com/guardar", 
+        const response = await fetch("http://localhost:5000/guardar", 
           {
         method: "POST",
         headers: {
@@ -147,12 +162,13 @@ function CapturarImagen() {
       console.log("Imagen en base64:", data_url_python); // podés usarla o enviarla a un backend
       setHiddenCellphone(!cellphone)
     }
-  function PermiCameraModal(){
+function PermiCameraModal(){
     setHiddenCamera(!camera)
 }
 function PermiCameraModalWeb(){
   setHiddenCamera(!camera)
   setHiddenFinishWeb(!hiddenfinishWeb)
+  selectWebCamera()
 }
 async function guardarDatosEnBackendWithWeb() {
     const datos = {
@@ -175,6 +191,8 @@ async function guardarDatosEnBackendWithWeb() {
     })
     if (!response.ok) throw new Error("❌ Falló el guardado");
     else {}
+      const result = await response.json();
+      localStorage.setItem("puntaje", result.Datos.puntaje);
       setHiddenLoad(true)
       setDetecFinish(!hiddenDetecActive)
     } catch (error){
@@ -193,9 +211,11 @@ async function guardarDatosEnBackendWithWeb() {
       localStorage.removeItem("error")
   }
   const buttonHiddenLoad = () => {
+    selectCamera()
     setHiddenLoadSure(!hiddenLoadSure)
     PermiCameraModal()
     PlayerIdCounter()
+
   
  
     
@@ -234,8 +254,33 @@ async function guardarDatosEnBackendWithWeb() {
   const handleSubmit = () => {
     if (!name.trim()) return;
     functionFetch(name,true,Target,hiddenLoadSure)
+    localStorage.setItem('Process', 'Confirmaciòn de nombre')
+    processConfirmName()
   }
-  
+
+  const writingName = (e) => {
+    setName(e.target.value)
+  }
+  const processWritingName = () => {
+    setProcess("Escribiendo su nombre")
+    setFunctions("FirstProcess")
+  }
+  const processConfirmName = () => {
+    setProcess("Confirmar Nombre")
+    setFunctions("SecondProcess")
+  }
+  const selectCamera = () => {
+    setProcess("Seleccionar Camara")
+    
+  }
+  const selectWebCamera = () => {
+    setProcess("Camara del servidor seleccionada")
+    setFunctions("ThirdWebProcess")
+  }
+  const selectCellphoneCamera = () => {
+      setProcess("Camara del dispositivo seleccionada")
+      setFunctions("ThirdCellphoneProcess")
+  }
   const buttonBase =
     'w-full py-4 px-6 rounded-xl text-white font-semibold text-lg transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl active:scale-95';
   const buttonColors = submitted
@@ -244,10 +289,6 @@ async function guardarDatosEnBackendWithWeb() {
 
   return (
     <div className="lg:min-h-screen h-auto w-full flex lg:flex-row flex-col items-center justify-around from-gray-50 to-gray-200 p-4 " id='BeatifulCard'>
-      {/*<video ref={videoRef}
-        autoPlay
-        playsInline
-        className="w-80 h-60 rounded-lg shadow-md border border-gray-300"></video>*/}
       <div className="relative w-full flex flex-col max-w-md h-screen justify-center grow">
         <div className='bg-white backdrop-blur-lg bg-opacity-30 rounded-2xl p-8 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1'>
             <h2 className="text-2xl md:text-3xl font-bold text-center text-indigo-600 mb-8">
@@ -258,7 +299,8 @@ async function guardarDatosEnBackendWithWeb() {
           <input
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={writingName}
+            onFocus={processWritingName}
             className="w-full px-5 py-4 text-lg rounded-xl border-2 transition-all text-black duration-300 focus:outline-none focus:ring-4"
             placeholder="Escribe tu nombre aquí..."
           />
@@ -303,7 +345,10 @@ async function guardarDatosEnBackendWithWeb() {
           <div className={hiddenfinishActiveCellphone}>
                       <div className="flex flex-col w-96 h-auto bg-white text-black rounded-xl p-10 gap-5">
                           <p className="text-center text-3xl font-black">Empieze a jugar</p>
-                          <p className="text-center text-3xl font-black">Ubique su telefono para empezar a jugar</p>
+                          <video ref={videoRef}
+                                autoPlay
+                                playsInline
+                                className={videoStyle}></video>
                           <p className="text-center font-bold">El numero de intento hasta ahora es {localStorage.getItem('playerIdCounter')}</p>
                           <p className="text-center font-bold">Al dar por terminado su intento haga click en Terminar intento</p>
                           <button id="cancelButton" onClick={buttonHiddenFinishCellphone} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
@@ -329,10 +374,11 @@ async function guardarDatosEnBackendWithWeb() {
               hiddenDetecActiveParam={hiddenDetecActive}
               HiddenCameraParam={hiddenCameraActive}
               PermiCameraParam={PermiCamera}
-              PermiCameraWebParam={PermiCameraModalWeb}></Load>
+              PermiCameraWebParam={PermiCameraModalWeb}
+              ></Load>
       </div>
         </div>
-       {localStorage.getItem("TypeGame") == "Puntuacion" && <BoardGamePoints/> }
+       {localStorage.getItem("TypeGame") == "Puntuacion" && <BoardGamePoints ProcessParam={process} FunctionsParam={functions} videoRefParam={videoRef} videoStyleParam={videoStyle} /> }
        {localStorage.getItem("TypeGame") == "Metrologia" && <BoardGameLen/> }
        {localStorage.getItem("TypeGame") == "" && <BoardGameNull /> }
 </div>

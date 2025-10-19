@@ -19,6 +19,8 @@ def show_graph_puntuacion_function(id,circles_num,tamañoX,tamañoY):
     red = [3,6,7,9,12,15,18,21,24,27,30,33]
     yellow = [11,17,22,23,34]
     green = [4,5,8,10,16,28,29]
+    print("Aca esta")
+    print(len(circles_num))
     for i in range(len(circles_num)):
         print(f"Circulo {i}: {circles_num[i]}")
         if circles_num[i] in Verde_fuerte:
