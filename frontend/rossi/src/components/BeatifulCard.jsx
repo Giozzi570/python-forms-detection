@@ -221,6 +221,8 @@ async function guardarDatosEnBackendWithWeb() {
     
   }
   const buttonHiddenFinishWeb = () => {
+    setProcess("Llamada al Servidor para ejecutar funciòn de detecciòn de fichas")
+    setFunctions("4to Web")
     setHiddenFinishWeb(!hiddenfinishWeb)
     guardarDatosEnBackendWithWeb()
   }
@@ -288,7 +290,7 @@ async function guardarDatosEnBackendWithWeb() {
     : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-purple-600 hover:to-indigo-600';
 
   return (
-    <div className="lg:min-h-screen h-auto w-full flex lg:flex-row flex-col items-center justify-around from-gray-50 to-gray-200 p-4 " id='BeatifulCard'>
+    <div className="xl:min-h-screen h-auto w-full flex xl:flex-row flex-col items-center justify-around from-gray-50 to-gray-200 p-4 " id='BeatifulCard'>
       <div className="relative w-full flex flex-col max-w-md h-screen justify-center grow">
         <div className='bg-white backdrop-blur-lg bg-opacity-30 rounded-2xl p-8 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1'>
             <h2 className="text-2xl md:text-3xl font-bold text-center text-indigo-600 mb-8">

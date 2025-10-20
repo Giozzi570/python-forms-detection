@@ -1,0 +1,49 @@
+#button-js{
+    width: auto;
+    background: #1e1e1e;
+    font-size: smaller;
+    margin: 0;
+    color: rgb(219, 219, 219);
+    border-right: 0.0001px solid #979797;
+    
+    border-radius: 0px;
+}
+#button-js:hover{
+    transition: all 300ms;
+    background: #2e2e2e;
+    border: 0.0001px solid #979797;
+}
+
+#button-py{
+    width: auto;
+    background: #1e1e1e;
+    font-size: smaller;
+    margin: 0;
+    color: rgb(219, 219, 219);
+    border-right: 0.0001px solid #979797;
+    border-radius: 0px;
+}
+#button-py:hover{
+    transition: all 300ms;
+    background: #2e2e2e;
+    border: 0.0001px solid #979797;
+}
+#types-code{
+    border: 0.0001px solid #979797;
+}
+.modal-code-py{
+    font-size: small;
+    border: 1px solid #979797;
+    padding: 5px;
+    color: rgb(219, 219, 219);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    min-width: max-content;
+}
+.modal-code-py:hover{
+    cursor: pointer;
+    transition: all 300ms;
+    background: #2e2e2e;
+    border: 0.0001px solid #979797;
+}

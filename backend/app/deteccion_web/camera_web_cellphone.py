@@ -56,7 +56,7 @@ def created_folder(name):
         
 
 
-def detectar_formas_puntuacion(data_image,x0=20, y0=40, ancho_total=600, alto_total=400, columnas=7, filas=5):
+def detectar_formas_puntuacion(data_image,x0=20, y0=40, ancho_total=720, alto_total=1610, columnas=7, filas=5):
     captura_hecha = False  # Bandera para saber si ya se hizo una captura y detener el programa.
     id_cuadrado = None     # Inicializa id_cuadrado para evitar errores si no se detecta ningún círculo.
     id = 0   
@@ -121,8 +121,8 @@ def detectar_formas_puntuacion(data_image,x0=20, y0=40, ancho_total=600, alto_to
         blur = cv2.medianBlur(gray, 5)
        #print("Procesando imagen para detección de círculos 2 ...")
         # Detección de círculos
-        circles = cv2.HoughCircles(blur, cv2.HOUGH_GRADIENT, dp=1.2, minDist=100,
-                            param1=200, param2=50, minRadius=10, maxRadius=100)
+        circles = cv2.HoughCircles(blur, cv2.HOUGH_GRADIENT, dp=1.2, minDist=80,
+                            param1=120, param2=40, minRadius=10, maxRadius=100)
 
         if circles is not None:
                 time.sleep(0.1)
