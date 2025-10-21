@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./playersPun.css";
 import Header from "../../components/header/header.jsx";
 import ScreenError from "../../components/modals/screenError/ScreenError.jsx";
@@ -19,14 +19,14 @@ const Players = () => {
   const [hideLoadActive, setHideLoadActive] = useState(true);
   const [jugadoresIterados, setJugadoresIterados] = useState([]);
   const [sinJugadores, setSinJugadores] = useState(true);
+  const num = useRef(0);
 
-
-
-  useEffect(() => {
   const fetchJugadores = async () => {
+    num.current += 10
+    console.log(num)
     try {
       setHideLoadActive(true);
-      const lotejugadores = query(collection(dbPun, "datos_guardados"),orderBy("puntaje","desc"));
+      const lotejugadores = query(collection(dbPun, "datos_guardados"),orderBy("puntaje","desc"),limit(num.current));
       const snapshot = await getDocs(lotejugadores)
       const jugadores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setJugadoresIterados(jugadores);
@@ -39,6 +39,8 @@ const Players = () => {
       console.error("El Error:", error);
     }
   };
+
+  useEffect(() => {
   fetchJugadores();
   }, []);
 
@@ -119,11 +121,11 @@ const getPodio = (puesto) => {
             </div>
           ))}
         </div>
-        <div className="flex flex-col gap-4 justify-center items-center">
+        <div className="flex lg:flex-col flex-row flex-wrap gap-4 justify-center items-center">
         {[...jugadoresOtros].map((jugador) => (
-            <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="w-auto text-black p-4 border border-4 border-black gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center justify-between">
+            <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="w-full lg:w-auto lg:flex-row flex-col text-black p-4 border border-4 border-black gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center justify-between">
                <p className="text-xl text-center font-black text-gray-700">{jugador.puesto ? `${jugador.puesto}°` : ""}</p>
-               <p className="text-gray-900 text-3xl font-black">{jugador.name}</p>
+               <p className="text-gray-900 text-3xl font-black text-wrap text-center">{jugador.name}</p>
               <div>
                  <div className="bg-[#E0E7FF] text-black rounded-lg p-3">
                             <p className="text-3xl font-black text-chart-3">{jugador.puntaje}</p>
@@ -134,6 +136,10 @@ const getPodio = (puesto) => {
               <button className="flex items-center gap-2" onClick={() => setGraph(jugador)}><FaEye /> <p>Ver grafico</p></button>
             </div>
           ))}
+        </div>
+        <div className="w-full flex justify-center p-4">
+        <button className="px-4 py-2 bg-[#1e1e1e] text-[#9CDCFE] border border-[#3C3C3C] rounded-lg 
+hover:bg-[#2a2a2a] hover:border-[#007ACC] transition-all duration-200" onClick={() => fetchJugadores() }>Cargar mas jugadores</button>
         </div>
 
 

@@ -31,7 +31,7 @@ const selectProcess = (process) => {
             setProcessShow("selectCellphoneCamera")
         }else if(process == "4to Web"){
           console.log("4to Web")
-          SetModal([{Name : "camera_web_pc.py"},{Name : "show_graph_puntuacion.py"},{Name: "app.py"},{Name : "firestore_get.py"}]) 
+          SetModal([{Name : "camera_web_pc.py"},{Name : "show_graph_metrologia.py"},{Name : "show_graph_puntuacion.py"},{Name: "app.py"},{Name : "firestore_get.py"}]) 
           setProcessShow("finishTry")
         }
     }
@@ -268,10 +268,338 @@ else:
                   "show_graph_puntuacion.py" : "aca iria graph.py",
                   "camera_web_pc.py" : "aca iria lo cellphone.py"},
                  "finishTry" : {
-                  "app.py" : "aca iria lo app.py",
-                  "show_graph_puntuacion.py" : "aca iria graph.py",
-                  "camera_web_pc.py" : `
-import cv2  # Importa la biblioteca OpenCV para el procesamiento de imágenes y video.
+                  "app.py" : `from flask import Flask, request, jsonify
+from flask_cors import CORS
+import json
+from deteccion_pc import camera_web_pc
+from deteccion_web import camera_web_cellphone
+from get_firestore_by_game import firestore_get
+from pathlib import Path
+import os
+import numpy as np
+import requests
+from flask import send_file
+app = Flask(__name__)
+import firebase_admin
+from firebase_admin import credentials, firestore
+import random
+
+from firebase_admin import credentials, firestore, initialize_app, get_app
+
+CORS(app)  # Permitir CORS para evitar bloqueos del navegador
+
+# Función de ejemplo (sin usar 'input()')
+def inputName(name):
+    return {
+        "name": name,
+        "cuadrado": "4",  # Valor de ejemplo
+        "points": "100",  # Valor de ejemplo
+        "img": "../capturas/captura.png"  # Ruta de ejemplo
+    }
+
+# Ruta principal que acepta POST (y opcionalmente GET)
+@app.route("/", methods=["GET", "POST"])  # Acepta ambos métodos
+def detectar():
+    if request.method == "POST":
+        datos = request.get_json()  # Obtiene datos JSON del frontend
+        nombre = datos.get("nombre")  # Extrae el nombre
+        resultado = inputName(nombre)  # Procesa los datos
+        return jsonify(resultado)  # Devuelve el resultado en JSON
+    else:
+        return jsonify({"mensaje": "Envía un POST para procesar datos"})
+    # Ruta para guardar los datos
+
+@app.route('/guardar', methods=['POST'])
+
+def guardar():
+
+        # Validar datos del frontend
+    datos = request.get_json()
+    if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame', 'TypeCamera', 'data_image']):
+            return jsonify({"error": "Los campos 'name' , 'id' , 'TypeGame' , 'TypeCamera' y 'data_image' son requeridos"}), 400
+
+    lista_instruments = ["Micrometro", "Calibre", "Goniometro"]
+    instrument = random.choice(lista_instruments)
+    print(f"Tipo de juego: {datos['TypeGame']}")
+
+    db = firestore_get.get_firestore_by_game(datos['TypeGame'],credentials, initialize_app, get_app, firestore)
+    try:
+        if datos['TypeCamera'] == 'WebCam':
+            resultado = camera_web_pc.select_game(datos["TypeGame"])
+            Circulos_detectados = resultado["circulos_detectados"]
+            Captura_realizada = resultado["captura_realizada"]
+            Puntaje = resultado["puntaje"]
+            Gano = resultado["Gano"]
+            Img = resultado["img"]
+            Img_graph = resultado["img_graph"]
+
+            datos_deteccion = {
+                "circulos_detectados": Circulos_detectados,
+                "captura_realizada": Captura_realizada,
+                "puntaje": Puntaje,
+                "Gano": Gano,
+                "img": Img,
+                "instrument": instrument,
+                "img_graph": Img_graph
+            }
+
+                # Combinar datos
+            resultado_final = {**datos, **datos_deteccion}
+
+            # Guardar en Firestore
+            db.collection('datos_guardados').add(resultado_final)
+
+            return jsonify({"Datos" : resultado_final}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+    if datos['TypeCamera'] == 'Cellphone':
+        resultado_cellphone = camera_web_cellphone.select_game(datos["TypeGame"], datos["data_image"])
+        Circulos_detectados = resultado_cellphone["circulos_detectados"]
+        Captura_realizada = resultado_cellphone["captura_realizada"]
+        Puntaje = resultado_cellphone["puntaje"]
+        Gano = resultado_cellphone["Gano"]
+        Img_tablero = resultado_cellphone["img_tablero"]
+        Img = resultado_cellphone["img"]
+
+        datos_deteccion = {
+            "circulos_detectados": int(Circulos_detectados),
+            "captura_realizada": Captura_realizada,
+            "puntaje": Puntaje,
+            "Gano": Gano,
+            "instrument": instrument,
+            "img": Img_tablero,
+            "img_graph": Img
+        }
+
+        # Combinar datos
+        resultado_final = {**datos, **datos_deteccion}
+
+        # Guardar en Firestore
+        db.collection('datos_guardados').add(resultado_final)
+
+        return jsonify({"Datos" : resultado_final}), 200
+
+# @app.route('/api/datos')
+# def get_datos():
+#     datos = db.collection('datos_guardados').stream()
+#     return jsonify([doc.to_dict() for doc in datos])
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000,host="0.0.0.0")
+
+`,
+                  "show_graph_puntuacion.py" : `import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+import os,time
+import base64
+def created_folder(name):
+    if not os.path.exists(name):  # Verifica si la carpeta 'capturas' no existe.
+        os.makedirs(name)  # Si no existe, la crea.
+        print(f"Carpeta creada: {name}")
+
+        
+def show_graph_puntuacion_function(id,circles_num,tamañoX,tamañoY):
+    puntaje_final = []
+    circulos = []
+    puntaje = 0
+    Verde_fuerte = [2,13,14,26,32]
+    orange = [0,1,19,20,25,31]
+    red = [3,6,7,9,12,15,18,21,24,27,30,33]
+    yellow = [11,17,22,23,34]
+    green = [4,5,8,10,16,28,29]
+    print("Aca esta")
+    print(len(circles_num))
+    for i in range(len(circles_num)):
+        print(f"Circulo {i}: {circles_num[i]}")
+        if circles_num[i] in Verde_fuerte:
+            puntaje = 5000
+        elif circles_num[i] in orange:
+            puntaje = 500
+        elif circles_num[i] in red:
+            puntaje = -1000
+        elif circles_num[i] in yellow:
+            puntaje = 1000
+        elif circles_num[i] in green:
+            puntaje = 1500
+        else:
+            raise TypeError("ID fuera de rango")
+        print(f"El puntaje para el ID {circles_num[i]} es: {puntaje}")
+        plt.style.use('_mpl-gallery')
+        # make the data
+        if 0 <= circles_num[i] <= 34:
+            fila = (circles_num[i]) // 7
+            columna = (circles_num[i]) % 7
+            print(columna,fila)
+            positionx = [fila + 0.5]
+            positiony = [columna + 0.5]
+        else:
+            raise TypeError("ID fuera de rango")
+        datos = [positionx,positiony]
+        circulos.append(datos)
+        puntaje_final.append(puntaje)
+        print("circulos:", circulos)
+        print(f"Total puntaje: {sum(puntaje_final)}")
+        puntaje = sum(puntaje_final)
+    try:
+        fig, ax = plt.subplots(figsize=(3, 5), facecolor='white',
+                       layout='constrained')
+        plt.style.use('_mpl-gallery')
+        print(circulos)
+        ax.set(xlim=(0, tamañoX), xticks=np.arange(1, tamañoX),
+            ylim=(0, tamañoY), yticks=np.arange(1, tamañoY))
+        ax.scatter(*zip(*circulos), color='blue', s=200, marker='o', edgecolor='black')
+        folder = "graph_puntuacion"
+        created_folder(folder)
+        captura_graph = os.path.join(folder,f"grafico{round(time.time())}.webp" )
+        plt.savefig(captura_graph)
+        print(f"Se guardo en {captura_graph}")
+        with open(captura_graph, "rb") as f:
+                imagen_bytes = f.read()
+        imagen_base64_graph = base64.b64encode(imagen_bytes).decode('utf-8')
+        plt.close(fig)  # Cierra la figura para liberar memoria
+        
+    except Exception as e:
+        print("Hubo un error", e)
+    return puntaje,id, imagen_base64_graph`,
+"show_graph_metrologia.py" : `import base64
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+import time
+import random
+def select_board():
+    square_calibre = []
+    square_micrometro = []
+    square_goniometro = []
+    square_cinta = []
+    square_manometro = []
+    square_toquimetro = []
+    #Definir datos
+    lista_nums = list(range(18))
+    for i in range(18):
+        num = random.choice(lista_nums)
+        if i < 3:
+            square_calibre.append(num)
+        elif 3 <= i < 6:
+            square_micrometro.append(num)
+        elif 6 <= i < 9:
+            square_goniometro.append(num)
+        elif 9 <= i < 12:
+            square_cinta.append(num)
+        elif 12 <= i < 15:
+            square_manometro.append(num)
+        else:
+            square_toquimetro.append(num)
+    print(f"Calibre: {square_calibre}")
+    print(f"Micrometro: {square_micrometro}")
+    print(f"Goniometro: {square_goniometro}")
+    print(f"Cinta: {square_cinta}")
+    print(f"Manometro: {square_manometro}")
+    
+    return square_calibre, square_micrometro, square_goniometro, square_cinta, square_manometro, square_toquimetro
+def created_folder(name):
+    if not os.path.exists(name):  # Verifica si la carpeta 'capturas' no existe.
+        os.makedirs(name)  # Si no existe, la crea.
+        print(f"Carpeta creada: {name}")
+# -----------------------------------------------------------
+# Función: show_graph()
+def show_graph_metrologia_function(id,tamañoX,tamañoY,event,square_calibre,square_micrometro,square_goniometro,square_cinta,square_manometro,square_toquimetro):
+
+
+    #El plt.style.use() puede cambiar el estilo del gráfico
+
+    plt.style.use('_mpl-gallery')
+
+    
+
+    #si el evento es "Calibre" y el id esta entre los cuadrados del calibre, el jugador gano
+
+
+    if event == "Calibre" and id in square_calibre:
+        print("GANASTE CON EL CALIBRE")
+        jugador_gano = True
+    elif event == "Micrometro" and id in square_micrometro:
+        print("GANASTE CON EL MICROMETRO")
+        jugador_gano = True
+    elif event == "Goniometro" and id in square_goniometro:
+        print("GANASTE CON EL GONIOMETRO")
+        jugador_gano = True
+    elif event == "Cinta" and id in square_cinta:
+        print("GANASTE CON LA CINTA")
+        jugador_gano = True
+    elif event == "Manometro" and id in square_manometro:
+        print("GANASTE CON EL MANOMETRO")
+        jugador_gano = True
+    elif event == "Toquimetro" and id in square_toquimetro:
+        print("GANASTE CON EL TOQUIMETRO")
+        jugador_gano = True
+    else:
+        print(f"PERDISTE con {event}")
+        jugador_gano = False
+
+    # Determinar la posición del cuadrado en el gráfico
+
+
+    
+    
+    if 0 <= id <= 17:
+        fila = id  // 6     # 6 columnas por fila
+        columna = id  % 6   # posición dentro de la fila
+        positionx = [columna + 0.5]
+        positiony = [fila + 0.5]
+    else:
+        positionx = []
+        positiony = []
+        raise TypeError("ID fuera de rango")
+    
+
+    # Crear la figura y los ejes
+    try:
+        fig, ax = plt.subplots(figsize=(3, 5), facecolor='white',
+                        layout='constrained')
+        plt.style.use('_mpl-gallery')
+        # Título del gráfico
+
+        # Crea el circulo donde cayo la ficha
+        ax.scatter(positionx, positiony, s=1000, c="black")
+        ax.set(xlim=(0, tamañoX), xticks=np.arange(1, tamañoX),
+            ylim=(0, tamañoY), yticks=np.arange(1, tamañoY))
+        # Configura los límites y las marcas de los ejes
+        #ax.set sirve para configurar los límites y las marcas de los ejes
+        '''
+        tamañoX y tamañoY son la cantidad de columnas y filas respectivamente, donde xlim sirve como xlim = (valor inicial, valor final) mientras que
+        ylim sirve como ylim = (valor inicial, valor final)
+        xticks sirve para definir las marcas o intervalos en el eje x
+        yticks sirve para definir las marcas o intervalos en el eje y
+        '''
+        folder = "graph_metrologia"
+        created_folder(folder)
+        captura_graph = os.path.join(folder,f"grafico{round(time.time())}.webp" )
+
+        
+            
+        plt.savefig(captura_graph)
+        print(f"Se guardo en {captura_graph}")
+        with open(captura_graph, "rb") as f:
+                imagen_bytes = f.read()
+        imagen_base64_graph = base64.b64encode(imagen_bytes).decode('utf-8')
+        plt.close(fig)
+    except Exception as e:
+        print(f"Error al crear el gráfico: {e}")
+        return None
+    # Muestra el gráfico
+    print(f"jugador_gano: {jugador_gano}")
+    return id,jugador_gano,imagen_base64_graph
+
+    #Retorna el ID del cuadrado y si el jugador ganó
+# -----------------------------------------------------------`,
+                  "camera_web_pc.py" : `import cv2  # Importa la biblioteca OpenCV para el procesamiento de imágenes y video.
 import numpy as np  # Importa la biblioteca NumPy para el manejo de arrays y cálculos matemáticos.
 import os  # Importa la biblioteca os para manejo de archivos y carpetas.
 # import serial  Importa la biblioteca pySerial para comunicación con Arduino a través del puerto serial.
@@ -612,7 +940,39 @@ def detectar_formas_metrologia(event,x0=20, y0=40, ancho_total=600, alto_total=4
                 print("Conecte una camara y vuelva a intentarlo.")
                 detectar_camara()
 `,
-                  "firestore_get.py" : "aca iria lo firestore.py"
+                  "firestore_get.py" : `def get_firestore_by_game(type_game: str, credentials, initialize_app, get_app, firestore):
+    """
+    Devuelve la conexión (db) a Firestore según el modo de juego.
+    type_game puede ser 'Puntuacion' o 'Metrologia'.
+    """
+
+    try:
+        if type_game == 'Puntuacion':
+            cred = credentials.Certificate("../passwords/Passwords_firebase_puntos.json")
+            app = initialize_app(cred, name='PuntuacionApp')
+
+        elif type_game == 'Metrologia':
+            cred = credentials.Certificate("../passwords/Passwords_firebase_metro.json")
+            app = initialize_app(cred, name='MetrologiaApp')
+
+        else:
+            raise ValueError(f"Tipo de juego desconocido: {type_game}")
+
+    except ValueError:
+        # La app ya estaba inicializada → recuperamos la instancia
+        if type_game == 'Puntuacion':
+            cred = credentials.Certificate("../passwords/Passwords_firebase_puntos.json")
+            app = get_app('PuntuacionApp')
+
+        elif type_game == 'Metrologia':
+            cred = credentials.Certificate("../passwords/Passwords_firebase_metro.json")
+            app = get_app('MetrologiaApp')
+
+    # Siempre llegamos acá con 'app' definido
+    print(f"[INFO] Credenciales utilizadas ({type_game}): {cred}")
+    db = firestore.client(app=app)
+    return db
+`
                  }
 
 }

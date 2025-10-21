@@ -381,7 +381,7 @@ async function guardarDatosEnBackendWithWeb() {
       </div>
         </div>
        {localStorage.getItem("TypeGame") == "Puntuacion" && <BoardGamePoints ProcessParam={process} FunctionsParam={functions} videoRefParam={videoRef} videoStyleParam={videoStyle} /> }
-       {localStorage.getItem("TypeGame") == "Metrologia" && <BoardGameLen/> }
+       {localStorage.getItem("TypeGame") == "Metrologia" && <BoardGameLen ProcessParamMet={process} FunctionsParamMet={functions} /> }
        {localStorage.getItem("TypeGame") == "" && <BoardGameNull /> }
 </div>
 
