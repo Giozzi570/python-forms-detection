@@ -979,9 +979,15 @@ def show_graph_metrologia_function(id,tamañoX,tamañoY,event,square_calibre,squ
         <div className="w-auto h-auto flex flex-col justify-around items-center p-4">
 
             <aside className={`${points ? 'hidden' : 'block'}`}>
-                <div id='content-1' className="flex flex-col items-center justify-center p-4 gap-7 max-w-sm xl:max-w-4xl">
+                 <div id='content-1' className=" m-4 rounded-3xl text-black shadow-lg animate__animated animate__fadeIn">
+                    <h3 className="font-black text-center p-2">Funciones a ejecutar y su explicaciòn</h3>
+                <div className="flex flex-col items-center justify-center p-4 gap-7 max-w-sm xl:max-w-4xl">
                     {FunctionsParamMet ? <CodeBlock codejs={codeJs[ProcessShow]} codepy={codePy[ProcessShow]?.[modal]} modals={modals} modalNameParam={modalName} /> : "No hay funciones en ejecución"}
+                    
+                     
+                
                 </div>
+            </div>
 
                 <div id='content-2' className="m-4 rounded-3xl text-black shadow-lg animate__animated animate__fadeIn">
                     <h3 className="font-black text-center p-2">Proceso en ejecuciòn</h3>
