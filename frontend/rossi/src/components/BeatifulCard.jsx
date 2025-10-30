@@ -102,6 +102,7 @@ const BeautifulForm = () => {
       setErrorMsg(message);
       setHiddenCellphoneError(false)
       setHiddenLoad(true)
+      setHiddenFinishWeb(true)
     }
     }
     CameraFunction()
@@ -205,9 +206,9 @@ async function InstrumentSelect(){
 
 }
 function PermiCameraModalWeb(){
-    setHiddenFinishWeb(false)
     setHiddenVideo(false)
     PermiCamera()
+    setHiddenFinishWeb(false)
     InstrumentSelect()
 }
 async function guardarDatosEnBackendWithWeb() {
@@ -268,7 +269,9 @@ async function guardarDatosEnBackendWithWeb() {
     guardarDatosEnBackendWithWeb()
   }
   const buttonHiddenCancelFinishWeb = () => {
-    videoRefWeb.current = null
+    videoRefWeb.current.srcObject.getTracks().forEach(track => track.stop());
+    videoRefWeb.current.srcObject = null;
+    videoRefWeb.current = null;
     setHiddenFinishWeb(true)
     
   }
@@ -280,10 +283,14 @@ async function guardarDatosEnBackendWithWeb() {
     setHiddenFinishCellphone(!hiddenfinishCellphone)
     CapturarImagen()
     guardarDatosEnBackendWithCellphone()
+    videoRefWeb.current.srcObject.getTracks().forEach(track => track.stop());
+    videoRefWeb.current.srcObject = null;
+    videoRefWeb.current = null;
   }
   const buttonHiddenCancelFinishCellphone = () => {
     videoRefCellphone.current = null
     setHiddenCellphone(true)
+    setHiddenCellphoneError(true)
   }
   
   function functionFetch(name,bool,target,hiddenLoadSure){
