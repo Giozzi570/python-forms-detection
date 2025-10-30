@@ -14,11 +14,11 @@ def show_graph_puntuacion_function(id,circles_num,tamañoX,tamañoY):
     puntaje_final = []
     circulos = []
     puntaje = 0
-    Verde_fuerte = [2,13,14,26,32]
+    Verde_fuerte = [2,8,13,14,26,32]
     orange = [0,1,19,20,25,31]
     red = [3,6,7,9,12,15,18,21,24,27,30,33]
     yellow = [11,17,22,23,34]
-    green = [4,5,8,10,16,28,29]
+    green = [4,5,10,16,28,29]
     print("Aca esta")
     print(len(circles_num))
     for i in range(len(circles_num)):

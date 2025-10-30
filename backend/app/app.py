@@ -17,7 +17,6 @@ import random
 from firebase_admin import credentials, firestore, initialize_app, get_app
 
 CORS(app)  # Permitir CORS para evitar bloqueos del navegador
-
 # Función de ejemplo (sin usar `input()`)
 def inputName(name):
     return {
@@ -38,6 +37,28 @@ def detectar():
     else:
         return jsonify({"mensaje": "Envía un POST para procesar datos"})
     # Ruta para guardar los datos
+@app.route('/instruments', methods=['POST'])
+def instruments():
+    try:
+        data = request.get_json()  # el JSON que mandás desde JS
+        eleccion = data.get("instrumento")  # por ejemplo: {"instrumento": "Elegi"}
+
+        if eleccion == "Elegi":
+            lista = ["Micrómetro", "Calibre", "Goniómetro", "Cinta", "Manómetro"]
+            instrumento = random.choice(lista)
+            print(f"Instrumento seleccionado: {instrumento}")
+            return jsonify({"instrumento": instrumento})
+        elif eleccion == "No eligas":
+            instrumento = None
+            print(f"Instrumento seleccionado: {instrumento}")
+            return jsonify({"instrumento": instrumento})
+        else:
+            return jsonify({"mensaje": "Dato no reconocido"}), 400
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 @app.route('/guardar', methods=['POST'])
 
@@ -45,23 +66,23 @@ def guardar():
 
         # Validar datos del frontend
     datos = request.get_json()
-    if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame', 'TypeCamera', 'data_image']):
+    if not datos or not all(key in datos for key in ['name', 'id' , 'TypeGame', 'TypeCamera', 'data_image','instrument_selected']):
             return jsonify({"error": "Los campos 'name' , 'id' , 'TypeGame' , 'TypeCamera' y 'data_image' son requeridos"}), 400
 
-    lista_instruments = ["Micrometro", "Calibre", "Goniometro"]
-    instrument = random.choice(lista_instruments)
+    
     print(f"Tipo de juego: {datos['TypeGame']}")
 
     db = firestore_get.get_firestore_by_game(datos['TypeGame'],credentials, initialize_app, get_app, firestore)
     try:
         if datos['TypeCamera'] == 'WebCam':
-            resultado = camera_web_pc.select_game(datos["TypeGame"])
+            resultado = camera_web_pc.select_game(datos["TypeGame"],datos['instrument_selected'])
             Circulos_detectados = resultado["circulos_detectados"]
             Captura_realizada = resultado["captura_realizada"]
             Puntaje = resultado["puntaje"]
             Gano = resultado["Gano"]
             Img = resultado["img"]
             Img_graph = resultado["img_graph"]
+            instrument = resultado["instrument"]
 
             datos_deteccion = {
                 "circulos_detectados": Circulos_detectados,

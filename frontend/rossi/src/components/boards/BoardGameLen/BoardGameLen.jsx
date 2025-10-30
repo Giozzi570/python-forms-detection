@@ -2,10 +2,11 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import './BoardGameLen.css'; 
 import CodeBlock from '../../funtions/function_writing/functionWriting';
+import Tablero from '../Board';
 const BoardGameLen = ({ProcessParamMet,FunctionsParamMet}) => {
     const [points, setPoints] = useState(false)
     // Generar un array de 35 números incrementales comenzando desde 1
-    const pointsArray = Array.from({ length: 18 }, (_, i) => 18 - i);
+    const pointsArray = Array.from({ length: 35 }, (_, i) => 18 - i);
     const [modals,SetModal] = useState([])
     const [ProcessShow,setProcessShow] = useState("")
     const [modal, setModal] = useState("")
@@ -997,18 +998,7 @@ def show_graph_metrologia_function(id,tamañoX,tamañoY,event,square_calibre,squ
                 </div>
             </aside>
 
-            <div id='containerDistribution' className={`text-black m-4 rounded-3xl shadow-lg justify-center flex flex-col items-center p-4 gap-7 ${points ? 'h-auto' : ""}`}>
-                <h3 className="font-black text-center">Distribución de Tolerancias</h3>
-                <button className="bg-emerald-600" onClick={() => setPoints(!points)}>
-                    {points ? "Ocultar Distribución de Tolerancias" : "Ver Distribución de Tolerancias"}
-                </button>
-
-                <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl ${points ? 'grid' : 'hidden'} animate__animated animate__fadeInRightBig`} id='containerPointsLen'>
-                    {pointsArray.map((num) => (
-                        <div className="tools" key={num} id={`${num}`}></div>
-                    ))}
-                </div>
-            </div>
+            <Tablero pointsArray={pointsArray} setPoints={setPoints} points={points} pri_param={"Micrometro"} seg_param={"Calibre"} ter_param={"Goniometro"} cuar_param={"Cinta metrica"} qui_param={"Manometro"}/>
 
         </div>
     </main>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import './BoardGame.css';
 import CodeBlock from '../../funtions/function_writing/functionWriting';
+import Tablero from '../Board';
 const BoardGamePoints = ({ProcessParam,FunctionsParam,videoRefParam,videoStyleParam}) => {
 const [modals,SetModal] = useState([])
 const [points, setPoints] = useState(false)
@@ -998,22 +999,7 @@ def detectar_formas_metrologia(event,x0=20, y0=40, ancho_total=600, alto_total=4
             </div>
                 </aside>
 
-                <div id='containerDistribution' className={`text-black m-4 rounded-3xl shadow-lg justify-center flex flex-col items-center p-4 gap-7 ${points ? 'h-auto' : ""}`}>
-                    <h3 className="font-black text-center">Distribución de puntaje</h3>
-                    <button className="bg-emerald-600" onClick={() => setPoints(!points)}>{points ? "Ocultar Distribución de puntaje" : "Ver Distribución de puntaje"}</button>
-                    <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl ${points ? 'grid' : 'hidden'} animate__animated animate__fadeInRightBig`} id='containerPoints'>
-                        {pointsArray.map((num) => (
-                            <div className="points-new" key={num} id={`${num}`}></div>
-                        ))}
-                    </div>
-                     <div className={`w-auto flex-wrap h-auto justify-center items-center border-2 border-black p-5 rounded-3xl gap-4 ${points ? 'flex' : 'hidden'} animate__animated animate__fadeIn`}>
-                        <div className='h-auto text-center bg-[#ff0000] rounded-full p-2' id='red'>-1000 puntos</div>
-                        <div className='h-auto text-center bg-[#FF9900] rounded-full p-2' id='orange'>+500 puntos</div>
-                        <div className='h-auto text-center bg-[#FFFF00] rounded-full p-2' id='yellow'>+1000 puntos</div>
-                        <div className='h-auto text-center bg-[#008000] rounded-full p-2' id='dark-green'>+1500 puntos</div>
-                        <div className='h-auto text-center bg-[#00fa0c] rounded-full p-2' id='light-green'>+3000 puntos</div>
-                    </div>
-                </div>
+                <Tablero setPoints={setPoints} pointsArray={pointsArray} points={points} pri_param={-1000} seg_param={500} ter_param={1000} cuar_param={1500} qui_param={5000} mode={" puntos"}/>
                 </div>
         </main>
     )

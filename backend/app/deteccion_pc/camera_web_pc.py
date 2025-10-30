@@ -6,8 +6,6 @@ import time  # Importa time para manejar pausas y esperas en la ejecución.
 import random
 from show_graph_types.show_graph_metrologia import show_graph_metrologia_function as metrologia
 from show_graph_types.show_graph_puntuacion import show_graph_puntuacion_function as puntuacion
-import show_graph_types.show_graph_metrologia 
-from show_graph_types.show_graph_metrologia import select_board
 import base64
 import sys
 
@@ -33,15 +31,12 @@ def created_folder(name):
 
 # -----------------------------------------------------------
 
-def select_game(mode_game): 
+def select_game(mode_game,instrument): 
     resultado = None
     try:
         if mode_game == "Puntuacion":
             resultado = detectar_formas_puntuacion()
         elif mode_game == "Metrologia":
-            lista_instruments = ["Micrometro", "Calibre", "Goniometro", "Cinta", "Manometro", "Toquimetro"]
-            instrument = random.choice(lista_instruments)
-            print(f"Instrumento seleccionado: {instrument}")
             resultado = detectar_formas_metrologia(instrument)
     except Exception as e:
         print("Ocurrió un error:", e)
@@ -211,7 +206,6 @@ def detectar_formas_puntuacion(x0=20, y0=40, ancho_total=600, alto_total=400, co
 # Función para detectar formas en el modo de metrología, donde se pasa un event para saber donde tiene que caer la ficha
 
 def detectar_formas_metrologia(event,x0=20, y0=40, ancho_total=600, alto_total=400, columnas=6, filas=3):
-    square_calibre, square_micrometro, square_goniometro, square_cinta, square_manometro, square_toquimetro = select_board()
     captura_hecha = False  # Bandera para saber si ya se hizo una captura y detener el programa.
     id_cuadrado = None     # Inicializa id_cuadrado para evitar errores si no se detecta ningún círculo.
     id = 0   
@@ -310,7 +304,7 @@ def detectar_formas_metrologia(event,x0=20, y0=40, ancho_total=600, alto_total=4
                                 if captura_hecha:
                                     # setup_arduino()  # Envía señal al Arduino.
                                     # print("Arduino configurado y listo para recibir datos.")  Mensaje de confirmación.
-                                    id,jugador_gano, imagen_base64_graph = metrologia(id_cuadrado, 6, 3,event,square_calibre, square_micrometro, square_goniometro, square_cinta, square_manometro, square_toquimetro)  # Muestra el gráfico con el ID del cuadrado capturado.
+                                    id,jugador_gano, imagen_base64_graph = metrologia(id_cuadrado, 6, 3,event)  # Muestra el gráfico con el ID del cuadrado capturado.
                                     print(id, id_cuadrado)
                                     return {
                             "circulos_detectados": len(circles[0]) if circles is not None else 0,
@@ -320,7 +314,7 @@ def detectar_formas_metrologia(event,x0=20, y0=40, ancho_total=600, alto_total=4
                             "img": imagen_base64,
                             "img_graph": imagen_base64_graph,
                             "puntaje": None,
-                            "instrument": None
+                            "instrument": event,
                         }
                             if circles is None:
                                 print("No se detectaron círculos.")

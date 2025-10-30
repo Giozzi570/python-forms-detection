@@ -9,12 +9,13 @@
     filter:brightness(0.7);
 }
 
-#containerPoints{
+#containerPointsPun{
     background-color: #C19A6B;
     grid-template-columns: repeat(5, 50px);
     grid-template-rows: repeat(7, 50px);
     justify-items: center;
-    transform: rotate3d(1, 0, 0, 20deg);
+    transform: rotate(180deg);
+
 }
 #containerDistribution{
     transition: all 3s ease-in-out;

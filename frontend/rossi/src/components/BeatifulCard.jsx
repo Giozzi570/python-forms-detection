@@ -43,7 +43,7 @@ const BeautifulForm = () => {
   const [process, setProcess] = useState('');
   const [functions, setFunctions] = useState('');
   const [video, setHiddenVideo] = useState(true)
-
+  const [startWebCamera, setStartWebCamera] = useState(false);
   const HideErrorActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenError ? "hidden" : ""}`
   const hideLoadActiveSure = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenLoadSure ? "hidden" : ""}`
   const hideLoadActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${hiddenLoad ? "hidden" : ""}`
@@ -52,15 +52,13 @@ const BeautifulForm = () => {
   const hiddenCameraActive = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${camera ? "hidden" : ""}`
   const hiddenfinishActiveCellphone = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${cellphone ? "hidden" : ""}`
   const hiddenfinishErrorCellphone = `fixed inset-0 flex items-center justify-center bg-transparent z-50 ${cellphoneError ? "hidden" : ""}`
-  const videoStyle = `bg-transparent h-auto w-76 rounded-2xl  border-2 ${video ? "hidden" : ""}`;
-
-
+  const videoStyle = `bg-transparent h-auto w-76 rounded-2xl border-2 ${video ? "hidden" : ""}`;
 
   const nameLocal = localStorage.getItem("name")
-  const videoRef = useRef(null); // referencia al <video>
+  const videoRefWeb = useRef(null);
+  const videoRefCellphone = useRef(null);
 
   function PermiCamera() {
-    selectCellphoneCamera()
     PermiCameraModal()
     async function CameraFunction() {
       try {
@@ -68,18 +66,18 @@ const BeautifulForm = () => {
         video: { facingMode: "environment" },
         audio: false,
       });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        
-        setHiddenVideo(false)
-        setHiddenCellphone(false)
+      if (videoRefCellphone.current) {
+        videoRefCellphone.current.srcObject = stream;
+        console.log("EL video anda")
         setHiddenCellphoneError(true)
         let Track = stream.getVideoTracks()[0]
         Track.addEventListener("ended",() => {
           CameraFunction()
-          setHiddenCellphone(true)
       })
       }
+      if (videoRefWeb.current) {
+  videoRefWeb.current.srcObject = stream;
+}
     } catch (err) {
         let message = "";
       switch (err.name) {
@@ -109,20 +107,24 @@ const BeautifulForm = () => {
     CameraFunction()
   }
 
-
+function PermiCameraCellphone(){
+  setHiddenVideo(false)
+  PermiCamera()
+  setHiddenCellphone(false)
+}
 async function guardarDatosEnBackendWithCellphone() {
   const datos = {
         name : localStorage.getItem('name'),
         id : localStorage.getItem('playerIdCounter'),
         TypeCamera : "Cellphone",
         TypeGame : localStorage.getItem('TypeGame'),
-        data_image: localStorage.getItem('data_text_image')
+        data_image: localStorage.getItem('data_text_image'),
         
   };
     console.log(`Estos son los ${datos}`);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("https://deana-inspirable-weirdly.ngrok-free.dev/guardar", 
+        const response = await fetch("http://localhost:5000/guardar", 
           {
         method: "POST",
         headers: {
@@ -143,10 +145,10 @@ async function guardarDatosEnBackendWithCellphone() {
 
 }
 function CapturarImagen() {
-      if (!videoRef.current) return;
+      if (!videoRefCellphone.current) return;
   
       const canvas = document.createElement("canvas");
-      const video = videoRef.current;
+      const video = videoRefCellphone.current;
   
       // tamaño del canvas igual al del video
       canvas.width = video.videoWidth;
@@ -165,10 +167,48 @@ function CapturarImagen() {
 function PermiCameraModal(){
     setHiddenCamera(!camera)
 }
+function TypeGame(){
+  let Instrument = "No hay instrumento"
+  if(localStorage.getItem("TypeGame") == "Metrologia"){
+    Instrument = { instrumento: "Elegi" };
+    return Instrument
+  }
+  else{
+      Instrument = { instrumento: "No eligas" };
+      return Instrument
+  }
+
+}
+async function InstrumentSelect(){
+  try{
+    const tryInstrument = TypeGame()
+    const response = await fetch("http://127.0.0.1:5000/instruments", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(tryInstrument),
+    })
+    if (!response.ok) throw new Error("❌ Falló el guardado");
+    else {}
+      const result = await response.json();
+      console.log(result.instrumento)
+      console.log(result)
+      if(result.instrumento == null){
+        localStorage.setItem("instrument_selected", "")
+      }else{
+      localStorage.setItem("instrument_selected",result.instrumento)}
+  }
+  catch (error){
+      console.log("No anda", error)
+    }
+
+}
 function PermiCameraModalWeb(){
-  setHiddenCamera(!camera)
-  setHiddenFinishWeb(!hiddenfinishWeb)
-  selectWebCamera()
+    setHiddenFinishWeb(false)
+    setHiddenVideo(false)
+    PermiCamera()
+    InstrumentSelect()
 }
 async function guardarDatosEnBackendWithWeb() {
     const datos = {
@@ -176,13 +216,14 @@ async function guardarDatosEnBackendWithWeb() {
         id : localStorage.getItem('playerIdCounter'),
         TypeCamera : 'WebCam',
         TypeGame : localStorage.getItem('TypeGame'),
-        data_image : ""
+        data_image : "",
+        instrument_selected : localStorage.getItem('instrument_selected')
         
     };
     console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("https://deana-inspirable-weirdly.ngrok-free.dev/guardar", {
+        const response = await fetch("http://localhost:5000/guardar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -221,13 +262,15 @@ async function guardarDatosEnBackendWithWeb() {
     
   }
   const buttonHiddenFinishWeb = () => {
+    setHiddenFinishWeb(true)
     setProcess("Llamada al Servidor para ejecutar funciòn de detecciòn de fichas")
     setFunctions("4to Web")
-    setHiddenFinishWeb(!hiddenfinishWeb)
     guardarDatosEnBackendWithWeb()
   }
   const buttonHiddenCancelFinishWeb = () => {
+    videoRefWeb.current = null
     setHiddenFinishWeb(true)
+    
   }
   const buttonHiddenLoadCancel = () => {
     setHiddenLoadSure(true)
@@ -239,6 +282,7 @@ async function guardarDatosEnBackendWithWeb() {
     guardarDatosEnBackendWithCellphone()
   }
   const buttonHiddenCancelFinishCellphone = () => {
+    videoRefCellphone.current = null
     setHiddenCellphone(true)
   }
   
@@ -335,10 +379,15 @@ async function guardarDatosEnBackendWithWeb() {
                     <BeautifulCard modificationGameParam={modificationGame} setModificationGameParam={setModificationGame} />
                 </div>
                 <div className={hiddenfinishActiveWeb}>
-                      <div className="flex flex-col w-96 h-96 bg-white text-black rounded-xl p-10 gap-5">
+                      <div className="flex flex-col w-96 h-auto bg-white text-black rounded-xl p-10 gap-5">
                           <p className="text-center text-3xl font-black">Empieze a jugar</p>
+                          <video ref={videoRefWeb}
+                                autoPlay
+                                playsInline
+                                className={videoStyle}></video>
                           <p className="text-center font-bold">El numero de intento hasta ahora es {localStorage.getItem('playerIdCounter')}</p>
                           <p className="text-center font-bold">Al dar por terminado su intento haga click en Terminar intento</p>
+                          {localStorage.getItem("instrument_selected") && <p className='text-center font-bold'> Su instrumento a atinar es {localStorage.getItem("instrument_selected")}</p>}
                           <button id="cancelButton" onClick={buttonHiddenFinishWeb} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
                           <button id="cancelButton" onClick={buttonHiddenCancelFinishWeb} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
                       </div>
@@ -347,12 +396,12 @@ async function guardarDatosEnBackendWithWeb() {
           <div className={hiddenfinishActiveCellphone}>
                       <div className="flex flex-col w-96 h-auto bg-white text-black rounded-xl p-10 gap-5">
                           <p className="text-center text-3xl font-black">Empieze a jugar</p>
-                          <video ref={videoRef}
+                          <video ref={videoRefCellphone}
                                 autoPlay
                                 playsInline
                                 className={videoStyle}></video>
                           <p className="text-center font-bold">El numero de intento hasta ahora es {localStorage.getItem('playerIdCounter')}</p>
-                          <p className="text-center font-bold">Al dar por terminado su intento haga click en Terminar intento</p>
+                          <p className="text-center font-bold">Al dar por terminado su intento celular haga click en Terminar intento</p>
                           <button id="cancelButton" onClick={buttonHiddenFinishCellphone} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
                           <button id="cancelButton" onClick={buttonHiddenCancelFinishCellphone} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
                       </div>
@@ -375,12 +424,12 @@ async function guardarDatosEnBackendWithWeb() {
               setHiddenDetecParam={setDetecFinish}
               hiddenDetecActiveParam={hiddenDetecActive}
               HiddenCameraParam={hiddenCameraActive}
-              PermiCameraParam={PermiCamera}
+              PermiCameraParam={PermiCameraCellphone}
               PermiCameraWebParam={PermiCameraModalWeb}
               ></Load>
       </div>
         </div>
-       {localStorage.getItem("TypeGame") == "Puntuacion" && <BoardGamePoints ProcessParam={process} FunctionsParam={functions} videoRefParam={videoRef} videoStyleParam={videoStyle} /> }
+       {localStorage.getItem("TypeGame") == "Puntuacion" && <BoardGamePoints ProcessParam={process} FunctionsParam={functions}/> }
        {localStorage.getItem("TypeGame") == "Metrologia" && <BoardGameLen ProcessParamMet={process} FunctionsParamMet={functions} /> }
        {localStorage.getItem("TypeGame") == "" && <BoardGameNull /> }
 </div>

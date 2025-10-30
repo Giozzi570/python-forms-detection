@@ -6,49 +6,23 @@ import numpy as np
 import os
 import time
 import random
-def select_board():
-    square_calibre = []
-    square_micrometro = []
-    square_goniometro = []
-    square_cinta = []
-    square_manometro = []
-    square_toquimetro = []
-    #Definir datos
-    lista_nums = list(range(18))
-    for i in range(18):
-        num = random.choice(lista_nums)
-        if i < 3:
-            square_calibre.append(num)
-        elif 3 <= i < 6:
-            square_micrometro.append(num)
-        elif 6 <= i < 9:
-            square_goniometro.append(num)
-        elif 9 <= i < 12:
-            square_cinta.append(num)
-        elif 12 <= i < 15:
-            square_manometro.append(num)
-        else:
-            square_toquimetro.append(num)
-    print(f"Calibre: {square_calibre}")
-    print(f"Micrometro: {square_micrometro}")
-    print(f"Goniometro: {square_goniometro}")
-    print(f"Cinta: {square_cinta}")
-    print(f"Manometro: {square_manometro}")
-    
-    return square_calibre, square_micrometro, square_goniometro, square_cinta, square_manometro, square_toquimetro
 def created_folder(name):
     if not os.path.exists(name):  # Verifica si la carpeta 'capturas' no existe.
         os.makedirs(name)  # Si no existe, la crea.
         print(f"Carpeta creada: {name}")
 # -----------------------------------------------------------
 # Función: show_graph()
-def show_graph_metrologia_function(id,tamañoX,tamañoY,event,square_calibre,square_micrometro,square_goniometro,square_cinta,square_manometro,square_toquimetro):
+def show_graph_metrologia_function(id,tamañoX,tamañoY,event):
 
 
     #El plt.style.use() puede cambiar el estilo del gráfico
 
     plt.style.use('_mpl-gallery')
-
+    square_manometro = [2,8,13,14,26,32]
+    square_calibre = [0,1,19,20,25,31]
+    square_micrometro = [3,6,7,9,12,15,18,21,24,27,30,33]
+    square_goniometro = [11,17,22,23,34]
+    square_cinta = [4,5,10,16,28,29]
     
 
     #si el evento es "Calibre" y el id esta entre los cuadrados del calibre, el jugador gano
@@ -68,9 +42,6 @@ def show_graph_metrologia_function(id,tamañoX,tamañoY,event,square_calibre,squ
         jugador_gano = True
     elif event == "Manometro" and id in square_manometro:
         print("GANASTE CON EL MANOMETRO")
-        jugador_gano = True
-    elif event == "Toquimetro" and id in square_toquimetro:
-        print("GANASTE CON EL TOQUIMETRO")
         jugador_gano = True
     else:
         print(f"PERDISTE con {event}")
