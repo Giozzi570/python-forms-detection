@@ -183,7 +183,7 @@ function TypeGame(){
 async function InstrumentSelect(){
   try{
     const tryInstrument = TypeGame()
-    const response = await fetch("http://127.0.0.1:5000/instruments", {
+    const response = await fetch(" https://deana-inspirable-weirdly.ngrok-free.dev/instruments", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -224,7 +224,7 @@ async function guardarDatosEnBackendWithWeb() {
     console.log(datos);
     try{
         setHiddenLoad(!hiddenLoad)
-        const response = await fetch("https://deana-inspirable-weirdly.ngrok-free.dev", {
+        const response = await fetch("https://deana-inspirable-weirdly.ngrok-free.dev/guardar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
