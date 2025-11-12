@@ -339,7 +339,18 @@ async function guardarDatosEnBackendWithWeb() {
   const buttonColors = submitted
     ? 'bg-emerald-600'
     : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-purple-600 hover:to-indigo-600';
-
+  useEffect(() => {
+  return () => {
+    if (videoRefWeb.current && videoRefWeb.current.srcObject) {
+      videoRefWeb.current.srcObject.getTracks().forEach(track => track.stop());
+      videoRefWeb.current.srcObject = null;
+    }
+    if (videoRefCellphone.current && videoRefCellphone.current.srcObject) {
+      videoRefCellphone.current.srcObject.getTracks().forEach(track => track.stop());
+      videoRefCellphone.current.srcObject = null;
+    }
+  };
+}, []);
   return (
     <div className="xl:min-h-screen h-auto w-full flex xl:flex-row flex-col items-center justify-around from-gray-50 to-gray-200 p-4 " id='BeatifulCard'>
       <div className="relative w-full flex flex-col max-w-md h-screen justify-center grow">

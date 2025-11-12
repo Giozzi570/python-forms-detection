@@ -151,7 +151,6 @@ def detectar_formas_puntuacion(x0=20, y0=40, ancho_total=600, alto_total=400, co
                                         captura_path = os.path.join("static/Puntuacion", f'captura_cuadrado_puntuacion{round(time.time())}.webp')  # Ruta de guardado.
                                         print(f"Ruta de guardado: {captura_path}")
                                         cropped_image = resized_image  # Guarda la imagen (nota: aquí se guarda la imagen completa, no recortada).
-                                        cv2.imshow(cropped_image)
                                         cv2.imwrite(captura_path, cropped_image)  # Guarda la imagen en disco.
                                         print(f"✔️ Captura guardada en: {captura_path}")
                                         captura_hecha = True  # Marca que se ha hecho una captura.

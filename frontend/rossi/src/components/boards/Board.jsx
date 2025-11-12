@@ -16,8 +16,8 @@ function Tablero({pointsArray,points,setPoints,pri_param,seg_param,ter_param,cua
                         <div className='h-auto text-center bg-[#ff0000] rounded-full p-2' id='red'>{pri_param}{mode}</div>
                         <div className='h-auto text-center bg-[#FF9900] rounded-full p-2' id='orange'>{seg_param}{mode}</div>
                         <div className='h-auto text-center bg-[#FFFF00] rounded-full p-2' id='yellow'>{ter_param}{mode}</div>
-                        <div className='h-auto text-center bg-[#008000] rounded-full p-2' id='dark-green'>{cuar_param}{mode}</div>
-                        <div className='h-auto text-center bg-[#00fa0c] rounded-full p-2' id='light-green'>{qui_param}{mode}</div>
+                        <div className='h-auto text-center bg-[#00fa0c] rounded-full p-2' id='dark-green'>{cuar_param}{mode}</div>
+                        <div className='h-auto text-center bg-[#008000] rounded-full p-2' id='light-green'>{qui_param}{mode}</div>
                     </div>
             </div>
     )
