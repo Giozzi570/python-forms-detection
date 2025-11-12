@@ -6,7 +6,7 @@
     height: 50px;
     background-color: #b3b3b3;
     border: 2px solid #000;
-    filter:brightness(0.7);
+    filter:brightness(1);
 }
 
 #containerPointsPun{
@@ -23,44 +23,44 @@
 }
 .points-new:hover{
     cursor: pointer;
-    filter:brightness(1);
+    filter:brightness(0.5);
 }
 .points-new:nth-child(1)  { background-color: #ff0000; }
-.points-new:nth-child(2)  { background-color: #00fa0c; }
-.points-new:nth-child(3)  { background-color: #FF9900; }
+.points-new:nth-child(2)  { background-color: #008000; }
+.points-new:nth-child(3)  { background-color:#FF6600; }
 .points-new:nth-child(4)  { background-color: #ff0000; }
 .points-new:nth-child(5)  { background-color: #FFFF00; }
-.points-new:nth-child(6)  { background-color: #008000; }
+.points-new:nth-child(6)  {  background-color: #00fa0c; }
 .points-new:nth-child(7)  { background-color: #ff0000; }
 
-.points-new:nth-child(8)  { background-color: #FF9900; }
-.points-new:nth-child(9)  { background-color: #00fa0c; }
+.points-new:nth-child(8)  { background-color:#FF6600; }
+.points-new:nth-child(9)  { background-color: #008000; }
 .points-new:nth-child(10) { background-color: #ff0000; }
-.points-new:nth-child(11) { background-color: #008000; }
+.points-new:nth-child(11) {  background-color: #00fa0c; }
 .points-new:nth-child(12) { background-color: #FFFF00; }
 .points-new:nth-child(13) { background-color: #ff0000; }
-.points-new:nth-child(14) { background-color: #FF9900; }
+.points-new:nth-child(14) { background-color:#FF6600; }
 
-.points-new:nth-child(15) { background-color: #00fa0c; }
+.points-new:nth-child(15) { background-color: #008000; }
 .points-new:nth-child(16) { background-color: #ff0000; }
-.points-new:nth-child(17) { background-color: #008000; }
+.points-new:nth-child(17) { background-color: #00fa0c; }
 .points-new:nth-child(18) { background-color: #FFFF00; }
 .points-new:nth-child(19) { background-color: #ff0000; }
-.points-new:nth-child(20) { background-color: #FF9900; }
-.points-new:nth-child(21) { background-color: #00fa0c; }
+.points-new:nth-child(20) { background-color: #FF6600; }
+.points-new:nth-child(21) { background-color: #008000; }
 
 .points-new:nth-child(22) { background-color: #ff0000; }
-.points-new:nth-child(23) { background-color: #008000; }
+.points-new:nth-child(23) { background-color: #00fa0c; }
 .points-new:nth-child(24) { background-color: #FFFF00; }
 .points-new:nth-child(25) { background-color: #ff0000; }
-.points-new:nth-child(26) { background-color: #FF9900; }
-.points-new:nth-child(27) { background-color: #00fa0c; }
+.points-new:nth-child(26) { background-color:#FF6600; }
+.points-new:nth-child(27) { background-color: #008000; }
 .points-new:nth-child(28) { background-color: #ff0000; }
 
 .points-new:nth-child(29) { background-color: #FFFF00; }
-.points-new:nth-child(30) { background-color: #008000; }
-.points-new:nth-child(31) { background-color: #FF9900; }
+.points-new:nth-child(30) { background-color: #00fa0c; }
+.points-new:nth-child(31) { background-color: #FF6600; }
 .points-new:nth-child(32) { background-color: #ff0000; }
-.points-new:nth-child(33) { background-color: #00fa0c; }
+.points-new:nth-child(33) { background-color: #008000; }
 .points-new:nth-child(34) { background-color: #ff0000; }
-.points-new:nth-child(35) { background-color: #008000; }
+.points-new:nth-child(35) { background-color: #00fa0c; }

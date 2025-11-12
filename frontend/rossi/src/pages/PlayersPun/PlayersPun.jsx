@@ -10,7 +10,6 @@ import { FaEye } from "react-icons/fa";
 
 
 
-
 const Players = () => {
   const [jugadaVisible, setJugadaVisible] = useState(null); 
   const [jugadaGraph, setGraph] = useState(null); 
@@ -117,7 +116,7 @@ const getPodio = (puesto) => {
                           </div>
               {getPodio(jugador.puesto)}
               <button className="flex items-center gap-2" onClick={() => setJugadaVisible(jugador)}><FaEye /> <p>Ver jugada</p></button>
-              <button className="flex items-center gap-2" onClick={() => setGraph(jugador)}><FaEye /> <p>Ver jugada</p></button>
+              <button className="flex items-center gap-2" onClick={() => setGraph(jugador)}><FaEye /> <p>Ver grafico</p></button>
             </div>
           ))}
         </div>
