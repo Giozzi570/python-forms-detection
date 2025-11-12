@@ -3,9 +3,9 @@ import React from "react";
 function Tablero({pointsArray,points,setPoints,pri_param,seg_param,ter_param,cuar_param,qui_param,mode}){
     return(
         <div id='containerDistribution' className={`text-black m-4 rounded-3xl shadow-lg justify-center flex flex-col items-center p-4 gap-7 ${points ? 'h-auto' : ""}`}>
-                <h3 className="font-black text-center">Distribución de Tolerancias</h3>
+                <h3 className="font-black text-center">Distribución del Tablero</h3>
                 <button className="bg-emerald-600" onClick={() => setPoints(!points)}>
-                    {points ? "Ocultar Distribución de Tolerancias" : "Ver Distribución de Tolerancias"}
+                    {points ? "Ocultar Distribución" : "Ver Distribución"}
                 </button>
             <div className={`w-auto h-auto justify-center items-center border-2 border-black p-5 rounded-3xl ${points ? 'grid' : 'hidden'}`} id='containerPointsPun'>
                         {pointsArray.map((num) => (
