@@ -214,15 +214,10 @@ async function InstrumentSelect(){
       console.log(result.instrumento)
       alert("Su instrumento a atinar es " + result.instrumento)
       console.log(result)
-      if(result.instrumento == null){
-        localStorage.setItem("instrument_selected", "No hay instrumento")
-      }else{
-      localStorage.setItem("instrument_selected",result.instrumento)}
-  }
-  catch (error){
+   alert("Su instrumento a atinar es " + result.instrumento)
+  } catch (error){
       console.log("No anda", error)
     }
-
 }
 function PermiCameraModalWeb(){
     setHiddenVideo(false)
@@ -417,7 +412,6 @@ async function guardarDatosEnBackendWithWeb() {
                                 className={videoStyle}></video>
                           <p className="text-center font-bold">El numero de intento hasta ahora es {localStorage.getItem('playerIdCounter')}</p>
                           <p className="text-center font-bold">Al dar por terminado su intento haga click en Terminar intento</p>
-                          {localStorage.getItem("instrument_selected") && <p className='text-center font-bold'> Su instrumento a atinar es {localStorage.getItem("instrument_selected")}</p>}
                           <button id="cancelButton" onClick={buttonHiddenFinishWeb} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Terminar intento N°{localStorage.getItem('playerIdCounter')} </button>
                           <button id="cancelButton" onClick={buttonHiddenCancelFinishWeb} class="overflow-hidden group px-6 py-6 rounded-full font-bold text-white bg-red-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 border-2 border-white/20 hover:border-white/40"> Cancelar </button>
                       </div>
