@@ -347,6 +347,7 @@ async function guardarDatosEnBackendWithWeb() {
   }
   const OnlyPeticion = () => {
     setHiddenFinishWeb(false)
+    setHiddenCamera(true)
   }
   const selectWebCamera = () => {
     setProcess("Camara del servidor seleccionada")

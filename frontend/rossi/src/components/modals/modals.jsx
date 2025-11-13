@@ -12,7 +12,7 @@ export const Load = ({videoRefParam,videoStyleParam,OnlyPeticionParam,hideLoadAc
       ¿Con qué tipo de cámara quiere jugar?
     </h3>
     <div className="flex flex-col justify-center gap-6">
-      <div className="flex">
+      <div className="flex justify-center">
 
       <button
         onClick={PermiCameraWebParam}
