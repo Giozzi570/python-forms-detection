@@ -212,9 +212,10 @@ async function InstrumentSelect(){
     else {}
       const result = await response.json();
       console.log(result.instrumento)
+      alert("Su instrumento a atinar es " + result.instrumento)
       console.log(result)
       if(result.instrumento == null){
-        localStorage.setItem("instrument_selected", "")
+        localStorage.setItem("instrument_selected", "No hay instrumento")
       }else{
       localStorage.setItem("instrument_selected",result.instrumento)}
   }
