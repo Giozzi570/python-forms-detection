@@ -13,18 +13,6 @@ export const Load = ({videoRefParam,videoStyleParam,OnlyPeticionParam,hideLoadAc
     </h3>
     <div className="flex flex-col justify-center gap-6">
       <div className="flex">
-        <button
-        onClick={PermiCameraParam}
-        className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-gray-100 transition"
-      >
-        <img
-          id="Cellphone"
-          className="rounded-md w-24 h-24 object-cover shadow"
-          src={Cellphone}
-          alt="Celular"
-        />
-        <span className="text-sm font-medium">Celular</span>
-      </button>
 
       <button
         onClick={PermiCameraWebParam}
