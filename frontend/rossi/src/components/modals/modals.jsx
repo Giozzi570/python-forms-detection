@@ -7,12 +7,13 @@ export const Load = ({videoRefParam,videoStyleParam,OnlyPeticionParam,hideLoadAc
   return(
     <>
     <div className={HiddenCameraParam}>
-  <div className="flex flex-col w-96 h-96 bg-white text-black rounded-2xl shadow-xl p-6 gap-8">
+  <div className="flex flex-col w-96 h-auto bg-white text-black rounded-2xl shadow-xl p-6 gap-8">
     <h3 className="text-center font-bold text-lg border-b pb-4">
       ¿Con qué tipo de cámara quiere jugar?
     </h3>
-    <div className="flex justify-center gap-6">
-      <button
+    <div className="flex flex-col justify-center gap-6">
+      <div className="flex">
+        <button
         onClick={PermiCameraParam}
         className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-gray-100 transition"
       >
@@ -37,10 +38,13 @@ export const Load = ({videoRefParam,videoStyleParam,OnlyPeticionParam,hideLoadAc
         />
         <span className="text-sm font-medium">Webcam</span>
       </button>
-      <button className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200" onClick={OnlyPeticionParam}>Solo pedir petición</button>
+      </div>
+      
+
+      <div className="flex justify-center"><button className="px-6 bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200" onClick={OnlyPeticionParam}>Solo pedir petición</button></div>
     </div>
   </div>
-</div>
+  </div>
 
     <div className={hideLoadActiveSureParam}>
                     <div className="flex flex-col w-80 h-80 bg-white text-black rounded-xl p-10 gap-8">
