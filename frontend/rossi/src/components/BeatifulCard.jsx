@@ -345,6 +345,9 @@ async function guardarDatosEnBackendWithWeb() {
     setProcess("Seleccionar Camara")
     
   }
+  const OnlyPeticion = () => {
+    setHiddenFinishWeb(false)
+  }
   const selectWebCamera = () => {
     setProcess("Camara del servidor seleccionada")
     setFunctions("ThirdWebProcess")
@@ -451,7 +454,7 @@ async function guardarDatosEnBackendWithWeb() {
               HiddenCameraParam={hiddenCameraActive}
               PermiCameraParam={PermiCameraCellphone}
               PermiCameraWebParam={PermiCameraModalWeb}
-              OnlyPeticionParam={guardarDatosEnBackendWithWeb}
+              OnlyPeticionParam={OnlyPeticion}
               ></Load>
       </div>
         </div>
