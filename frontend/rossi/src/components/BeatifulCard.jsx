@@ -212,7 +212,11 @@ async function InstrumentSelect(){
     else {}
       const result = await response.json();
       console.log(result.instrumento)
-      alert("Su instrumento a atinar es " + result.instrumento)
+      if(result.instrumento == null){
+        alert("No seleccionaste ningun instrumento, debido a que esta en el modo de puntuacion")
+      }
+      else{
+      alert("Su instrumento a atinar es" + result.instrumento)}
       console.log(result)
    alert("Su instrumento a atinar es " + result.instrumento)
   } catch (error){
