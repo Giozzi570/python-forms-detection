@@ -108,10 +108,10 @@ const BeautifulForm = () => {
     CameraFunction()
   }
 function StopCamera() {
-  if (currentStream) {
-    currentStream.getTracks().forEach(track => track.stop());
+  if (videoRefWeb) {
+    videoRefWeb.getTracks().forEach(track => track.stop());
     console.log("Cámara detenida");
-    currentStream = null;
+    videoRefWeb = null;
 
     // opcional: limpiar la vista del video
     if (videoRefCellphone.current) {
