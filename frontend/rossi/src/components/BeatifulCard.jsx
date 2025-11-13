@@ -451,6 +451,7 @@ async function guardarDatosEnBackendWithWeb() {
               HiddenCameraParam={hiddenCameraActive}
               PermiCameraParam={PermiCameraCellphone}
               PermiCameraWebParam={PermiCameraModalWeb}
+              OnlyPeticionParam={guardarDatosEnBackendWithCellphone}
               ></Load>
       </div>
         </div>

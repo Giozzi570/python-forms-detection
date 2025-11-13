@@ -76,6 +76,9 @@ def guardar():
     try:
         if datos['TypeCamera'] == 'WebCam':
             resultado = camera_web_pc.select_game(datos["TypeGame"],datos['instrument_selected'])
+
+            print("Resultado devuelto por select_game:", resultado)  # <-- clave
+            
             Circulos_detectados = resultado["circulos_detectados"]
             Captura_realizada = resultado["captura_realizada"]
             Puntaje = resultado["puntaje"]

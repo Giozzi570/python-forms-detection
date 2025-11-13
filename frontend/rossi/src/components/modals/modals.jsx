@@ -3,7 +3,7 @@ import './ProgressBarLoadingScreen.css'
 import SpinnerLoadingScreen from "./modalLoad";
 import Cellphone from "/typeCellphone.png";
 import Web from "/typeWeb.png";
-export const Load = ({videoRefParam,videoStyleParam,hideLoadActiveSureParam , nameLocalParam, buttonHiddenLoadParam, buttonHiddenLoadCancelParam , hideLoadActiveParam , HideErrorActiveParam ,setHiddenErrorParam, hiddenDetecActiveParam, setHiddenDetecParam, HiddenCameraParam, PermiCameraParam, PermiCameraWebParam }) => {
+export const Load = ({videoRefParam,videoStyleParam,OnlyPeticionParam,hideLoadActiveSureParam , nameLocalParam, buttonHiddenLoadParam, buttonHiddenLoadCancelParam , hideLoadActiveParam , HideErrorActiveParam ,setHiddenErrorParam, hiddenDetecActiveParam, setHiddenDetecParam, HiddenCameraParam, PermiCameraParam, PermiCameraWebParam }) => {
   return(
     <>
     <div className={HiddenCameraParam}>
@@ -37,6 +37,7 @@ export const Load = ({videoRefParam,videoStyleParam,hideLoadActiveSureParam , na
         />
         <span className="text-sm font-medium">Webcam</span>
       </button>
+      <button className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200" onClick={OnlyPeticionParam}>Solo pedir petición</button>
     </div>
   </div>
 </div>

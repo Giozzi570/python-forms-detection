@@ -177,7 +177,8 @@ def detectar_formas_puntuacion(x0=20, y0=40, ancho_total=600, alto_total=400, co
                             "posicion_del_circulo": f"{id}",
                             "img": imagen_base64,
                             "Gano": None,
-                            "img_graph": imagen_base64_graph
+                            "img_graph": imagen_base64_graph,
+                            "instrument": None
                         }
                                 
                         if circles is None:
