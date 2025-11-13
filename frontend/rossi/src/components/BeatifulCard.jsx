@@ -57,7 +57,7 @@ const BeautifulForm = () => {
   const nameLocal = localStorage.getItem("name")
   const videoRefWeb = useRef(null);
   const videoRefCellphone = useRef(null);
-
+  const [cameraStream, setCameraStream] = useState(null);
   function PermiCamera() {
     PermiCameraModal()
     async function CameraFunction() {
@@ -66,6 +66,8 @@ const BeautifulForm = () => {
         video: { facingMode: "environment" },
         audio: false,
       });
+      setCameraStream(stream); // guardamos el stream
+
       if (videoRefCellphone.current) {
         videoRefCellphone.current.srcObject = stream;
         console.log("EL video anda")
@@ -106,19 +108,24 @@ const BeautifulForm = () => {
     }
     }
     CameraFunction()
+    
   }
-function StopCamera() {
-  if (videoRefWeb) {
-    videoRefWeb.getTracks().forEach(track => track.stop());
-    console.log("Cámara detenida");
-    videoRefWeb = null;
 
-    // opcional: limpiar la vista del video
-    if (videoRefCellphone.current) {
-      videoRefCellphone.current.srcObject = null;
-    }
-  }
-}
+
+  function StopCamera() {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => track.stop());
+      console.log("Cámara detenida");
+
+      if (videoRefWeb.current) {
+        videoRefWeb.current.srcObject = null;
+      }
+      if (videoRefCellphone.current) {
+        videoRefCellphone.current.srcObject = null;
+      }
+
+      setCameraStream(null);
+    }}
 function PermiCameraCellphone(){
   setHiddenVideo(false)
   PermiCamera()
