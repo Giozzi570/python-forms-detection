@@ -5,7 +5,7 @@ export const createElement = (name) => {
     const playerData = name
 
     // Guardar la información del jugador en el localStorage
-    localStorage.setItem('name', playerData);  // Guardar el array actualizado de jugadores
+    localStorage.setItem('name', playerData);  // Guardar el nombre del jugadores
 };
 export const PlayerIdCounter = () => {
     let playerIdCounter = 1
@@ -13,12 +13,13 @@ export const PlayerIdCounter = () => {
     playerIdCounter++;
     localStorage.setItem('playerIdCounter', playerIdCounter);
 }
-export const SelectGameFunction = (TypeGame) => {
-    // Crear el contenido HTML del nuevo jugador
+// export const SelectGameFunction = (TypeGame) => {
+//     // Crear el contenido HTML del nuevo jugador
 
-    // Crear un objeto con la información que quieres guardar
-    const TypeGameSelected = TypeGame
-    console.log(TypeGameSelected)
-    // Guardar la información del jugador en el localStorage
-    localStorage.setItem('TypeGame', TypeGameSelected);  // Guardar el array actualizado de jugadores
-};
+//     // Crear un objeto con la información que quieres guardar
+//     const TypeGameSelected = TypeGame
+//     console.log(TypeGameSelected)                                                                   ==> // Without use
+//     // Guardar la información del jugador en el localStorage
+//     localStorage.setItem('TypeGame', TypeGameSelected);  // Guardar el array actualizado de jugadores
+// }; 
+

@@ -11,6 +11,8 @@ import { FaEye } from "react-icons/fa";
 
 
 const Players = () => {
+  const [imgUrl, setImgUrl] = useState("");
+  const [graphUrl, setGraphUrl] = useState("");
   const [jugadaVisible, setJugadaVisible] = useState(null); 
   const [jugadaGraph, setGraph] = useState(null); 
   const [hiddenAll, setHiddenAll] = useState(false);
@@ -19,15 +21,70 @@ const Players = () => {
   const [jugadoresIterados, setJugadoresIterados] = useState([]);
   const [sinJugadores, setSinJugadores] = useState(true);
   const num = useRef(0);
+  const [loadJugada, setLoadJugada] = useState(false);
+  const [loadGraph, setLoadGraph] = useState(false)
+  
 
+  function verImagenJugada(id) {
+    fetch(`http://localhost:5000/jugada/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.url) {
+          setImgUrl(data.url);
+        } else {
+          console.error(data.error);
+        }
+      })
+      .catch((err) => console.error(err));
+  }
+
+  function verImagenGrafico(id) {
+    
+    fetch(`http://localhost:5000/grafico/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.url) {
+          setGraphUrl(data.url);
+        } else {
+          console.error(data.error);
+        }
+      })
+      .catch((err) => console.error(err));
+
+  }
+  function volverLoadJugada(){
+    setLoadJugada(false);
+    setJugadaVisible(null);
+    setImgUrl("");
+  }
+  function volverLoadGraph(){
+    setLoadGraph(false);
+    setGraph(null);
+    setGraphUrl("");
+  }
+  function observarJugada(id){
+    console.log("ID de la jugada seleccionada:", id);
+    setJugadaVisible(true);
+    verImagenJugada(id);
+    
+  }
+  function observarGraph(id){
+    console.log("ID del grafico seleccionado:", id);
+    setGraph(true);
+    verImagenGrafico(id);
+  }
   const fetchJugadores = async () => {
-    num.current += 10
+    num.current += 5
     console.log(num)
+    const inicio = Date.now();
     try {
       setHideLoadActive(true);
       const lotejugadores = query(collection(dbPun, "datos_guardados"),orderBy("puntaje","desc"),limit(num.current));
       const snapshot = await getDocs(lotejugadores)
       const jugadores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const fin = Date.now();
+      const ms = fin - inicio;
+      console.log(`Tiempo de carga de jugadores: ${ms} ms`);
       setJugadoresIterados(jugadores);
       setHideLoadActive(false);
     } catch (error) {
@@ -107,7 +164,7 @@ const getPodio = (puesto) => {
 )}
         <div className="flex flex-col md:flex-row gap-4 justify-center items-center mb-12">
           {[...jugadoresTop].map((jugador) => (
-            <div key={jugador.id} id={`puesto-${jugador.puesto}`} className="w-64 h-auto text-center justify-between p-4 border bg-blue-500 border-gray-200 gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center flex-col">
+            <div id={`puesto-${jugador.puesto}`} data-id={jugador.id} key={jugador.id} className="w-64 h-auto text-center justify-between p-4 border bg-blue-500 border-gray-200 gap-6 rounded-lg flex shadow-sm hover:shadow-md transition items-center flex-col">
               <p className="text-gray-900 text-3xl font-black">{jugador.name}</p>
               <p className="text-xl text-center font-black text-gray-700">{jugador.puesto ? `${jugador.puesto}° Puesto` : ""}</p>
               <div className="bg-[#E0E7FF] text-black rounded-lg p-3">
@@ -115,8 +172,8 @@ const getPodio = (puesto) => {
                             <p className="text-sm text-muted-foreground">puntos</p>
                           </div>
               {getPodio(jugador.puesto)}
-              <button className="flex items-center gap-2" onClick={() => setJugadaVisible(jugador)}><FaEye /> <p>Ver jugada</p></button>
-              <button className="flex items-center gap-2" onClick={() => setGraph(jugador)}><FaEye /> <p>Ver grafico</p></button>
+              <button className="flex items-center gap-2" onClick={() => observarJugada(jugador.id)}><FaEye /> <p>Ver jugada</p></button>
+              <button className="flex items-center gap-2" onClick={() => observarGraph(jugador.id)}><FaEye /> <p>Ver grafico</p></button>
             </div>
           ))}
         </div>
@@ -131,8 +188,8 @@ const getPodio = (puesto) => {
                             <p className="text-sm text-muted-foreground">puntos</p>
                   </div>
               </div>
-              <button className="flex items-center gap-2" onClick={() => setJugadaVisible(jugador)}><FaEye /> <p>Ver jugada</p></button>
-              <button className="flex items-center gap-2" onClick={() => setGraph(jugador)}><FaEye /> <p>Ver grafico</p></button>
+              <button className="flex items-center gap-2" onClick={() => observarJugada(jugador.id)}><FaEye /> <p>Ver jugada</p></button>
+              <button className="flex items-center gap-2" onClick={() => observarGraph(jugador.id)}><FaEye /> <p>Ver grafico</p></button>
             </div>
           ))}
         </div>
@@ -146,17 +203,23 @@ hover:bg-[#2a2a2a] hover:border-[#007ACC] transition-all duration-200" onClick={
       {jugadaVisible && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 w-full">
           <div className="w-full max-w-lg bg-white text-black rounded-2xl shadow-xl border-4 border-black p-6 relative flex flex-col items-center animate-fade-in">
+            {!loadJugada && (
+              <div className="bg-gray-300 flex items-center justify-center animate-pulse rounded-2xl w-72 h-96"><SpinnerLoadingScreen></SpinnerLoadingScreen><p className="text-gray-950 font-bold">Cargando imagen...</p></div>
+      )}
+
+              <img
+                className={"border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105 " + (loadJugada ? 'block' : 'hidden')}
+                src={`${imgUrl}`}
+                alt="jugada"
+                id="jugadaImg"
+                onLoad={() => setLoadJugada(true)}
+              />
             
-            <img
-              className="border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105"
-              src={`data:image/webp;base64,${jugadaVisible.img}`}
-              alt="jugada"
-            />
 
             <p className="text-2xl font-bold text-center mt-4 tracking-wide">{jugadaVisible.name}</p>
 
             <button
-              onClick={() => setJugadaVisible(null)}
+              onClick={() => volverLoadJugada()}
               className="mt-6 px-6 py-2 text-white bg-red-600 hover:bg-red-700 transition-colors duration-200 rounded-lg font-semibold shadow-md"
             >
               Cerrar
@@ -168,17 +231,22 @@ hover:bg-[#2a2a2a] hover:border-[#007ACC] transition-all duration-200" onClick={
       {jugadaGraph && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 w-full">
           <div className="w-full max-w-lg bg-white text-black rounded-2xl shadow-xl border-4 border-black p-6 relative flex flex-col items-center animate-fade-in">
-            
+            {!loadGraph && (
+              <div className="bg-gray-300 flex items-center justify-center animate-pulse rounded-2xl w-72 h-96"><SpinnerLoadingScreen></SpinnerLoadingScreen><p className="text-gray-950 font-bold">Cargando imagen...</p></div>
+      )}
             <img
-              className="border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105"
-              src={`data:image/webp;base64,${jugadaGraph.img_graph}`}
+              className={"border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105 " + (loadGraph ? 'block' : 'hidden')}
+              src={`${graphUrl}`}
               alt="jugada"
+              id="graphImg"
+              width={250}
+              onLoad={() => setLoadGraph(true)}
             />
 
             <p className="text-2xl font-bold text-center mt-4 tracking-wide">{jugadaGraph.name}</p>
 
             <button
-              onClick={() => setGraph(null)}
+              onClick={() => volverLoadGraph()}
               className="mt-6 px-6 py-2 text-white bg-red-600 hover:bg-red-700 transition-colors duration-200 rounded-lg font-semibold shadow-md"
             >
               Cerrar

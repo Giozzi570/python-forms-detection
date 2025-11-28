@@ -10,4 +10,12 @@
 #puesto-3{
     background: #A77044;
 }
-
+#graphImg{
+    border-radius: 0.75rem;
+    border: 10px solid #964B00;
+    transition: transform 0.3s;
+    transform: rotate(180deg);
+}
+#jugadaImg{
+    transform: rotate(90deg);
+}

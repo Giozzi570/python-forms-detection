@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore } from "firebase/firestore";
 
 const firebaseConfigPun = {
   apiKey: "AIzaSyCgW4SBQv8DETQEPZBaQUQ3ohiB8q6MWoI",
@@ -13,7 +13,7 @@ const firebaseConfigPun = {
 
 const appPun = initializeApp(firebaseConfigPun,"Puntos");
 
-const dbPun = getFirestore(appPun);
+const dbPun = initializeFirestore(appPun, {experimentalForceLongPolling: true});
 
 export { dbPun };
 

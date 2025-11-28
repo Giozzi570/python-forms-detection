@@ -1,30 +1,28 @@
 import './App.css'
-import BeautifulForm from './components/BeatifulCard'
+import BeautifulForm from './components/BeautifulCard'
 import Header from './components/header/header'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Players from "./pages/PlayersPun/PlayersPun";
-import PlayersMet from "./pages/PlayersMet/PlayersMet";
 import React from 'react';
-import SearchBar from './components/searchBar/search';
 import Footer from './components/footer/footer';
-import Integrantes from './components/integrantes/integrante';
+import Test from './pages/Test';
+
 function App() {
-  
+
   return (
     <>
-    <React.StrictMode>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<><Header/><BeautifulForm /><Footer/></>}/>
-          <Route path="/playersPun" element={<Players/>} />
-          <Route path="/playersMet" element={<PlayersMet/>} />
-          <Route path="/test" element={<Integrantes/>}/>
+          <Route path='/' element={<><Header /><BeautifulForm /><Footer /></>} />
+          <Route path="/ranking" element={<Players />} />
+          <Route path="/partidas" element={<Players />} />
+          <Route path="/test" element={<Test />} />
         </Routes>
       </BrowserRouter>
-    </React.StrictMode>
-
     </>
   )
 }
+
+
 
 export default App

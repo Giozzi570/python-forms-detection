@@ -2,8 +2,8 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 .points-new{
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 66.81px;
     background-color: #b3b3b3;
     border: 2px solid #000;
     filter:brightness(1);
@@ -11,8 +11,8 @@
 
 #containerPointsPun{
     background-color: #C19A6B;
-    grid-template-columns: repeat(5, 50px);
-    grid-template-rows: repeat(7, 50px);
+    grid-template-columns: repeat(5, 70px);
+    grid-template-rows: repeat(7, 66.81px);
     justify-items: center;
     transform: rotate(180deg);
 
