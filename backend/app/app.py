@@ -19,6 +19,7 @@ from deteccion_web import camera_web_cellphone
 from get_firestore_by_game import firestore_get
 from puntuacion_in_live.puntuacion_live import funcion_main
 load_dotenv()
+from personaje.personaje_function import personaje_function
 
 app = Flask(__name__)
 CORS(app)
@@ -116,14 +117,17 @@ def guardar():
         Captura_realizada = resultado["captura_realizada"]
         Puntaje = resultado["puntaje"]
         Img = resultado["img"]
+        posicion_del_circulo = resultado["posicion_del_circulo"]
         Img_graph = resultado["img_graph"]
+        posicion_circulos_px = resultado["posicion_circulos_px"]
         Tiempo_de_ejecucion = resultado["Time_of_ejecuty"]
-
-
+        
         datos_deteccion = {
             "circulos_detectados": Circulos_detectados,
             "captura_realizada": Captura_realizada,
             "puntaje": Puntaje,
+            "posicion_del_circulo": posicion_del_circulo,
+            "posicion_circulos_px": posicion_circulos_px,
             }
         
         try:
@@ -147,44 +151,52 @@ def guardar():
         Tiempo_de_subida = round((final_de_subida_de_img - inicio_de_subida_de_img) * 1000, 2)
         Tiempo_de_ejecucion = round((Tiempo_de_ejecucion * 1000),2)
         Tiempos = {"Tiempo_de_subida" : Tiempo_de_subida,"Tiempo_de_funcion" : Tiempo_de_funcion, "Tiempo_de_ejecucion" : Tiempo_de_ejecucion}
+        print("Hola")
         resultado_final = {**datos, **datos_deteccion, **Tiempos}
+        print(resultado_final)
+        print(type(posicion_circulos_px[0]))
         db.collection('datos_guardados').add(resultado_final)
         return jsonify({"Datos" : resultado_final}), 200
     except Exception as e:
+        print("ERROR:", e)
         return jsonify({"error": str(e)}), 500
-    
-    # if datos['TypeCamera'] == 'Cellphone':
-    #     resultado_cellphone = camera_web_cellphone.select_game(datos["TypeGame"], datos["data_image"])
-    #     Circulos_detectados = resultado_cellphone["circulos_detectados"]
-    #     Captura_realizada = resultado_cellphone["captura_realizada"]
-    #     Puntaje = resultado_cellphone["puntaje"]
-    #     Gano = resultado_cellphone["Gano"]
-    #     Img_tablero = resultado_cellphone["img_tablero"]
-    #     Img = resultado_cellphone["img"]
 
-    #     datos_deteccion = {
-    #         "circulos_detectados": int(Circulos_detectados),
-    #         "captura_realizada": Captura_realizada,
-    #         "puntaje": Puntaje,
-    #         "Gano": Gano,
-    #         "instrument": instrument,
-    #         "img": Img_tablero,
-    #         "img_graph": Img
-    #     }
 
-    #     # Combinar datos
-    #     resultado_final = {**datos, **datos_deteccion}
 
-    #     # Guardar en Firestore
-    #     db.collection('datos_guardados').add(resultado_final)
+@app.route('/guardarMultijugador', methods=['POST'])
+def guardarMultijugador():
+    datos = request.get_json()
+    if not datos or not all(key in datos for key in ["jugador"]):
+            return jsonify({"error": "Los campos 'jugador' son requeridos"}), 400
+    print(datos)
+    try:
+        resultado = camera_web_pc.select_game("Puntuacion")
+        Circulos_detectados = resultado["circulos_detectados"]
+        Captura_realizada = resultado["captura_realizada"]
+        Puntaje = resultado["puntaje"]
+        posicion_del_circulo = resultado["posicion_del_circulo"]
+        print(datos["jugador"]["personaje"])
+        print(Puntaje)
+        Puntaje_jugador,array_de_elementos = personaje_function(datos["jugador"]["personaje"],Puntaje)
+        datos_deteccion = {
+            "circulos_detectados": Circulos_detectados,
+            "captura_realizada": Captura_realizada,
+            "puntaje": Puntaje_jugador,
+            "suma": array_de_elementos[2],
+            "resta": array_de_elementos[0],
+            "multiplicador": array_de_elementos[1],
+            "posicion_del_circulo": posicion_del_circulo,
+            }
 
-    #     return jsonify({"Datos" : resultado_final}), 200
+        resultado_final = {**datos, **datos_deteccion}
+        print(resultado_final)
+        return jsonify({"Datos" : resultado_final}), 200
+    except Exception as e:
+        print("ERROR:", e)
+        return jsonify({"error": str(e)}), 500
 
-# @app.route('/api/datos')
-# def get_datos():
-#     datos = db.collection('datos_guardados').stream()
-#     return jsonify([doc.to_dict() for doc in datos])
-camara = cv2.VideoCapture(0)
+
+camara = cv2.VideoCapture(1)
 @app.route('/recibir', methods=['POST'])
 def recibir():
     print("Recibiendo datos")

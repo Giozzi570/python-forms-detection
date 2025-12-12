@@ -19,8 +19,8 @@ function App() {
           <ul className="nav-links">
             <li><a href="/">Ingreso</a></li>
             <li><a href="/ranking">Ranking de Jugadores</a></li>
-            <li><a href="/partidas">Partidas Multijugador</a></li>
-            {/* <li><a href="/playersMet">Jugadores Metrología</a></li> */}
+            <li><a href="/multijugador">Partidas Multijugador</a></li>
+            <li><a href="/estadisticas">Estadísticas</a></li>
           </ul>
           <div id='githubMobile' className="github">
           <p className='github-text'>Link del proyecto</p>

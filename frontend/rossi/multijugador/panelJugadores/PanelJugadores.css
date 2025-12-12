@@ -1,0 +1,23 @@
+#multijugador {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+    background: linear-gradient(135deg, #3b0f5f 0%, #1565c0 40%, #ff8c42 80%, #f9a825 100%);
+}
+
+#jugadorAlpha {
+    background: url("./FondoMultijugador.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    clip-path: polygon(0% 0%, 0% 100%, 90% 100%, 100% 80%, 100% 20%, 90% 0%);
+}
+
+#jugadorBeta {
+    background: url("./FondoMultijugadorReverse.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    clip-path: polygon(100% 0%, 100% 50%, 100% 100%, 0% 100%, 10% 80%, 10% 38%, 10% 20%, 0% 0%);}
+

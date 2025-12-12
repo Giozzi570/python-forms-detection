@@ -3,43 +3,9 @@ import './ProgressBarLoadingScreen.css'
 import SpinnerLoadingScreen from "./modalLoad";
 import Cellphone from "/typeCellphone.png";
 import Web from "/typeWeb.png";
-export const Load = ({videoRefParam,videoStyleParam,hideLoadActiveSureParam , nameLocalParam,tiempoDeEspera,tiempoDeFuncion,tiempoDeSubida, buttonHiddenLoadParam, buttonHiddenLoadCancelParam , hideLoadActiveParam , HideErrorActiveParam ,setHiddenErrorParam, hiddenDetecActiveParam, setHiddenDetecParam, HiddenCameraParam, PermiCameraParam, PermiCameraWebParam }) => {
+export const Load = ({hideLoadActiveSureParam , nameLocalParam,tiempoDeEspera,tiempoDeFuncion,tiempoDeSubida, buttonHiddenLoadParam, buttonHiddenLoadCancelParam , hideLoadActiveParam , HideErrorActiveParam ,setHiddenErrorParam, hiddenDetecActiveParam, setHiddenDetecParam, HiddenCameraParam, PermiCameraParam, PermiCameraWebParam }) => {
   return(
     <>
-    {/* <div className={HiddenCameraParam}>
-  <div className="flex flex-col w-96 h-96 bg-white text-black rounded-2xl shadow-xl p-6 gap-8">
-    <h3 className="text-center font-bold text-lg border-b pb-4">
-      ¿Con qué tipo de cámara quiere jugar?
-    </h3>
-    <div className="flex justify-center gap-6">
-      <button
-        onClick={PermiCameraParam}
-        className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-gray-100 transition"
-      >
-        <img
-          id="Cellphone"
-          className="rounded-md w-24 h-24 object-cover shadow"
-          src={Cellphone}
-          alt="Celular"
-        />
-        <span className="text-sm font-medium">Celular</span>
-      </button>
-
-      <button
-        onClick={PermiCameraWebParam}
-        className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-gray-100 transition"
-      >
-        <img
-          id="Web"
-          className="rounded-md w-24 h-24 object-cover shadow"
-          src={Web}
-          alt="Webcam"
-        />
-        <span className="text-sm font-medium">Webcam</span>
-      </button>
-    </div>
-  </div>
-</div> */}
 
     <div className={hideLoadActiveSureParam}>
                     <div className="flex flex-col w-80 h-80 bg-white text-black rounded-xl p-10 gap-8">

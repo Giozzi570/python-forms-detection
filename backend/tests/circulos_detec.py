@@ -1,6 +1,6 @@
 import cv2
 
-camara = cv2.VideoCapture(1)
+camara = cv2.VideoCapture(0)
 while True:
     ret, frame = camara.read()
     gris = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

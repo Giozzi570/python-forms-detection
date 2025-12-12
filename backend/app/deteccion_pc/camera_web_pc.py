@@ -79,6 +79,7 @@ def detectar_formas_puntuacion(x0=84, y0=78, ancho_total=468, alto_total=350, co
     # capturas_hechas = 0  # Contador de capturas hechas (no usado actualmente).
     ids_cuadrados = []
     cuadrados = []  # Lista para almacenar información de los cuadrados detectados.
+    posicion_circulos_px = []
     ancho_celda = ancho_total // columnas
     alto_celda = alto_total // filas
     puntajes = []
@@ -138,7 +139,9 @@ def detectar_formas_puntuacion(x0=84, y0=78, ancho_total=468, alto_total=350, co
                                 if x0 <= x <= x0 + ancho_total and y0 <= y <= y0 + alto_total:
                                         col = (x - x0) // ancho_celda
                                         fila = (y - y0) // alto_celda
-                                        id_cuadrado = fila * columnas + col
+                                        posicion = {"x": int(x), "y": int(y)}
+                                        posicion_circulos_px.append(posicion)
+                                        id_cuadrado = (fila * columnas + col) - 1
                                         id_celda = f"Fila{fila}_Columna{col}"  # Calcula el ID del cuadrado basado en fila y columna.
                                         cv2.putText(frame, f"{id_celda}", (x + 10, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
                                         print(f"Ficha detectada en celda: {id_celda}")
@@ -162,16 +165,20 @@ def detectar_formas_puntuacion(x0=84, y0=78, ancho_total=468, alto_total=350, co
                                 captura_hecha = True
                                 puntaje, id, imagen_base64_graph = puntuacion(id_cuadrado,ids_cuadrados, 5, 7)  # Muestra el gráfico con el ID del cuadrado capturado.
                                 print(id, id_cuadrado)
+                                list_ids = [int(x) for x in ids_cuadrados]
+                                print("Esto es circles", list_ids)
                                 print(circles)
                                 print(f"El puntaje total acumulado es: {sum(puntaje)}")
                                 print(f"El ID del cuadrado detectado es: {ids_cuadrados}")
+                                print("Datos de deteccion:", posicion_circulos_px)
                                 return {
                             "circulos_detectados": len(circles[0]) if circles is not None else 0,
                             "captura_realizada": captura_hecha,
                             "puntaje": sum(puntaje),
-                            "posicion_del_circulo": f"{id}",
+                            "posicion_del_circulo": list_ids,
                             "img": imagen_base64,
                             "Gano": None,
+                            "posicion_circulos_px": posicion_circulos_px,
                             "img_graph": imagen_base64_graph,
                             "Time_of_ejecuty": (final_de_deteccion - incio_de_deteccion)
                         }

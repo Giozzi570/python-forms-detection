@@ -1,0 +1,9 @@
+#turno1{
+    background: url("./FondoMultijugador.png");   
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: 'Press Start 2P', cursive;
+    color: black;
+}
+

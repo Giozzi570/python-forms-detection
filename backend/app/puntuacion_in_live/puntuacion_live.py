@@ -1,33 +1,10 @@
-
 import cv2
 import numpy as np
 import time
 import requests
 import sys
+
 def puntuacion_en_vivo(camara):
-    # def dibujar_matriz():
-    #     filas = 7
-    #     columnas = 5
-    #     ancho_total = 468
-    #     alto_total = 350
-    #     cuadrados = []
-    #     cuadrado_id = 0
-    #     tamaño_cuadrado_x = ancho_total // filas
-    #     tamaño_cuadrado_y = alto_total // columnas
-    #     # print(f"Cada cuadrado mide {tamaño_cuadrado_x}, {tamaño_cuadrado_y}")
-    #     for columna in range(columnas):
-    #         for fila in range(filas):
-    #             y = x0 + fila * tamaño_cuadrado_x
-    #             x = y0 + columna * tamaño_cuadrado_y
-    #             fy = x0 + (fila + 1 ) * tamaño_cuadrado_x
-    #             fx = y0 + (columna + 1 ) * tamaño_cuadrado_y
-    #             square = [cuadrado_id,(fy,fx),(y,x),(255,255,255),1]  
-    #             cuadrado_id += 1      # ==> cv2.rectangle(imagen ==> frame, punto_inicial ==> tupla (y,x), punto_final ==> (fy,fx), color, grosor ==> en px)
-    #             cuadrados.append(square)
-    #     for cuadrado in cuadrados:
-    #         id,fxy,xy,rgb,grosor = cuadrado
-    #         cv2.rectangle(frame,xy,fxy,rgb,grosor)
-    #     return filas,columnas,x0,y0,ancho_total,alto_total
     def detectar_camara():
         puntos = ""
         intentos = 0
@@ -100,19 +77,24 @@ def puntuacion_en_vivo(camara):
             else:
                 if point in Verde_fuerte:
                             puntaje.append(5000)
+                            color.append("Verde fuerte")
                 elif point in orange:  
-                            puntaje.append(500)                         
+                            puntaje.append(500)   
+                            color.append("Naranja")                      
                 elif point in red:               # ==> Dependiendo de la cantidad de circulos que tenemos en la matriz, es la cantidad de veces que repite el bucle 
-                            puntaje.append(-1000)                      # ==> Despues cuando pide el [np.uint16(11), np.uint16(25), np.uint16(33)] circles_num[0] da 11 ,y asi para los otros y se fija en que array coincide el numero 
+                            puntaje.append(-1000) 
+                            color.append("Rojo")                     # ==> Despues cuando pide el [np.uint16(11), np.uint16(25), np.uint16(33)] circles_num[0] da 11 ,y asi para los otros y se fija en que array coincide el numero 
                 elif point in yellow:
                             puntaje.append(1000)
+                            color.append("Amarillo")
                 elif point in green:
                             puntaje.append(1500)
+                            color.append("Verde")
                 else:
                             raise TypeError("ID fuera de rango")
                 id_ya_calculado.append(point)
                 print(f"Puntaje de ID {point}: ----> {puntaje}")
-        return puntaje
+        return puntaje,color
     # def posiciones_del_circulo(circles):
     #     print(circles)
     #     circulos_append = []
@@ -183,6 +165,7 @@ def puntuacion_en_vivo(camara):
     circulos_ids = []
     id_ya_calculado = []
     puntaje = []
+    color = []
     while True:
         ret, frame = camara.read()
         if not ret or frame is None:
@@ -196,7 +179,7 @@ def puntuacion_en_vivo(camara):
         print(circulos_anteriores)
         print(f"Estos son los ids {circulos_ids}")
         mismo_frame = son_los_mismo_ids(circulos_anteriores,circulos)
-        puntaje = cacular_puntaje(circulos_ids)
+        puntaje,color = cacular_puntaje(circulos_ids)
         print(f"Este es el {sum(puntaje)}")
         print(f"Este es el tamaño de la lista {len(puntaje)}")
         if len(puntaje) > 0:
@@ -204,14 +187,15 @@ def puntuacion_en_vivo(camara):
             break
     camara.release()        # ==> Cierra la ventana luego de un tiempo
     cv2.destroyAllWindows()
-    return puntaje,circulos_ids,datos_circulos
+    return puntaje,circulos_ids,color,datos_circulos
 def funcion_main(camara):
     while True:
-        puntaje,circulos_id,datos_circulos = puntuacion_en_vivo(camara)
+        puntaje,circulos_id,color,datos_circulos = puntuacion_en_vivo(camara)
         url = "http://localhost:5000/recibir"
         print(circulos_id)
         datos_circulos = datos_circulos.tolist()
-        dato = {"puntaje": puntaje, "ids": circulos_id,"datos_circulos": datos_circulos[0]}  # cualquier dato que quieras mandar
+        
+        dato = {"puntaje": puntaje, "ids": circulos_id,"datos_circulos": datos_circulos[0],"color": color}  
         print(F"Tamaño de la lista {len(puntaje)}")
         break
     return dato

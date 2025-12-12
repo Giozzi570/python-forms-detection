@@ -202,13 +202,13 @@ hover:bg-[#2a2a2a] hover:border-[#007ACC] transition-all duration-200" onClick={
       {/* Modal de jugada */}
       {jugadaVisible && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 w-full">
-          <div className="w-full max-w-lg bg-white text-black rounded-2xl shadow-xl border-4 border-black p-6 relative flex flex-col items-center animate-fade-in">
+          <div className="w-full max-w-lg max-h-[80vh] min-h-[65vh] gap-6 overflow-hidden bg-white text-black rounded-2xl shadow-xl border-4 border-black p-6 relative flex flex-col justify-end items-center animate-fade-in">
             {!loadJugada && (
               <div className="bg-gray-300 flex items-center justify-center animate-pulse rounded-2xl w-72 h-96"><SpinnerLoadingScreen></SpinnerLoadingScreen><p className="text-gray-950 font-bold">Cargando imagen...</p></div>
       )}
 
               <img
-                className={"border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105 " + (loadJugada ? 'block' : 'hidden')}
+                className={"max-w-full max-h-full object-contain border-4 border-black rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105 " + (loadJugada ? 'block' : 'hidden')}
                 src={`${imgUrl}`}
                 alt="jugada"
                 id="jugadaImg"
