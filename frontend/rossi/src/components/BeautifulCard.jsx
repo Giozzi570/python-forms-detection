@@ -91,7 +91,7 @@ const BeautifulForm = () => {
     const interval = setInterval(() => {
       console.log(detecFichas)
       setActualizado("Actualizando...")
-      fetch("https://deana-inspirable-weirdly.ngrok-free.dev /recibir", {
+      fetch("https://deana-inspirable-weirdly.ngrok-free.dev/recibir", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ "Query": "pedime_puntaje" })
