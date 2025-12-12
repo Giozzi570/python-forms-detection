@@ -91,7 +91,7 @@ const BeautifulForm = () => {
     const interval = setInterval(() => {
       console.log(detecFichas)
       setActualizado("Actualizando...")
-      fetch("http://localhost:5000/recibir", {
+      fetch("https://deana-inspirable-weirdly.ngrok-free.dev/recibir", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ "Query": "pedime_puntaje" })
@@ -125,7 +125,7 @@ const BeautifulForm = () => {
     console.log(datos);
     try {
       setHiddenLoad(!hiddenLoad)
-      const response = await fetch("http://localhost:5000/guardar", {
+      const response = await fetch(" https://deana-inspirable-weirdly.ngrok-free.dev/guardar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
