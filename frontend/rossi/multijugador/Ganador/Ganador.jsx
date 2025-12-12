@@ -3,7 +3,11 @@ function Ganador({ jugador1, jugador2 }) {
     function SeleccionarGanador() {
         if (jugador1.Datos.puntaje > jugador2.Datos.puntaje) {
             return jugador1.Datos.jugador.name
-        } else {
+        } 
+        else if(jugador1.Datos.puntaje == jugador2.Datos.puntaje) {
+            return "Empate"
+        }
+        else {
             return jugador2.Datos.jugador.name
         }
     }
@@ -35,7 +39,7 @@ function Ganador({ jugador1, jugador2 }) {
     return (
         <>
             <div id="ganador" className="flex flex-col justify-center items-center h-screen">
-                <h1 className="text-black font-bold text-2xl p-12">El ganador fue {SeleccionarGanador()}</h1>
+                <h1 className="text-black font-bold text-2xl p-12">{SeleccionarGanador() === "Empate" ? "Empate" : "El ganador fue " + SeleccionarGanador()}</h1>
                 <div className="flex flex-row gap-8 p-6 bg-gray-100 rounded-xl shadow-lg">
                     <div className="flex bg-white rounded-xl p-4 shadow-md w-60 border border-gray-200">
                         <div className="flex flex-col gap-2">
