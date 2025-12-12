@@ -55,7 +55,7 @@ def puntuacion_en_vivo(camara):
                         if (x_centro >= x0 and x_centro <= x0 + ancho_total) and (y_centro >= y0 and y_centro <= y0 + alto_total):
                             fila = int((x_centro - x0) // (ancho_total // filas))
                             columna = int((y_centro - y0) // (alto_total // columnas))
-                            id_circle = (columna * filas) + fila
+                            id_circle = ((columna * filas) + fila) -1
                             if any(abs(x_centro - circle_save[0]) < 10 and abs(y_centro - circle_save[1]) < 10 for circle_save in circulos_guardados):
                                 pass
                             else:

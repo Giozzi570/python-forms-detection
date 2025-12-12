@@ -10,6 +10,7 @@ import BoardEstadisticas from './components/boards/boardEstadisticas/BoardEstadi
 import Promedio from './components/Promedios/Promedio';
 import PanelJugadores from '../multijugador/panelJugadores/PanelJugadores';
 import SeleccionDePersonaje from '../multijugador/panelJugadores/jugador1/ElegirPersonaje/SeleccionDePersonaje';
+import SinInternet from './SinInternet/SinInternet';
 function App() {
 
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/test" element={<SeleccionDePersonaje />} />
           <Route path="/estadisticas" element={<BoardEstadisticas/>} />
           <Route path="/documentacion" element={<Promedio/>} />
+          <Route path="/SinInternet" element={<SinInternet/>} />
         </Routes>
       </BrowserRouter>
     </>

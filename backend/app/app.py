@@ -19,7 +19,7 @@ from deteccion_web import camera_web_cellphone
 from get_firestore_by_game import firestore_get
 from puntuacion_in_live.puntuacion_live import funcion_main
 load_dotenv()
-from personaje.personaje_function import personaje_function
+# from personaje.personaje_function import personaje_function
 
 app = Flask(__name__)
 CORS(app)
@@ -175,16 +175,16 @@ def guardarMultijugador():
         Captura_realizada = resultado["captura_realizada"]
         Puntaje = resultado["puntaje"]
         posicion_del_circulo = resultado["posicion_del_circulo"]
-        print(datos["jugador"]["personaje"])
-        print(Puntaje)
-        Puntaje_jugador,array_de_elementos = personaje_function(datos["jugador"]["personaje"],Puntaje)
+        # print(datos["jugador"]["personaje"])
+        # print(Puntaje)
+        # Puntaje_jugador,array_de_elementos = personaje_function(datos["jugador"]["personaje"],Puntaje)
         datos_deteccion = {
             "circulos_detectados": Circulos_detectados,
             "captura_realizada": Captura_realizada,
-            "puntaje": Puntaje_jugador,
-            "suma": array_de_elementos[2],
-            "resta": array_de_elementos[0],
-            "multiplicador": array_de_elementos[1],
+            "puntaje": Puntaje,
+            # "suma": array_de_elementos[2],
+            # "resta": array_de_elementos[0],
+            # "multiplicador": array_de_elementos[1],
             "posicion_del_circulo": posicion_del_circulo,
             }
 
@@ -207,8 +207,55 @@ def recibir():
     return jsonify(dato)
 
 
+@app.route('/SinInternet', methods=['POST'])
+def guardarSinInternet():
+    inicio_de_funcion = time.time()
+        # Validar datos del frontend
+    datos = request.get_json()
+    if not datos or not all(key in datos for key in ['name', 'id']):
+            return jsonify({"error": "Los campos 'name' , 'id' son requeridos"}), 400
+
+    try:
+        resultado = camera_web_pc.select_game("Puntuacion")
+        inicio_de_subida_de_img = time.time()
+        Circulos_detectados = resultado["circulos_detectados"]
+        Captura_realizada = resultado["captura_realizada"]
+        Puntaje = resultado["puntaje"]
+        Img = resultado["img"]
+        posicion_del_circulo = resultado["posicion_del_circulo"]
+        Img_graph = resultado["img_graph"]
+        posicion_circulos_px = resultado["posicion_circulos_px"]
+        Tiempo_de_ejecucion = resultado["Time_of_ejecuty"]
+        
+        datos_deteccion = {
+            "circulos_detectados": Circulos_detectados,
+            "captura_realizada": Captura_realizada,
+            "puntaje": Puntaje,
+            "posicion_del_circulo": posicion_del_circulo,
+            "posicion_circulos_px": posicion_circulos_px,
+            }
+        
+
+        
+
+        final_de_subida_de_img = time.time()
+        final_de_funcion = time.time()
+        Tiempo_de_funcion = round((final_de_funcion - inicio_de_funcion) * 1000, 2)
+        Tiempo_de_subida = round((final_de_subida_de_img - inicio_de_subida_de_img) * 1000, 2)
+        Tiempo_de_ejecucion = round((Tiempo_de_ejecucion * 1000),2)
+        Tiempos = {"Tiempo_de_subida" : Tiempo_de_subida,"Tiempo_de_funcion" : Tiempo_de_funcion, "Tiempo_de_ejecucion" : Tiempo_de_ejecucion}
+        print("Hola")
+        resultado_final = {**datos, **datos_deteccion, **Tiempos}
+        print(resultado_final)
+        print(type(posicion_circulos_px[0]))
+        
+        return jsonify({"Datos" : resultado_final}), 200
+    except Exception as e:
+        print("ERROR:", e)
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000,host="0.0.0.0")
+
 

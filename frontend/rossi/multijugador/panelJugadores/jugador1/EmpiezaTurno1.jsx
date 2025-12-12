@@ -55,7 +55,7 @@ function EmpiezaTurno1({name,setTurno1,setTurno2,DatosJugador1,setDatosJugador1}
     }
     return(
         <>
-        <div id="turno1" className={`h-screen flex items-center justify-center animate__fadeInLeftBig animate__animated ${Finalizado ? "animate__fadeOutRightBig" : ""} ${Oculto ? "hidden" : ""}`}>
+        <div id="turno1" className={`h-screen flex items-center overflow-y-hidden justify-center animate__fadeInLeftBig animate__animated ${Finalizado ? "animate__fadeOutRightBig" : ""} ${Oculto ? "hidden" : ""}`}>
             <h1>Empieza el turno de {name}</h1>
         </div>
         <SeleccionDePersonaje Datos={DatosJugador1} Fondo={true} TerminarJuego={terminarTurno} msgFinal="Siguiente jugador" setTurno2={setTurno2} setTurno1={setTurno1} savePersonaje={savePersonaje} Background="./FondoMultijugador.png" TerminarSeleccionJugador={TerminarSeleccionJugador} setTerminarSeleccionJugador={setTerminarSeleccionJugador}/>
